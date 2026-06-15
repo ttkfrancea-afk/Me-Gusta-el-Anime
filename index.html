@@ -3,60 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Me Gusta el Anime | Entrar</title>
+    <title>Me Gusta el Anime - Login</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Urbanist:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- Conexión a tus módulos CSS -->
     <link rel="stylesheet" href="./css/variables.css">
     <link rel="stylesheet" href="./css/login.css">
 </head>
 <body>
-    <div id="dynamic-bg" class="dynamic-bg"></div>
-    <div class="login-container">
-        <div class="glass-panel split-wrapper" id="split-wrapper">
-            
-            <div class="form-panel sign-up-panel">
-                <form id="register-form">
-                    <h2>Únete al Nexo</h2>
-                    <select name="country" required>
+
+    <div class="background-grid">
+        <img class="bg-poster" src="images (9).jpeg" alt="Solo Leveling / Demon Slayer">
+        <img class="bg-poster" src="images (8).jpeg" alt="Jujutsu Kaisen">
+        <img class="bg-poster" src="images (7).jpeg" alt="Gachiakuta">
+    </div>
+
+    <!-- El lienzo de las brasas ardientes -->
+    <canvas id="canvas-particles"></canvas>
+
+    <div class="container" id="container">
+        
+        <div class="form-container sign-up-container">
+            <!-- ID añadido para Supabase -->
+            <form id="register-form">
+                <h2>CREAR <span>CUENTA</span></h2>
+                
+                <div class="input-box" style="margin-bottom: 5px;">
+                    <select name="country" class="input-field" required style="padding: 8px 15px;">
                         <option value="+58">🇻🇪 Venezuela (+58)</option>
                         <option value="+57">🇨🇴 Colombia (+57)</option>
                     </select>
-                    <input type="email" name="email" placeholder="Correo Electrónico" required />
-                    <input type="password" name="password" placeholder="Contraseña" required />
-                    <input type="password" name="confirm_password" placeholder="Confirmar Contraseña" required />
-                    <button type="submit">Forjar Registro</button>
-                </form>
-            </div>
+                </div>
 
-            <div class="form-panel sign-in-panel">
-                <form id="login-form">
-                    <h2>Iniciar Sesión</h2>
-                    <input type="email" name="email" placeholder="Correo" required />
-                    <input type="password" name="password" placeholder="Contraseña" required />
-                    <a href="#" style="color: #ccc; font-size: 12px; margin-top:10px;">¿Olvidaste tu contraseña?</a>
-                    <button type="submit">Entrar</button>
-                </form>
-            </div>
+                <div class="input-box">
+                    <input type="email" name="email" class="input-field" placeholder="correo@clan.com" required>
+                </div>
+                <div class="input-box">
+                    <input type="password" name="password" class="input-field" placeholder="Contraseña" required>
+                </div>
+                <div class="input-box">
+                    <input type="password" name="confirm_password" class="input-field" placeholder="Confirmar Contraseña" required>
+                </div>
+                <button type="submit" class="btn-action">Registrarse</button>
+            </form>
+        </div>
 
-            <div class="overlay-container">
-                <div class="overlay">
-                    <div class="overlay-panel overlay-left">
-                        <h2>¡Bienvenido de vuelta!</h2>
-                        <p>Inicia sesión para acceder a los quizzes hardcore y ganar premios.</p>
-                        <button class="ghost" id="signIn">Ir a Login</button>
-                    </div>
-                    <div class="overlay-panel overlay-right">
-                        <h2>¿Nuevo guerrero?</h2>
-                        <p>Regístrate para demostrar cuánto sabes de anime.</p>
-                        <button class="ghost" id="signUp">Registrarse</button>
-                    </div>
+        <div class="form-container sign-in-container">
+            <!-- ID añadido para Supabase -->
+            <form id="login-form">
+                <h2>INICIAR <span>SESIÓN</span></h2>
+                <div class="input-box">
+                    <label>Email del Guerrero</label>
+                    <input type="email" name="email" class="input-field" placeholder="correo@clan.com" required>
+                </div>
+                <div class="input-box">
+                    <label>Contraseña</label>
+                    <input type="password" name="password" class="input-field" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-action" style="margin-top: 25px;">Entrar</button>
+            </form>
+        </div>
+
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h3>¿YA TIENES CLAN?</h3>
+                    <p>Inicia sesión y mantén tu racha de IQ para reclamar premios físicos.</p>
+                    <button class="btn-ghost" id="signIn">Entrar</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h3>ÚNETE AL NEXO</h3>
+                    <p>Regístrate ahora y demuestra tu conocimiento en Manga y Anime.</p>
+                    <button class="btn-ghost" id="signUp">Registrarse</button>
                 </div>
             </div>
-
         </div>
-    </div>
-    
-    <div id="alert-box"></div>
 
+    </div>
+
+    <!-- Alerta amarilla de verificación -->
+    <div id="alert-box" style="display:none; position:fixed; bottom:20px; background:#f5d142; color:#000; padding:15px; border-radius:8px; z-index:999; font-weight:bold;"></div>
+
+    <!-- Script modular -->
     <script type="module" src="./js/auth.js"></script>
 </body>
-  </html>
-  
+</html>
