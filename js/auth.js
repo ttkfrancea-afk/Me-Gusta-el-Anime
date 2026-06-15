@@ -57,10 +57,23 @@ document.addEventListener('DOMContentLoaded', () => {
     animate();
 
     // 3. Conexión con Supabase (Registro e Inicio de Sesión)
-    function showAlert(msg) {
-        alertBox.textContent = msg;
+    function showAlert(msg, isVerification = false) {
+        if (isVerification) {
+            alertBox.innerHTML = `
+                <div>${msg}</div>
+                <ol>
+                    <li><strong>Verifica:</strong> Revisa tu correo electrónico y confirma la cuenta desde el enlace recibido.</li>
+                    <li><strong>Gmail:</strong> Entra a tu bandeja de entrada si el sistema te redirige allí.</li>
+                    <li><strong>Acceso:</strong> Inicia sesión con tu correo y clave en la plataforma.</li>
+                    <li><strong>Disfruta:</strong> Ingresa y Disfruta de "Me Gusta el Anime".</li>
+                </ol>
+            `;
+        } else {
+            alertBox.textContent = msg;
+        }
+        
         alertBox.style.display = 'block';
-        setTimeout(() => alertBox.style.display = 'none', 6000);
+        setTimeout(() => alertBox.style.display = 'none', 10000);
     }
 
     document.getElementById('register-form').addEventListener('submit', async (e) => {
@@ -97,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (error) {
             if (error.message.includes('Email not confirmed')) {
-                showAlert('Verifica tu correo electrónico siguiendo los pasos 1, 2, 3 y 4 antes de ingresar');
+                showAlert('Verifica tu correo electrónico:', true);
             } else {
                 showAlert('Credenciales inválidas');
             }
