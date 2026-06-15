@@ -1,25 +1,68 @@
 import { supabase } from './supabase.js';
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Lógica del Slider
     const signUpButton = document.getElementById('signUp');
     const signInButton = document.getElementById('signIn');
-    const container = document.getElementById('split-wrapper');
+    const container = document.getElementById('container');
     const alertBox = document.getElementById('alert-box');
 
-    // UI Toggles
-    signUpButton.addEventListener('click', () => container.classList.add('right-panel-active'));
-    signInButton.addEventListener('click', () => container.classList.remove('right-panel-active'));
+    signUpButton.addEventListener('click', () => {
+        container.classList.add("right-panel-active");
+    });
 
-    // Cargar fondo dinámico desde Supabase (Tabla config)
-    const loadDynamicBg = async () => {
-        const { data, error } = await supabase.from('config').select('image_url').eq('key_name', 'login_bg').single();
-        if (data && data.image_url) {
-            document.getElementById('dynamic-bg').style.backgroundImage = `url('${data.image_url}')`;
+    signInButton.addEventListener('click', () => {
+        container.classList.remove("right-panel-active");
+    });
+
+    // 2. Motor de partículas de fondo (Brasas Ardientes intacto)
+    const canvas = document.getElementById('canvas-particles');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particlesArray = [];
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2;
+            this.speedX = Math.random() * 0.5 - 0.25;
+            this.speedY = Math.random() * -0.5 - 0.2;
+            this.color = Math.random() > 0.5 ? '#ff3131' : '#555';
         }
-    };
-    loadDynamicBg();
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.y < 0) {
+                this.y = canvas.height;
+                this.x = Math.random() * canvas.width;
+            }
+        }
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
 
-    // Lógica de Registro
+    for (let i = 0; i < 50; i++) particlesArray.push(new Particle());
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particlesArray.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    // 3. Conexión con Supabase (Registro e Inicio de Sesión)
+    function showAlert(msg) {
+        alertBox.textContent = msg;
+        alertBox.style.display = 'block';
+        setTimeout(() => alertBox.style.display = 'none', 6000);
+    }
+
     document.getElementById('register-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = e.target.email.value;
@@ -40,11 +83,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (error) showAlert(error.message);
         else {
             showAlert('¡Registro exitoso! Por favor, verifica tu correo antes de entrar.');
-            container.classList.remove('right-panel-active'); // Volver al login
+            container.classList.remove('right-panel-active');
+            e.target.reset();
         }
     });
 
-    // Lógica de Login
     document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = e.target.email.value;
@@ -62,11 +105,4 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.location.href = 'dashboard.html';
         }
     });
-
-    // Función de alerta
-    function showAlert(msg) {
-        alertBox.textContent = msg;
-        alertBox.classList.add('show');
-        setTimeout(() => alertBox.classList.remove('show'), 5000);
-    }
 });
