@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard | Me Gusta el Anime</title>
+    <link rel="stylesheet" href="./css/variables.css">
+    <link rel="stylesheet" href="./css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <header class="prizes-section glass-panel" id="prizes-container">
+            </header>
+
+        <main class="feed-grid" id="feed-container">
+            </main>
+    </div>
+
+    <div class="quiz-fab" onclick="window.startHardcoreQuiz(1)">
+        🔥
+    </div>
+
+    <script type="module">
+        import { initQuizEngine } from './js/quiz.js';
+        initQuizEngine();
+    </script>
+    <script type="module" src="./js/feed.js"></script>
+</body>
+</html>
