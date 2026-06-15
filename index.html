@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Me Gusta el Anime | Entrar</title>
+    <link rel="stylesheet" href="./css/variables.css">
+    <link rel="stylesheet" href="./css/login.css">
+</head>
+<body>
+    <div id="dynamic-bg" class="dynamic-bg"></div>
+    <div class="login-container">
+        <div class="glass-panel split-wrapper" id="split-wrapper">
+            
+            <div class="form-panel sign-up-panel">
+                <form id="register-form">
+                    <h2>Únete al Nexo</h2>
+                    <select name="country" required>
+                        <option value="+58">🇻🇪 Venezuela (+58)</option>
+                        <option value="+57">🇨🇴 Colombia (+57)</option>
+                    </select>
+                    <input type="email" name="email" placeholder="Correo Electrónico" required />
+                    <input type="password" name="password" placeholder="Contraseña" required />
+                    <input type="password" name="confirm_password" placeholder="Confirmar Contraseña" required />
+                    <button type="submit">Forjar Registro</button>
+                </form>
+            </div>
+
+            <div class="form-panel sign-in-panel">
+                <form id="login-form">
+                    <h2>Iniciar Sesión</h2>
+                    <input type="email" name="email" placeholder="Correo" required />
+                    <input type="password" name="password" placeholder="Contraseña" required />
+                    <a href="#" style="color: #ccc; font-size: 12px; margin-top:10px;">¿Olvidaste tu contraseña?</a>
+                    <button type="submit">Entrar</button>
+                </form>
+            </div>
+
+            <div class="overlay-container">
+                <div class="overlay">
+                    <div class="overlay-panel overlay-left">
+                        <h2>¡Bienvenido de vuelta!</h2>
+                        <p>Inicia sesión para acceder a los quizzes hardcore y ganar premios.</p>
+                        <button class="ghost" id="signIn">Ir a Login</button>
+                    </div>
+                    <div class="overlay-panel overlay-right">
+                        <h2>¿Nuevo guerrero?</h2>
+                        <p>Regístrate para demostrar cuánto sabes de anime.</p>
+                        <button class="ghost" id="signUp">Registrarse</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <div id="alert-box"></div>
+
+    <script type="module" src="./js/auth.js"></script>
+</body>
+  </html>
+  
