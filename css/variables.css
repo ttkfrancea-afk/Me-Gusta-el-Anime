@@ -1,33 +1,27 @@
+/* --- COLORES MANGA NOIR --- */
 :root {
-    --bg-dark: #030303;
+    --bg-noir: #030303;
     --accent-red: #ff3131;
-    --alert-yellow: #f5d142;
-    --text-light: #ffffff;
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    --font-main: 'Poppins', sans-serif;
+    --glass-bg: rgba(10, 10, 10, 0.45);
+    --glass-border: 1px solid rgba(255, 49, 49, 0.25);
+    --text-white: #ffffff;
 }
 
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: var(--font-main);
+    font-family: 'Urbanist', sans-serif;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
-    background-color: var(--bg-dark);
-    color: var(--text-light);
-    overflow-x: hidden;
-}
-
-/* Utilidad Glassmorphism */
-.glass-panel {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    box-shadow: var(--glass-shadow);
+    background-color: var(--bg-noir);
+    color: var(--text-white);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
 }
