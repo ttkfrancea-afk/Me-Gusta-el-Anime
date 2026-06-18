@@ -1,363 +1,156 @@
 /* =====================================================================
-   OTAKU NEXUS · dashboard.css
-   ---------------------------------------------------------------------
-   Estilos exclusivos de dashboard.html. Tres bloques principales:
-     1) Navbar superior
-     2) Sección de premios (3 tarjetas: 1er, 2do, 3er lugar)
-     3) Motor de Quiz (preguntas + barra de tiempo)
-     4) Feed de videos de YouTube (grid responsivo)
+   NUEVOS ESTILOS: NAVEGACIÓN, MODAL Y JUEGOS
    ===================================================================== */
 
-/* ---------------------------------------------------------------------
-   LAYOUT GENERAL
-   --------------------------------------------------------------------- */
-.app-shell {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: var(--space-md);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
+/* Ocultamos el botón original del navbar superior ya que ahora está en ajustes */
+.navbar__usuario #btn-logout { display: none; }
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 90px; /* Espacio para la barra inferior */
 }
 
-/* ---------------------------------------------------------------------
-   NAVBAR
-   --------------------------------------------------------------------- */
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-sm) var(--space-lg);
-  position: sticky;
-  top: var(--space-sm);
-  z-index: 50;
+/* --- SISTEMA DE PESTAÑAS --- */
+.tab-pane {
+  display: none;
+  animation: fadeIn 0.3s ease;
 }
-
-.navbar__logo {
-  font-family: var(--font-display);
-  font-size: var(--fs-xl);
-  letter-spacing: 0.1em;
-  color: #fff;
+.tab-pane.activa {
+  display: block;
 }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-.navbar__logo span {
-  color: var(--color-accent-red);
-}
-
-.navbar__usuario {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-}
-
-.navbar__puntos {
-  font-family: var(--font-mono);
-  font-size: var(--fs-lg);
-  color: var(--color-accent-yellow);
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.navbar__puntos .etiqueta {
-  font-family: var(--font-body);
-  font-size: var(--fs-xs);
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
-
-/* ---------------------------------------------------------------------
-   SECCIÓN: PREMIOS FÍSICOS (1er, 2do, 3er lugar)
-   --------------------------------------------------------------------- */
-.seccion-titulo {
-  font-family: var(--font-display);
-  font-size: var(--fs-xl);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: var(--space-md);
-  position: relative;
-  padding-left: var(--space-md);
-}
-
-/* Pequeño "tachón" rojo a la izquierda de cada título de sección,
-   firma visual repetida en todo el dashboard. */
-.seccion-titulo::before {
-  content: '';
-  position: absolute;
+/* --- BARRA INFERIOR --- */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
   left: 0;
-  top: 6px;
-  bottom: 6px;
-  width: 5px;
-  background: var(--color-accent-red);
-  border-radius: 3px;
-}
-
-.premios-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-md);
-}
-
-.premio-card {
-  padding: var(--space-md);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.premio-card__medalla {
-  font-family: var(--font-display);
-  font-size: var(--fs-2xl);
-  letter-spacing: 0.05em;
-}
-
-.premio-card--oro .premio-card__medalla   { color: #ffd700; }
-.premio-card--plata .premio-card__medalla { color: #d8d8e0; }
-.premio-card--bronce .premio-card__medalla{ color: #d18a4a; }
-
-.premio-card__media {
   width: 100%;
-  aspect-ratio: 1 / 1;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  margin: var(--space-sm) 0;
-  background: rgba(0, 0, 0, 0.4);
-}
-
-.premio-card__media img,
-.premio-card__media video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.premio-card__titulo {
-  font-weight: 700;
-  font-size: var(--fs-sm);
-}
-
-.premio-card__descripcion {
-  font-size: var(--fs-xs);
-  color: var(--color-text-muted);
-  margin-top: 0.3rem;
-}
-
-/* ---------------------------------------------------------------------
-   SECCIÓN: MOTOR DE QUIZ
-   --------------------------------------------------------------------- */
-.quiz-card {
-  padding: var(--space-lg);
-}
-
-.quiz-header {
+  height: 70px;
+  background: rgba(3, 3, 3, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--glass-border);
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  margin-bottom: var(--space-md);
-  font-family: var(--font-mono);
-  font-size: var(--fs-sm);
+  z-index: 100;
+}
+
+.bottom-nav .nav-item {
   color: var(--color-text-muted);
-}
-
-.quiz-header .quiz-progreso {
-  color: var(--color-accent-yellow);
-}
-
-/* Barra de tiempo: se vacía de izquierda a derecha en 10 segundos.
-   El JS controla su "width" en tiempo real. */
-.quiz-timer {
-  width: 100%;
-  height: 8px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.08);
-  overflow: hidden;
-  margin-bottom: var(--space-md);
-}
-
-.quiz-timer__barra {
-  height: 100%;
-  width: 100%;
-  background: linear-gradient(90deg, var(--color-accent-yellow), var(--color-accent-red));
-  transform-origin: left;
-  transition: width 0.1s linear, background var(--transition-mid);
-}
-
-.quiz-timer__barra.urgente {
-  background: var(--color-accent-red);
-  box-shadow: 0 0 14px var(--color-red-glow);
-}
-
-.quiz-pregunta {
-  font-family: var(--font-display);
-  font-size: var(--fs-xl);
-  letter-spacing: 0.02em;
-  margin-bottom: var(--space-md);
-  min-height: 3.2em;
-}
-
-.quiz-opciones {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-sm);
-}
-
-.quiz-opcion {
-  text-align: left;
-  padding: var(--space-md);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--color-text);
-  font-family: var(--font-body);
-  font-size: var(--fs-base);
-  font-weight: 600;
-  cursor: pointer;
-  transition: border-color var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
-  display: flex;
-  gap: var(--space-sm);
-}
-
-.quiz-opcion .letra {
-  font-family: var(--font-mono);
-  color: var(--color-accent-yellow);
-}
-
-.quiz-opcion:hover:not(:disabled) {
-  border-color: var(--color-accent-red);
-  transform: translateY(-2px);
-}
-
-.quiz-opcion:disabled {
-  cursor: not-allowed;
-}
-
-.quiz-opcion.correcta {
-  border-color: #4cd97b;
-  background: rgba(76, 217, 123, 0.12);
-}
-
-.quiz-opcion.incorrecta {
-  border-color: var(--color-accent-red);
-  background: var(--color-red-soft);
-}
-
-.quiz-feedback {
-  margin-top: var(--space-md);
-  text-align: center;
-  font-weight: 700;
-  font-family: var(--font-body);
-}
-
-.quiz-feedback.ok { color: #4cd97b; }
-.quiz-feedback.fail { color: var(--color-accent-red); }
-
-.quiz-final {
-  text-align: center;
-}
-
-.quiz-final__puntaje {
-  font-family: var(--font-mono);
-  font-size: var(--fs-3xl);
-  color: var(--color-accent-yellow);
-  text-shadow: 0 0 20px var(--color-yellow-glow);
-}
-
-/* ---------------------------------------------------------------------
-   SECCIÓN: FEED DE VIDEOS (YouTube)
-   --------------------------------------------------------------------- */
-.feed-filtros {
-  display: flex;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-md);
-  flex-wrap: wrap;
-}
-
-.feed-filtros button {
-  font-family: var(--font-body);
-  font-size: var(--fs-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 0.45rem 1rem;
-  border-radius: 999px;
-  border: 1px solid var(--glass-border);
-  background: transparent;
-  color: var(--color-text-muted);
+  font-size: 1.5rem;
   cursor: pointer;
   transition: all var(--transition-fast);
-}
-
-.feed-filtros button.activo,
-.feed-filtros button:hover {
-  border-color: var(--color-accent-red);
-  color: var(--color-accent-red);
-}
-
-.feed-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--space-md);
-}
-
-.feed-card {
-  overflow: hidden;
-  padding: 0;
-}
-
-.feed-card__video {
   position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background: #000;
-}
-
-.feed-card__video iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-.feed-card__info {
-  padding: var(--space-sm) var(--space-md);
-}
-
-.feed-card__titulo {
-  font-weight: 700;
-  font-size: var(--fs-sm);
-}
-
-.feed-card__categoria {
-  font-size: var(--fs-xs);
-  color: var(--color-accent-yellow);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.feed-vacio {
+  width: 50px;
   text-align: center;
-  color: var(--color-text-muted);
+}
+
+.bottom-nav .nav-item.activo {
+  color: #fff;
+  transform: translateY(-5px);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.bottom-nav .nav-item.activo::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: var(--color-accent-red);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--color-red-glow);
+}
+
+/* --- MODAL AJUSTES (TUERCA) --- */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 101;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+}
+.modal-overlay.activo { opacity: 1; pointer-events: auto; }
+
+.modal-bottom-sheet {
+  position: fixed; bottom: 0; left: 0; width: 100%;
+  background: var(--color-bg-soft);
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
+  border-top: 1px solid var(--glass-border);
+  z-index: 102;
   padding: var(--space-lg);
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.modal-bottom-sheet.abierto { transform: translateY(0); }
+
+.modal-handle {
+  width: 40px; height: 5px;
+  background: var(--glass-border);
+  border-radius: 10px;
+  margin: 0 auto 20px auto;
 }
 
-/* ---------------------------------------------------------------------
-   RESPONSIVE
-   --------------------------------------------------------------------- */
-@media (max-width: 760px) {
-  .premios-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .quiz-opciones {
-    grid-template-columns: 1fr;
-  }
-
-  .navbar__logo {
-    font-size: var(--fs-lg);
-  }
-
-  .quiz-pregunta {
-    font-size: var(--fs-lg);
-    min-height: auto;
-  }
+.settings-btn {
+  width: 100%; text-align: left;
+  background: transparent; border: none;
+  border-bottom: 1px solid var(--glass-border);
+  padding: 15px 10px;
+  color: var(--color-text);
+  font-family: var(--font-body); font-size: var(--fs-lg);
+  cursor: pointer; display: flex; gap: 15px; align-items: center;
 }
+.settings-btn:last-child { border-bottom: none; }
+.settings-btn i { width: 25px; text-align: center; color: var(--color-text-muted); }
+.settings-btn .text-accent, .settings-btn.text-accent i { color: var(--color-accent-red); }
+
+/* --- JUEGOS Y ARENA POKÉMON --- */
+.text-accent { color: var(--color-accent-red); }
+.mt-4 { margin-top: 1rem; }
+
+.games-menu { display: flex; flex-direction: column; gap: 15px; }
+.game-card { display: flex; align-items: center; gap: 15px; padding: 15px; cursor: pointer; border: 1px solid var(--glass-border); transition: border-color 0.3s; }
+.game-card:hover { border-color: var(--color-accent-red); }
+.game-card__icon { width: 50px; height: 50px; background: rgba(0,0,0,0.5); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #fff; border: 1px solid var(--color-accent-red); }
+.game-card__info h3 { font-weight: 700; font-size: var(--fs-lg); }
+.game-card__info p { font-size: var(--fs-sm); color: var(--color-text-muted); }
+
+.pokemon-select-grid { display: flex; justify-content: center; gap: 15px; }
+.poke-choice { padding: 10px; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s, border-color 0.2s; background: rgba(0,0,0,0.5); border-radius: var(--radius-md); }
+.poke-choice:hover { transform: scale(1.1); border-color: var(--color-accent-red); }
+.poke-choice img { width: 80px; image-rendering: pixelated; }
+
+/* Arena Pokémon - Inspirada en el video */
+.arena-pokemon { position: relative; height: calc(100vh - 160px); background: #1a1a24; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--glass-border); box-shadow: inset 0 0 50px rgba(0,0,0,0.8); }
+.arena-header { position: absolute; top: 10px; left: 10px; z-index: 10; }
+.btn-huir { background: rgba(0,0,0,0.6); color: #fff; border: 1px solid var(--glass-border); padding: 5px 15px; border-radius: 20px; cursor: pointer; font-family: var(--font-body); }
+
+.arena-top { position: absolute; top: 30px; right: 20px; width: 100%; }
+.arena-bottom { position: absolute; bottom: 130px; left: 20px; width: 100%; }
+
+.poke-sprite { position: absolute; width: 120px; image-rendering: pixelated; transition: opacity 0.2s, transform 0.2s; }
+.poke-sprite.enemy { top: 20px; right: 20px; }
+.poke-sprite.player { bottom: 20px; left: 20px; }
+
+.poke-info { position: absolute; padding: 10px 15px; border: 2px solid rgba(255,255,255,0.2); width: 180px; background: rgba(20,20,20,0.8); }
+.enemy-info { top: 0; left: 20px; border-radius: 0 15px 0 15px; }
+.player-info { bottom: 0; right: 20px; border-radius: 15px 0 15px 0; }
+
+.poke-name { display: flex; justify-content: space-between; font-weight: 700; text-transform: uppercase; margin-bottom: 5px; font-size: var(--fs-sm); }
+.hp-bar-bg { width: 100%; height: 10px; background: #333; border-radius: 5px; border: 1px solid #000; overflow: hidden; }
+.hp-bar-fill { width: 100%; height: 100%; background: #4cd97b; transition: width 0.3s, background 0.3s; }
+.hp-text { text-align: right; font-size: var(--fs-xs); font-weight: bold; margin-top: 3px; }
+
+.arena-controls { position: absolute; bottom: 0; left: 0; width: 100%; height: 110px; display: flex; background: rgba(0,0,0,0.9); border-top: 2px solid var(--glass-border); }
+.battle-message { width: 50%; padding: 15px; font-weight: 700; font-size: var(--fs-base); border-right: 2px solid var(--glass-border); display: flex; align-items: center; }
+.battle-actions { width: 50%; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; padding: 5px; }
+.btn-action { background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); color: #fff; font-family: var(--font-body); font-weight: 700; text-transform: uppercase; border-radius: var(--radius-sm); cursor: pointer; transition: background 0.2s; }
+.btn-action:hover { background: rgba(255,255,255,0.2); }
+.btn-special { border-color: #4da6ff; color: #4da6ff; }
+.btn-heal { border-color: #4cd97b; color: #4cd97b; }
+.btn-run { border-color: var(--color-accent-red); color: var(--color-accent-red); }
