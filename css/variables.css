@@ -1,27 +1,295 @@
-/* --- COLORES MANGA NOIR --- */
+/* =====================================================================
+   OTAKU NEXUS · variables.css
+   ---------------------------------------------------------------------
+   Aquí viven TODOS los "tokens" de diseño: colores, tipografías,
+   espaciados y efectos de cristal (glassmorphism).
+   Este archivo se importa PRIMERO en cada HTML, antes que los demás
+   CSS, para que :root esté disponible en todas las páginas.
+
+   Estilo "Manga Noir": fondo casi negro, acentos rojo sangre y
+   amarillo alerta, tipografía display condensada y agresiva (al
+   estilo de las portadas de anime de acción) combinada con una
+   tipografía técnica/competitiva para la interfaz.
+   ===================================================================== */
+
+/* Tipografías de Google Fonts:
+   - "Bebas Neue"  -> títulos grandes, condensados, tipo "póster".
+   - "Rajdhani"    -> textos de interfaz, botones, labels (look "gamer").
+   - "Share Tech Mono" -> números, temporizador del quiz, puntajes. */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
+
 :root {
-    --bg-noir: #030303;
-    --accent-red: #ff3131;
-    --glass-bg: rgba(10, 10, 10, 0.45);
-    --glass-border: 1px solid rgba(255, 49, 49, 0.25);
-    --text-white: #ffffff;
+  /* ---------- COLORES BASE (definidos por el brief) ---------- */
+  --color-bg: #030303;            /* Fondo principal, negro casi puro */
+  --color-bg-soft: #0c0c0f;        /* Fondo secundario para tarjetas sólidas */
+  --color-accent-red: #ff3131;     /* Rojo sangre: acciones, errores, marca */
+  --color-accent-yellow: #f5d142;  /* Amarillo alerta: avisos, verificación */
+
+  /* ---------- COLORES DERIVADOS ---------- */
+  --color-text: #f5f5f5;           /* Texto principal sobre fondo oscuro */
+  --color-text-muted: #a3a3ad;     /* Texto secundario / descripciones */
+  --color-border: rgba(255, 255, 255, 0.08);
+
+  /* Glassmorphism: superficies traslúcidas con blur */
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-bg-strong: rgba(255, 255, 255, 0.07);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-blur: 16px;
+
+  /* Variantes del rojo y amarillo para hover / sombras / glow */
+  --color-red-glow: rgba(255, 49, 49, 0.45);
+  --color-yellow-glow: rgba(245, 209, 66, 0.35);
+  --color-red-soft: rgba(255, 49, 49, 0.12);
+  --color-yellow-soft: rgba(245, 209, 66, 0.12);
+
+  /* ---------- TIPOGRAFÍA ---------- */
+  --font-display: 'Bebas Neue', 'Oswald', sans-serif; /* Títulos / logos */
+  --font-body: 'Rajdhani', 'Segoe UI', sans-serif;     /* Interfaz general */
+  --font-mono: 'Share Tech Mono', monospace;            /* Números / timer */
+
+  /* Escala tipográfica */
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.75rem;
+  --fs-2xl: 2.5rem;
+  --fs-3xl: 4rem;
+
+  /* ---------- ESPACIADOS ---------- */
+  --space-xs: 0.4rem;
+  --space-sm: 0.8rem;
+  --space-md: 1.4rem;
+  --space-lg: 2.2rem;
+  --space-xl: 3.5rem;
+
+  /* ---------- RADIOS Y TRANSICIONES ---------- */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --transition-fast: 0.18s ease;
+  --transition-mid: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---------- SOMBRAS ---------- */
+  --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.55);
 }
 
+/* =====================================================================
+   RESET BÁSICO
+   Aplica a TODAS las páginas (index, dashboard, admin).
+   ===================================================================== */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Urbanist', sans-serif;
-    -webkit-tap-highlight-color: transparent;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
 }
 
 body {
-    background-color: var(--bg-noir);
-    color: var(--text-white);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    position: relative;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  /* Textura sutil de "ruido" tipo manga sobre el fondo negro */
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(255, 49, 49, 0.06), transparent 35%),
+    radial-gradient(circle at 85% 80%, rgba(245, 209, 66, 0.05), transparent 35%);
+  background-attachment: fixed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img, iframe, video {
+  max-width: 100%;
+  display: block;
+}
+
+/* =====================================================================
+   ELEMENTOS REUTILIZABLES (botones, inputs, tarjetas de cristal)
+   ===================================================================== */
+
+/* Tarjeta base con efecto "vidrio esmerilado" */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--shadow-card);
+}
+
+/* Título "estilo poster": grande, condensado, con un trazo rojo
+   debajo a modo de "tachón de tinta" (firma visual del proyecto). */
+.titulo-poster {
+  font-family: var(--font-display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+}
+
+.titulo-poster::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 60%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-accent-red), transparent);
+  border-radius: 2px;
+}
+
+/* Botón primario (rojo sangre) */
+.btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: var(--fs-sm);
+  padding: var(--space-sm) var(--space-lg);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+
+.btn-primario {
+  background: var(--color-accent-red);
+  color: #fff;
+  box-shadow: 0 6px 20px var(--color-red-glow);
+}
+
+.btn-primario:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px var(--color-red-glow);
+}
+
+.btn-secundario {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--glass-border);
+}
+
+.btn-secundario:hover {
+  border-color: var(--color-accent-red);
+  color: var(--color-accent-red);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Campos de formulario */
+.input-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.input-grupo label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+.input-grupo input,
+.input-grupo select,
+.input-grupo textarea {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.input-grupo input:focus,
+.input-grupo select:focus,
+.input-grupo textarea:focus {
+  border-color: var(--color-accent-red);
+  box-shadow: 0 0 0 3px var(--color-red-soft);
+}
+
+/* Fila para combinar selector de país + campo de teléfono / correo */
+.input-fila {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.input-fila .input-grupo {
+  flex: 1;
+}
+
+.input-fila .input-grupo.codigo-pais {
+  flex: 0 0 110px;
+}
+
+/* Alerta amarilla de verificación (usada en index.html) */
+.alerta-amarilla {
+  background: var(--color-yellow-soft);
+  border: 1px solid var(--color-accent-yellow);
+  color: var(--color-accent-yellow);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  box-shadow: 0 0 24px var(--color-yellow-glow);
+}
+
+/* Alerta roja de error genérico */
+.alerta-roja {
+  background: var(--color-red-soft);
+  border: 1px solid var(--color-accent-red);
+  color: var(--color-accent-red);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+/* Mensaje de éxito (verde sutil, sin romper la paleta) */
+.alerta-verde {
+  background: rgba(76, 217, 123, 0.12);
+  border: 1px solid #4cd97b;
+  color: #4cd97b;
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+/* Clase utilitaria para ocultar elementos sin quitarlos del DOM */
+.oculto {
+  display: none !important;
+}
+
+/* Scrollbar oscuro y delgado, acorde al tema */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-soft);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent-red);
+  border-radius: 4px;
 }
