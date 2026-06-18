@@ -1,44 +1,186 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CMS Oculto | Admin</title>
-    <link rel="stylesheet" href="./css/variables.css">
-    <link rel="stylesheet" href="./css/admin.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <!-- robots: noindex para que esta URL no aparezca en buscadores -->
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Otaku Nexus Â· Panel Privado</title>
+
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/admin.css" />
 </head>
 <body>
-    <div class="glass-panel admin-container">
-        <div class="admin-section">
-            <h2>Inyectar Video de YouTube</h2>
-            <form id="form-video">
-                <div class="form-group">
-                    <label>URL del Video (Ej: https://www.youtube.com/watch?v=...)</label>
-                    <input type="url" name="url" required>
-                </div>
-                <div class="form-group">
-                    <label>Categoría</label>
-                    <select name="category">
-                        <option value="shonen">Shonen</option>
-                        <option value="seinen">Seinen</option>
-                    </select>
-                </div>
-                <button type="submit">Inyectar en Dashboard</button>
-            </form>
+
+  <!-- =====================================================================
+       PANTALLA: ACCESO DENEGADO
+       Visible solo si el usuario logueado NO tiene es_admin = true.
+       Empieza oculta; admin.js decide cuÃ¡l mostrar.
+       ===================================================================== -->
+  <div id="admin-denegado" class="admin-denegado oculto">
+    <h1>403</h1>
+    <p>Esta secciÃ³n es exclusiva para el administrador de Otaku Nexus.</p>
+    <a href="dashboard.html" class="btn btn-primario">Volver al Dashboard</a>
+  </div>
+
+  <!-- =====================================================================
+       PANEL PRINCIPAL (oculto hasta confirmar que es admin)
+       ===================================================================== -->
+  <div id="admin-panel-contenedor" class="admin-shell oculto">
+
+    <header class="admin-header glass">
+      <h1>Panel <span>Admin</span></h1>
+      <button id="btn-logout-admin" class="btn btn-secundario">Salir</button>
+    </header>
+
+    <!-- ---------------- TABS ---------------- -->
+    <nav class="admin-tabs">
+      <button class="admin-tab activo" data-tab="banners">Banners (Login)</button>
+      <button class="admin-tab" data-tab="videos">Videos (Feed)</button>
+      <button class="admin-tab" data-tab="premios">Premios</button>
+    </nav>
+
+    <!-- ================================================================
+         PANEL 1: BANNERS DEL LOGIN
+         Inserta filas en "configuracion" (clave = banner_login_N)
+         ================================================================ -->
+    <section id="panel-banners" class="admin-panel glass activo">
+      <h2>Banners del Login</h2>
+      <p class="formulario__subtitulo">
+        Pega la URL de una imagen (ej. un poster de anime subido a un hosting
+        de imÃ¡genes). Se mostrarÃ¡n en carrusel en el lado izquierdo del login.
+      </p>
+
+      <form id="form-banner">
+        <div class="input-grupo">
+          <label for="banner-url">URL de la imagen</label>
+          <input type="url" id="banner-url" placeholder="https://..." required />
+        </div>
+        <button type="submit" class="btn btn-primario">Agregar Banner</button>
+      </form>
+
+      <div id="lista-banners" class="admin-lista">
+        <!-- admin.js inyecta aquÃ­ la lista de banners existentes -->
+      </div>
+    </section>
+
+    <!-- ================================================================
+         PANEL 2: VIDEOS DEL FEED
+         Inserta filas en "contenido" (youtube_id + categoria)
+         ================================================================ -->
+    <section id="panel-videos" class="admin-panel glass">
+      <h2>Videos del Feed</h2>
+      <p class="formulario__subtitulo">
+        Pega el link completo de YouTube (o solo el ID) y elige una categorÃ­a.
+        AparecerÃ¡ como tarjeta embebida en el dashboard de todos los usuarios.
+      </p>
+
+      <form id="form-video">
+        <div class="input-grupo">
+          <label for="video-titulo">TÃ­tulo</label>
+          <input type="text" id="video-titulo" placeholder="Ej: Top 10 Momentos Ã‰picos" required />
         </div>
 
-        <div class="admin-section">
-            <h2>Configurar Fondo del Login</h2>
-            <form id="form-bg">
-                <div class="form-group">
-                    <label>URL Directa de Imagen</label>
-                    <input type="url" name="bg_url" required>
-                </div>
-                <button type="submit">Actualizar Fondo</button>
-            </form>
+        <div class="input-grupo">
+          <label for="video-url">Link o ID de YouTube</label>
+          <input type="text" id="video-url" placeholder="https://youtube.com/watch?v=..." required />
         </div>
-    </div>
 
-    <script type="module" src="./js/admin.js"></script>
+        <div class="input-grupo">
+          <label for="video-categoria">CategorÃ­a</label>
+          <input type="text" id="video-categoria" placeholder="Ej: AMV, ReseÃ±as, Noticias..." required />
+        </div>
+
+        <button type="submit" class="btn btn-primario">Agregar Video</button>
+      </form>
+
+      <div id="lista-videos" class="admin-lista">
+        <!-- admin.js inyecta aquÃ­ la lista de videos existentes -->
+      </div>
+    </section>
+
+    <!-- ================================================================
+         PANEL 3: PREMIOS FÃSICOS (3 filas fijas: 1, 2 y 3)
+         Actualiza filas existentes en "premios"
+         ================================================================ -->
+    <section id="panel-premios" class="admin-panel glass">
+      <h2>Premios del Torneo</h2>
+      <p class="formulario__subtitulo">
+        Edita el tÃ­tulo, descripciÃ³n e imagen/video de cada lugar. Puedes
+        dejar el campo de video vacÃ­o si solo quieres mostrar una imagen.
+      </p>
+
+      <form id="form-premios">
+
+        <!-- ---- Premio 1er lugar ---- -->
+        <h3 class="formulario__titulo" style="font-size: var(--fs-lg); margin-top: var(--space-md);">ðŸ¥‡ 1er Lugar</h3>
+        <div class="input-grupo">
+          <label for="premio-1-titulo">TÃ­tulo</label>
+          <input type="text" id="premio-1-titulo" placeholder="Ej: PlayStation 5 + 3 Juegos" />
+        </div>
+        <div class="input-grupo">
+          <label for="premio-1-descripcion">DescripciÃ³n</label>
+          <input type="text" id="premio-1-descripcion" placeholder="Breve descripciÃ³n del premio" />
+        </div>
+        <div class="input-fila">
+          <div class="input-grupo">
+            <label for="premio-1-imagen">URL de imagen</label>
+            <input type="url" id="premio-1-imagen" placeholder="https://..." />
+          </div>
+          <div class="input-grupo">
+            <label for="premio-1-video">URL de video (opcional)</label>
+            <input type="url" id="premio-1-video" placeholder="https://..." />
+          </div>
+        </div>
+
+        <!-- ---- Premio 2do lugar ---- -->
+        <h3 class="formulario__titulo" style="font-size: var(--fs-lg); margin-top: var(--space-md);">ðŸ¥ˆ 2do Lugar</h3>
+        <div class="input-grupo">
+          <label for="premio-2-titulo">TÃ­tulo</label>
+          <input type="text" id="premio-2-titulo" placeholder="Ej: Figura Coleccionable" />
+        </div>
+        <div class="input-grupo">
+          <label for="premio-2-descripcion">DescripciÃ³n</label>
+          <input type="text" id="premio-2-descripcion" placeholder="Breve descripciÃ³n del premio" />
+        </div>
+        <div class="input-fila">
+          <div class="input-grupo">
+            <label for="premio-2-imagen">URL de imagen</label>
+            <input type="url" id="premio-2-imagen" placeholder="https://..." />
+          </div>
+          <div class="input-grupo">
+            <label for="premio-2-video">URL de video (opcional)</label>
+            <input type="url" id="premio-2-video" placeholder="https://..." />
+          </div>
+        </div>
+
+        <!-- ---- Premio 3er lugar ---- -->
+        <h3 class="formulario__titulo" style="font-size: var(--fs-lg); margin-top: var(--space-md);">ðŸ¥‰ 3er Lugar</h3>
+        <div class="input-grupo">
+          <label for="premio-3-titulo">TÃ­tulo</label>
+          <input type="text" id="premio-3-titulo" placeholder="Ej: MercancÃ­a Oficial" />
+        </div>
+        <div class="input-grupo">
+          <label for="premio-3-descripcion">DescripciÃ³n</label>
+          <input type="text" id="premio-3-descripcion" placeholder="Breve descripciÃ³n del premio" />
+        </div>
+        <div class="input-fila">
+          <div class="input-grupo">
+            <label for="premio-3-imagen">URL de imagen</label>
+            <input type="url" id="premio-3-imagen" placeholder="https://..." />
+          </div>
+          <div class="input-grupo">
+            <label for="premio-3-video">URL de video (opcional)</label>
+            <input type="url" id="premio-3-video" placeholder="https://..." />
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primario" style="margin-top: var(--space-md);">Guardar Premios</button>
+      </form>
+    </section>
+
+  </div>
+
+  <script type="module" src="js/admin.js"></script>
 </body>
 </html>
