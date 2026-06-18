@@ -5,121 +5,252 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Otaku Nexus · Dashboard</title>
 
+  <!-- FontAwesome para los íconos de la barra -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <link rel="stylesheet" href="css/variables.css" />
   <link rel="stylesheet" href="css/dashboard.css" />
 </head>
 <body>
 
   <div class="app-shell">
-
-    <!-- =================================================================
-         NAVBAR
-         ================================================================= -->
+    <!-- NAVBAR SUPERIOR ORIGINAL -->
     <header class="navbar glass">
       <div class="navbar__logo">OTAKU <span>NEXUS</span></div>
-
       <div class="navbar__usuario">
         <div class="navbar__puntos">
           <span id="navbar-puntos">0</span>
           <span class="etiqueta">pts</span>
         </div>
         <span id="navbar-username" class="navbar__username"></span>
-        <button id="btn-logout" class="btn btn-secundario">Salir</button>
       </div>
     </header>
 
-    <!-- =================================================================
-         SECCIÓN: PREMIOS FÍSICOS (1er, 2do, 3er lugar)
-         feed.js llena #premios-grid leyendo la tabla "premios"
-         ================================================================= -->
-    <section>
-      <h2 class="seccion-titulo">Premios del Torneo</h2>
-      <div id="premios-grid" class="premios-grid">
-        <!-- feed.js inyecta aquí 3 tarjetas .premio-card -->
+    <!-- ÁREA DE CONTENIDO (Pestañas) -->
+    <main class="main-content">
+      
+      <!-- PESTAÑA 1: INICIO (Premios y Feed - Activa por defecto) -->
+      <div id="tab-home" class="tab-pane activa">
+        <section>
+          <h2 class="seccion-titulo">Premios del Torneo</h2>
+          <div id="premios-grid" class="premios-grid"></div>
+        </section>
+
+        <section>
+          <h2 class="seccion-titulo">Feed de la Comunidad</h2>
+          <div id="feed-filtros" class="feed-filtros"></div>
+          <div id="feed-grid" class="feed-grid"></div>
+        </section>
       </div>
-    </section>
 
-    <!-- =================================================================
-         SECCIÓN: QUIZ ANTI-TRAMPAS
-         quiz.js controla todo este bloque
-         ================================================================= -->
-    <section>
-      <h2 class="seccion-titulo">Quiz Diario Hardcore</h2>
-
-      <div id="quiz-card" class="glass quiz-card">
-
-        <!-- ----- Bloque visible MIENTRAS el quiz está en curso ----- -->
-        <div id="quiz-en-curso">
-          <div class="quiz-header">
-            <span id="quiz-progreso">Pregunta 1/10</span>
-            <span>⏱ 10s</span>
+      <!-- PESTAÑA 2: BÚSQUEDA -->
+      <div id="tab-search" class="tab-pane">
+        <section>
+          <h2 class="seccion-titulo">Buscar</h2>
+          <div class="input-grupo">
+            <input type="text" placeholder="Buscar usuarios, videos..." style="width: 100%; border-radius: 99px; padding-left: 20px;">
           </div>
+          <div class="feed-vacio">Resultados aparecerán aquí</div>
+        </section>
+      </div>
 
-          <div class="quiz-timer">
-            <div id="quiz-timer-barra" class="quiz-timer__barra"></div>
+      <!-- PESTAÑA 3: JUEGOS (ESPADAS) -->
+      <div id="tab-games" class="tab-pane">
+        <section>
+          <h2 class="seccion-titulo">Zona Arcade</h2>
+          <div class="games-menu">
+            <div class="game-card glass" onclick="app.abrirSeleccionPokemon()">
+              <div class="game-card__icon"><i class="fa-solid fa-gamepad"></i></div>
+              <div class="game-card__info">
+                <h3>Pokémon Battle</h3>
+                <p>Elige tu inicial y lucha</p>
+              </div>
+              <i class="fa-solid fa-chevron-right text-accent"></i>
+            </div>
           </div>
+        </section>
+      </div>
 
-          <p id="quiz-pregunta-texto" class="quiz-pregunta">Cargando pregunta...</p>
-
-          <div id="quiz-opciones" class="quiz-opciones">
-            <!-- quiz.js inyecta aquí 4 botones .quiz-opcion -->
+      <!-- PESTAÑA 3.1: SELECCIÓN POKÉMON -->
+      <div id="tab-pokemon-select" class="tab-pane">
+        <section style="text-align: center;">
+          <button class="btn btn-secundario" style="margin-bottom: 20px;" onclick="app.cambiarTab('games')">Volver</button>
+          <h2 class="seccion-titulo" style="justify-content: center; padding: 0;">Elige tu Pokémon</h2>
+          <div class="pokemon-select-grid mt-4">
+            <div class="poke-choice glass" onclick="app.iniciarBatalla('charmander')">
+              <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png" alt="Charmander">
+            </div>
+            <div class="poke-choice glass" onclick="app.iniciarBatalla('squirtle')">
+              <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png" alt="Squirtle">
+            </div>
+            <div class="poke-choice glass" onclick="app.iniciarBatalla('bulbasaur')">
+              <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="Bulbasaur">
+            </div>
           </div>
+        </section>
+      </div>
 
-          <div id="quiz-feedback" class="quiz-feedback"></div>
+      <!-- PESTAÑA 3.2: ARENA DE BATALLA POKÉMON -->
+      <div id="tab-pokemon-battle" class="tab-pane arena-pokemon">
+        <div class="arena-header">
+          <button class="btn-huir" onclick="app.cambiarTab('games')">Rendirse</button>
+        </div>
+        
+        <div class="arena-top">
+          <div class="poke-info enemy-info glass">
+            <div class="poke-name">Alakazam <span>Lv50</span></div>
+            <div class="hp-bar-bg"><div id="enemy-hp" class="hp-bar-fill"></div></div>
+          </div>
+          <img id="enemy-sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/65.png" class="poke-sprite enemy">
         </div>
 
-        <!-- ----- Bloque de RESULTADO FINAL (oculto hasta terminar) ----- -->
-        <div id="quiz-final" class="quiz-final oculto">
-          <h3 class="titulo-poster">¡Quiz de Hoy Completado!</h3>
-          <p id="quiz-final-puntaje" class="quiz-final__puntaje">+0 pts</p>
-          <p id="quiz-final-detalle" class="formulario__subtitulo"></p>
+        <div class="arena-bottom">
+          <img id="player-sprite" src="" class="poke-sprite player">
+          <div class="poke-info player-info glass">
+            <div class="poke-name" id="player-name">Player <span>Lv50</span></div>
+            <div class="hp-bar-bg"><div id="player-hp" class="hp-bar-fill"></div></div>
+            <div class="hp-text" id="player-hp-text">100/100</div>
+          </div>
         </div>
 
-      </div>
-    </section>
-
-    <!-- =================================================================
-         SECCIÓN: FEED DE VIDEOS (YouTube embebido)
-         feed.js llena #feed-filtros y #feed-grid leyendo "contenido"
-         ================================================================= -->
-    <section>
-      <h2 class="seccion-titulo">Feed de la Comunidad</h2>
-
-      <div id="feed-filtros" class="feed-filtros">
-        <!-- feed.js inyecta aquí los botones de categoría -->
+        <div class="arena-controls">
+          <div id="battle-text" class="battle-message">¡Un Alakazam salvaje apareció!</div>
+          <div class="battle-actions">
+            <button class="btn-action" onclick="app.atacar(25, 'Ataque Rápido')">Ataque</button>
+            <button class="btn-action btn-special" onclick="app.atacar(40, 'Habilidad')">Especial</button>
+            <button class="btn-action btn-heal" onclick="app.curar()">Poción</button>
+            <button class="btn-action btn-run" onclick="app.cambiarTab('games')">Huir</button>
+          </div>
+        </div>
       </div>
 
-      <div id="feed-grid" class="feed-grid">
-        <!-- feed.js inyecta aquí las tarjetas .feed-card con <iframe> de YouTube -->
+      <!-- PESTAÑA 4: QUIZ (Cerebro) -->
+      <div id="tab-quiz" class="tab-pane">
+        <section>
+          <h2 class="seccion-titulo">Quiz Diario Hardcore</h2>
+          <div id="quiz-card" class="glass quiz-card">
+            <!-- Bloque en curso -->
+            <div id="quiz-en-curso">
+              <div class="quiz-header">
+                <span id="quiz-progreso">Pregunta 1/10</span>
+                <span>⏱ 10s</span>
+              </div>
+              <div class="quiz-timer"><div id="quiz-timer-barra" class="quiz-timer__barra"></div></div>
+              <p id="quiz-pregunta-texto" class="quiz-pregunta">Cargando pregunta...</p>
+              <div id="quiz-opciones" class="quiz-opciones"></div>
+              <div id="quiz-feedback" class="quiz-feedback"></div>
+            </div>
+            <!-- Bloque final -->
+            <div id="quiz-final" class="quiz-final oculto">
+              <h3 class="titulo-poster">¡Quiz Completado!</h3>
+              <p id="quiz-final-puntaje" class="quiz-final__puntaje">+0 pts</p>
+              <p id="quiz-final-detalle" class="formulario__subtitulo"></p>
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
+    </main>
+
+    <!-- BARRA DE NAVEGACIÓN INFERIOR -->
+    <nav class="bottom-nav">
+      <div class="nav-item activo" onclick="app.cambiarTab('home', this)"><i class="fa-solid fa-house"></i></div>
+      <div class="nav-item" onclick="app.cambiarTab('search', this)"><i class="fa-solid fa-magnifying-glass"></i></div>
+      <div class="nav-item" onclick="app.cambiarTab('games', this)"><i class="fa-solid fa-khanda"></i></div>
+      <div class="nav-item" onclick="app.cambiarTab('quiz', this)"><i class="fa-solid fa-brain"></i></div>
+      <div class="nav-item" onclick="app.abrirAjustes()"><i class="fa-solid fa-gear"></i></div>
+    </nav>
+
+    <!-- MODAL DE AJUSTES (Tuerca) -->
+    <div id="settings-overlay" class="modal-overlay" onclick="app.cerrarAjustes()"></div>
+    <div id="settings-modal" class="modal-bottom-sheet glass">
+      <div class="modal-handle"></div>
+      <h3 class="seccion-titulo" style="margin-top: 10px;">Ajustes</h3>
+      
+      <div class="settings-list">
+        <button class="settings-btn"><i class="fa-solid fa-user"></i> Perfil</button>
+        <button class="settings-btn"><i class="fa-solid fa-lock"></i> Cambiar contraseña</button>
+        <button class="settings-btn"><i class="fa-solid fa-share-nodes text-accent"></i> Compartir Otaku Nexus</button>
+        <button class="settings-btn"><i class="fa-solid fa-scale-balanced"></i> Información legal</button>
+        <button class="settings-btn text-accent mt-4" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
+      </div>
+    </div>
 
   </div>
 
-  <!-- =====================================================================
-       SCRIPTS
-       ---------------------------------------------------------------------
-       1) Un módulo "inline" que: revisa la sesión (si no hay, redirige al
-          login) y pinta el nombre/puntos del usuario en el navbar.
-       2) feed.js  -> premios + videos
-       3) quiz.js  -> motor anti-trampas (se auto-inicia al final del archivo)
-       ===================================================================== -->
+  <!-- SCRIPTS ORIGINALES DE SUPABASE CON CARGADOR ROBUSTO -->
   <script type="module">
-    import { supabase, obtenerSesion, obtenerPerfil, cerrarSesion } from './js/supabase.js';
+    let supabase, obtenerSesion, obtenerPerfil, cerrarSesion;
 
-    // Si no hay sesión activa, no se puede ver el dashboard
-    const sesion = await obtenerSesion();
-    if (!sesion) {
-      window.location.href = 'index.html';
-    } else {
-      const perfil = await obtenerPerfil(sesion.user.id);
-      document.getElementById('navbar-username').textContent = perfil?.username || sesion.user.email;
-      document.getElementById('navbar-puntos').textContent = perfil?.puntos_totales ?? 0;
+    // Función auxiliar para cargar supabase.js de forma dinámica y resolver problemas de base de datos no jerárquica
+    async function cargarModuloSupabase() {
+      try {
+        // Intento 1: Importación relativa tradicional
+        return await import('./js/supabase.js');
+      } catch (e) {
+        console.warn("Importación relativa directa fallida, intentando resolución avanzada de ruta:", e);
+        
+        // Intento 2: Deducir base real a partir de otros scripts cargados o el href
+        let base = window.location.origin;
+        if (!base || base === 'null' || base.startsWith('file') || base.startsWith('blob') || base.startsWith('data')) {
+          const scripts = Array.from(document.querySelectorAll('script[src]'));
+          const scriptConSrc = scripts.find(s => s.src && s.src.includes('js/'));
+          if (scriptConSrc) {
+            try {
+              base = new URL(scriptConSrc.src).origin;
+            } catch (err) {
+              base = window.location.href;
+            }
+          } else {
+            base = window.location.href;
+          }
+        }
+        
+        try {
+          // Construir URL absoluta robusta
+          const url = new URL('js/supabase.js', base).href;
+          return await import(url);
+        } catch (err) {
+          console.warn("Intento de URL absoluta fallido, cayendo a importación de raíz:", err);
+          // Intento 3: Cargar desde la raíz absoluta directa
+          return await import('/js/supabase.js');
+        }
+      }
     }
 
-    document.getElementById('btn-logout').addEventListener('click', cerrarSesion);
+    async function inicializarApp() {
+      try {
+        const modulo = await cargarModuloSupabase();
+        supabase = modulo.supabase;
+        obtenerSesion = modulo.obtenerSesion;
+        obtenerPerfil = modulo.obtenerPerfil;
+        cerrarSesion = modulo.cerrarSesion;
+
+        // Comprobación de sesión
+        const sesion = await obtenerSesion();
+        if (!sesion) {
+          window.location.href = 'index.html';
+        } else {
+          const perfil = await obtenerPerfil(sesion.user.id);
+          document.getElementById('navbar-username').textContent = perfil?.username || sesion.user.email;
+          document.getElementById('navbar-puntos').textContent = perfil?.puntos_totales ?? 0;
+        }
+
+        const btnLogout = document.getElementById('btn-logout');
+        if (btnLogout) {
+          btnLogout.addEventListener('click', cerrarSesion);
+        }
+      } catch (error) {
+        console.error("Error cargando o inicializando el módulo de Supabase en el Dashboard:", error);
+      }
+    }
+
+    inicializarApp();
   </script>
 
+  <!-- LÓGICA DE UI NUEVA -->
+  <script src="js/app.js"></script>
+
+  <!-- SCRIPTS EXISTENTES INTACTOS -->
   <script type="module" src="js/feed.js"></script>
   <script type="module" src="js/quiz.js"></script>
 </body>
