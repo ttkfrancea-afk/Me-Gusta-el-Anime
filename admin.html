@@ -5,27 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <!-- robots: noindex para que esta URL no aparezca en buscadores -->
   <meta name="robots" content="noindex, nofollow" />
-  <title>Otaku Nexus Â· Panel Privado</title>
+  <title>Otaku Nexus · Panel Privado</title>
 
   <link rel="stylesheet" href="css/variables.css" />
   <link rel="stylesheet" href="css/admin.css" />
 </head>
 <body>
 
-  <!-- =====================================================================
-       PANTALLA: ACCESO DENEGADO
-       Visible solo si el usuario logueado NO tiene es_admin = true.
-       Empieza oculta; admin.js decide cuÃ¡l mostrar.
-       ===================================================================== -->
+  <!-- PANTALLA: ACCESO DENEGADO -->
   <div id="admin-denegado" class="admin-denegado oculto">
     <h1>403</h1>
-    <p>Esta secciÃ³n es exclusiva para el administrador de Otaku Nexus.</p>
+    <p>Esta sección es exclusiva para el administrador de Otaku Nexus.</p>
     <a href="dashboard.html" class="btn btn-primario">Volver al Dashboard</a>
   </div>
 
-  <!-- =====================================================================
-       PANEL PRINCIPAL (oculto hasta confirmar que es admin)
-       ===================================================================== -->
+  <!-- PANEL PRINCIPAL -->
   <div id="admin-panel-contenedor" class="admin-shell oculto">
 
     <header class="admin-header glass">
@@ -33,23 +27,17 @@
       <button id="btn-logout-admin" class="btn btn-secundario">Salir</button>
     </header>
 
-    <!-- ---------------- TABS ---------------- -->
+    <!-- TABS -->
     <nav class="admin-tabs">
       <button class="admin-tab activo" data-tab="banners">Banners (Login)</button>
       <button class="admin-tab" data-tab="videos">Videos (Feed)</button>
       <button class="admin-tab" data-tab="premios">Premios</button>
     </nav>
 
-    <!-- ================================================================
-         PANEL 1: BANNERS DEL LOGIN
-         Inserta filas en "configuracion" (clave = banner_login_N)
-         ================================================================ -->
+    <!-- PANEL 1: BANNERS -->
     <section id="panel-banners" class="admin-panel glass activo">
       <h2>Banners del Login</h2>
-      <p class="formulario__subtitulo">
-        Pega la URL de una imagen (ej. un poster de anime subido a un hosting
-        de imÃ¡genes). Se mostrarÃ¡n en carrusel en el lado izquierdo del login.
-      </p>
+      <p class="formulario__subtitulo">Pega la URL de una imagen para el carrusel de inicio.</p>
 
       <form id="form-banner">
         <div class="input-grupo">
@@ -59,26 +47,18 @@
         <button type="submit" class="btn btn-primario">Agregar Banner</button>
       </form>
 
-      <div id="lista-banners" class="admin-lista">
-        <!-- admin.js inyecta aquÃ­ la lista de banners existentes -->
-      </div>
+      <div id="lista-banners" class="admin-lista"></div>
     </section>
 
-    <!-- ================================================================
-         PANEL 2: VIDEOS DEL FEED
-         Inserta filas en "contenido" (youtube_id + categoria)
-         ================================================================ -->
+    <!-- PANEL 2: VIDEOS -->
     <section id="panel-videos" class="admin-panel glass">
       <h2>Videos del Feed</h2>
-      <p class="formulario__subtitulo">
-        Pega el link completo de YouTube (o solo el ID) y elige una categorÃ­a.
-        AparecerÃ¡ como tarjeta embebida en el dashboard de todos los usuarios.
-      </p>
+      <p class="formulario__subtitulo">Pega el link de YouTube y elige una categoría.</p>
 
       <form id="form-video">
         <div class="input-grupo">
-          <label for="video-titulo">TÃ­tulo</label>
-          <input type="text" id="video-titulo" placeholder="Ej: Top 10 Momentos Ã‰picos" required />
+          <label for="video-titulo">Título</label>
+          <input type="text" id="video-titulo" placeholder="Ej: Top 10 Momentos Épicos" required />
         </div>
 
         <div class="input-grupo">
@@ -87,40 +67,31 @@
         </div>
 
         <div class="input-grupo">
-          <label for="video-categoria">CategorÃ­a</label>
-          <input type="text" id="video-categoria" placeholder="Ej: AMV, ReseÃ±as, Noticias..." required />
+          <label for="video-categoria">Categoría</label>
+          <input type="text" id="video-categoria" placeholder="Ej: AMV, Reseñas, Noticias..." required />
         </div>
 
         <button type="submit" class="btn btn-primario">Agregar Video</button>
       </form>
 
-      <div id="lista-videos" class="admin-lista">
-        <!-- admin.js inyecta aquÃ­ la lista de videos existentes -->
-      </div>
+      <div id="lista-videos" class="admin-lista"></div>
     </section>
 
-    <!-- ================================================================
-         PANEL 3: PREMIOS FÃSICOS (3 filas fijas: 1, 2 y 3)
-         Actualiza filas existentes en "premios"
-         ================================================================ -->
+    <!-- PANEL 3: PREMIOS -->
     <section id="panel-premios" class="admin-panel glass">
       <h2>Premios del Torneo</h2>
-      <p class="formulario__subtitulo">
-        Edita el tÃ­tulo, descripciÃ³n e imagen/video de cada lugar. Puedes
-        dejar el campo de video vacÃ­o si solo quieres mostrar una imagen.
-      </p>
+      <p class="formulario__subtitulo">Edita la informacion de cada lugar.</p>
 
       <form id="form-premios">
-
-        <!-- ---- Premio 1er lugar ---- -->
-        <h3 class="formulario__titulo" style="font-size: var(--fs-lg); margin-top: var(--space-md);">ðŸ¥‡ 1er Lugar</h3>
+        <!-- Premio 1 -->
+        <h3 class="formulario__titulo" style="font-size: var(--fs-lg); margin-top: var(--space-md); color: #ffd700;">#1 - Primer Lugar</h3>
         <div class="input-grupo">
-          <label for="premio-1-titulo">TÃ­tulo</label>
-          <input type="text" id="premio-1-titulo" placeholder="Ej: PlayStation 5 + 3 Juegos" />
+          <label for="premio-1-titulo">Título</label>
+          <input type="text" id="premio-1-titulo" placeholder="Ej: PlayStation 5" />
         </div>
         <div class="input-grupo">
-          <label for="premio-1-descripcion">DescripciÃ³n</label>
-          <input type="text" id="premio-1-descripcion" placeholder="Breve descripciÃ³n del premio" />
+          <label for="premio-1-descripcion">Descripción</label>
+          <input type="text" id="premio-1-descripcion" placeholder="Breve descripción" />
         </div>
         <div class="input-fila">
           <div class="input-grupo">
@@ -133,15 +104,15 @@
           </div>
         </div>
 
-        <!-- ---- Premio 2do lugar ---- -->
-        <h3 class="formulario__titulo" style="font-size: var(--fs-lg); margin-top: var(--space-md);">ðŸ¥ˆ 2do Lugar</h3>
+        <!-- Premio 2 -->
+        <h3 class="formulario__titulo" style="font-size: var(--fs-lg); margin-top: var(--space-md); color: #d8d8e0;">#2 - Segundo Lugar</h3>
         <div class="input-grupo">
-          <label for="premio-2-titulo">TÃ­tulo</label>
-          <input type="text" id="premio-2-titulo" placeholder="Ej: Figura Coleccionable" />
+          <label for="premio-2-titulo">Título</label>
+          <input type="text" id="premio-2-titulo" placeholder="Ej: Figura de Colección" />
         </div>
         <div class="input-grupo">
-          <label for="premio-2-descripcion">DescripciÃ³n</label>
-          <input type="text" id="premio-2-descripcion" placeholder="Breve descripciÃ³n del premio" />
+          <label for="premio-2-descripcion">Descripción</label>
+          <input type="text" id="premio-2-descripcion" placeholder="Breve descripción" />
         </div>
         <div class="input-fila">
           <div class="input-grupo">
@@ -154,15 +125,15 @@
           </div>
         </div>
 
-        <!-- ---- Premio 3er lugar ---- -->
-        <h3 class="formulario__titulo" style="font-size: var(--fs-lg); margin-top: var(--space-md);">ðŸ¥‰ 3er Lugar</h3>
+        <!-- Premio 3 -->
+        <h3 class="formulario__titulo" style="font-size: var(--fs-lg); margin-top: var(--space-md); color: #d18a4a;">#3 - Tercer Lugar</h3>
         <div class="input-grupo">
-          <label for="premio-3-titulo">TÃ­tulo</label>
-          <input type="text" id="premio-3-titulo" placeholder="Ej: MercancÃ­a Oficial" />
+          <label for="premio-3-titulo">Título</label>
+          <input type="text" id="premio-3-titulo" placeholder="Ej: Mercancía Oficial" />
         </div>
         <div class="input-grupo">
-          <label for="premio-3-descripcion">DescripciÃ³n</label>
-          <input type="text" id="premio-3-descripcion" placeholder="Breve descripciÃ³n del premio" />
+          <label for="premio-3-descripcion">Descripción</label>
+          <input type="text" id="premio-3-descripcion" placeholder="Breve descripción" />
         </div>
         <div class="input-fila">
           <div class="input-grupo">
