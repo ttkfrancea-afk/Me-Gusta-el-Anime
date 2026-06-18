@@ -1,29 +1,126 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard | Me Gusta el Anime</title>
-    <link rel="stylesheet" href="./css/variables.css">
-    <link rel="stylesheet" href="./css/dashboard.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Otaku Nexus · Dashboard</title>
+
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
 </head>
 <body>
-    <div class="dashboard-layout">
-        <header class="prizes-section glass-panel" id="prizes-container">
-            </header>
 
-        <main class="feed-grid" id="feed-container">
-            </main>
-    </div>
+  <div class="app-shell">
 
-    <div class="quiz-fab" onclick="window.startHardcoreQuiz(1)">
-        🔥
-    </div>
+    <!-- =================================================================
+         NAVBAR
+         ================================================================= -->
+    <header class="navbar glass">
+      <div class="navbar__logo">OTAKU <span>NEXUS</span></div>
 
-    <script type="module">
-        import { initQuizEngine } from './js/quiz.js';
-        initQuizEngine();
-    </script>
-    <script type="module" src="./js/feed.js"></script>
+      <div class="navbar__usuario">
+        <div class="navbar__puntos">
+          <span id="navbar-puntos">0</span>
+          <span class="etiqueta">pts</span>
+        </div>
+        <span id="navbar-username" class="navbar__username"></span>
+        <button id="btn-logout" class="btn btn-secundario">Salir</button>
+      </div>
+    </header>
+
+    <!-- =================================================================
+         SECCIÓN: PREMIOS FÍSICOS (1er, 2do, 3er lugar)
+         feed.js llena #premios-grid leyendo la tabla "premios"
+         ================================================================= -->
+    <section>
+      <h2 class="seccion-titulo">Premios del Torneo</h2>
+      <div id="premios-grid" class="premios-grid">
+        <!-- feed.js inyecta aquí 3 tarjetas .premio-card -->
+      </div>
+    </section>
+
+    <!-- =================================================================
+         SECCIÓN: QUIZ ANTI-TRAMPAS
+         quiz.js controla todo este bloque
+         ================================================================= -->
+    <section>
+      <h2 class="seccion-titulo">Quiz Diario Hardcore</h2>
+
+      <div id="quiz-card" class="glass quiz-card">
+
+        <!-- ----- Bloque visible MIENTRAS el quiz está en curso ----- -->
+        <div id="quiz-en-curso">
+          <div class="quiz-header">
+            <span id="quiz-progreso">Pregunta 1/10</span>
+            <span>⏱ 10s</span>
+          </div>
+
+          <div class="quiz-timer">
+            <div id="quiz-timer-barra" class="quiz-timer__barra"></div>
+          </div>
+
+          <p id="quiz-pregunta-texto" class="quiz-pregunta">Cargando pregunta...</p>
+
+          <div id="quiz-opciones" class="quiz-opciones">
+            <!-- quiz.js inyecta aquí 4 botones .quiz-opcion -->
+          </div>
+
+          <div id="quiz-feedback" class="quiz-feedback"></div>
+        </div>
+
+        <!-- ----- Bloque de RESULTADO FINAL (oculto hasta terminar) ----- -->
+        <div id="quiz-final" class="quiz-final oculto">
+          <h3 class="titulo-poster">¡Quiz de Hoy Completado!</h3>
+          <p id="quiz-final-puntaje" class="quiz-final__puntaje">+0 pts</p>
+          <p id="quiz-final-detalle" class="formulario__subtitulo"></p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =================================================================
+         SECCIÓN: FEED DE VIDEOS (YouTube embebido)
+         feed.js llena #feed-filtros y #feed-grid leyendo "contenido"
+         ================================================================= -->
+    <section>
+      <h2 class="seccion-titulo">Feed de la Comunidad</h2>
+
+      <div id="feed-filtros" class="feed-filtros">
+        <!-- feed.js inyecta aquí los botones de categoría -->
+      </div>
+
+      <div id="feed-grid" class="feed-grid">
+        <!-- feed.js inyecta aquí las tarjetas .feed-card con <iframe> de YouTube -->
+      </div>
+    </section>
+
+  </div>
+
+  <!-- =====================================================================
+       SCRIPTS
+       ---------------------------------------------------------------------
+       1) Un módulo "inline" que: revisa la sesión (si no hay, redirige al
+          login) y pinta el nombre/puntos del usuario en el navbar.
+       2) feed.js  -> premios + videos
+       3) quiz.js  -> motor anti-trampas (se auto-inicia al final del archivo)
+       ===================================================================== -->
+  <script type="module">
+    import { supabase, obtenerSesion, obtenerPerfil, cerrarSesion } from './js/supabase.js';
+
+    // Si no hay sesión activa, no se puede ver el dashboard
+    const sesion = await obtenerSesion();
+    if (!sesion) {
+      window.location.href = 'index.html';
+    } else {
+      const perfil = await obtenerPerfil(sesion.user.id);
+      document.getElementById('navbar-username').textContent = perfil?.username || sesion.user.email;
+      document.getElementById('navbar-puntos').textContent = perfil?.puntos_totales ?? 0;
+    }
+
+    document.getElementById('btn-logout').addEventListener('click', cerrarSesion);
+  </script>
+
+  <script type="module" src="js/feed.js"></script>
+  <script type="module" src="js/quiz.js"></script>
 </body>
 </html>
