@@ -1,261 +1,232 @@
-/* --- FONDO CON TUS IMÁGENES --- */
-.background-grid {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    display: flex;
-    opacity: 0.25; 
-    z-index: 1;
-    pointer-events: none;
+/* =====================================================================
+   OTAKU NEXUS · login.css
+   ---------------------------------------------------------------------
+   Estilos exclusivos de index.html (pantalla de Login / Registro).
+   Estructura: un panel "split" (dividido en 2) dentro de una tarjeta
+   de cristal. El lado izquierdo muestra imágenes de fondo dinámicas
+   (cargadas desde Supabase) y el lado derecho contiene los
+   formularios de Login y Registro, que se alternan con una animación
+   de deslizamiento.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   Contenedor de toda la pantalla
+   --------------------------------------------------------------------- */
+.pantalla-login {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
 }
 
-.bg-poster {
-    flex: 1;
-    height: 100%;
-    object-fit: cover;
-    filter: grayscale(20%) contrast(120%);
+/* ---------------------------------------------------------------------
+   Tarjeta "split panel"
+   --------------------------------------------------------------------- */
+.split-panel {
+  position: relative;
+  width: 100%;
+  max-width: 920px;
+  min-height: 560px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
 }
 
-/* Partículas flotantes */
-#canvas-particles {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 2;
-    pointer-events: none;
+/* ---------- LADO VISUAL (imágenes dinámicas de anime) ---------- */
+.panel-visual {
+  position: relative;
+  overflow: hidden;
+  /* Orden por defecto: visual a la izquierda */
+  order: 1;
+  transition: order var(--transition-mid);
 }
 
-/* --- CONTENEDOR PRINCIPAL DEL SLIDER --- */
-.container {
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: var(--glass-border);
-    border-radius: 20px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.8), 0 0 20px rgba(255, 49, 49, 0.1);
-    position: relative;
-    overflow: hidden;
-    width: 850px;
-    max-width: 95vw; 
-    min-height: 500px;
-    z-index: 10;
+.panel-visual__slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transform: scale(1.05);
+  transition: opacity 1.2s ease, transform 6s ease;
 }
 
-/* --- PANELES DE FORMULARIO --- */
-.form-container {
-    position: absolute;
-    top: 0;
-    height: 100%;
-    transition: all 0.6s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 0 40px;
-    width: 50%; 
-    text-align: center;
+.panel-visual__slide.activa {
+  opacity: 1;
+  transform: scale(1);
 }
 
-.sign-in-container {
-    left: 0;
-    z-index: 2;
+/* Degradado para que el texto/branding se lea bien sobre la imagen */
+.panel-visual::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(3, 3, 3, 0.15) 0%,
+    rgba(3, 3, 3, 0.55) 70%,
+    rgba(3, 3, 3, 0.9) 100%
+  );
+  z-index: 2;
 }
 
-.sign-up-container {
-    left: 0;
-    opacity: 0;
-    z-index: 1;
+.panel-visual__branding {
+  position: absolute;
+  bottom: var(--space-lg);
+  left: var(--space-lg);
+  right: var(--space-lg);
+  z-index: 3;
 }
 
-/* --- TIPOGRAFÍA E INPUTS --- */
-form { width: 100%; }
-
-h2 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 26px;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-}
-h2 span { color: var(--accent-red); }
-
-.input-box {
-    width: 100%;
-    margin-bottom: 15px;
-    text-align: left;
+.panel-visual__branding h1 {
+  font-family: var(--font-display);
+  font-size: var(--fs-3xl);
+  line-height: 1;
+  letter-spacing: 0.06em;
+  color: #fff;
+  text-shadow: 0 0 24px var(--color-red-glow);
 }
 
-.input-box label {
-    display: block;
-    font-size: 11px;
-    text-transform: uppercase;
-    color: var(--accent-red);
-    margin-bottom: 5px;
-    font-weight: 800;
+.panel-visual__branding p {
+  margin-top: var(--space-xs);
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+  max-width: 320px;
 }
 
-.input-field {
-    width: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 12px 15px;
-    border-radius: 8px;
-    color: var(--text-white);
-    font-size: 14px;
-    outline: none;
-    transition: 0.3s;
+/* ---------- LADO DE FORMULARIOS ---------- */
+.panel-formularios {
+  position: relative;
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-left: 1px solid var(--glass-border);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-xl) var(--space-lg);
+  order: 2;
 }
 
-.input-field:focus {
-    border-color: var(--accent-red);
-    background: #000;
+/* ---------------------------------------------------------------------
+   ANIMACIÓN DE DESLIZAMIENTO ENTRE LOGIN / REGISTRO
+   ---------------------------------------------------------------------
+   Cada formulario ocupa el 100% del panel-formularios. Usamos
+   "translateX" para deslizar el que está activo dentro de la vista y
+   sacar el inactivo hacia un costado. El JS solo agrega/quita la
+   clase ".activo" en <body> o en cada formulario.
+   --------------------------------------------------------------------- */
+.formularios-wrapper {
+  position: relative;
+  width: 100%;
 }
 
-.btn-action {
-    background: var(--accent-red);
-    color: var(--text-white);
-    border: none;
-    padding: 12px 30px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 800;
-    text-transform: uppercase;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 10px;
-    transition: 0.3s;
+.formulario {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(40px);
+  transition: opacity var(--transition-mid), transform var(--transition-mid);
 }
 
-.btn-action:hover { transform: scale(1.02); }
-
-/* --- EL PANEL QUE SE DESLIZA (OVERLAY) --- */
-.overlay-container {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 50%;
-    height: 100%;
-    overflow: hidden;
-    transition: transform 0.6s ease-in-out;
-    z-index: 100;
-    border-left: 1px solid rgba(255,255,255,0.1);
+.formulario.activo {
+  position: relative;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
 }
 
-.overlay {
-    background: linear-gradient(135deg, #050505 0%, #2a0000 100%);
-    background-size: cover;
-    color: #fff;
-    position: relative;
-    left: -100%;
-    height: 100%;
-    width: 200%;
-    transform: translateX(0);
-    transition: transform 0.6s ease-in-out;
+.formulario__titulo {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-sm);
 }
 
-.overlay-panel {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 0 30px;
-    text-align: center;
-    top: 0;
-    height: 100%;
-    width: 50%;
-    transform: translateX(0);
-    transition: transform 0.6s ease-in-out;
+.formulario__subtitulo {
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+  margin-bottom: var(--space-lg);
 }
 
-.overlay-left { transform: translateX(-20%); }
-.overlay-right { right: 0; transform: translateX(0); }
-
-.overlay-panel h3 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 22px;
-    margin-bottom: 10px;
+.formulario__pie {
+  margin-top: var(--space-md);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  text-align: center;
 }
 
-.overlay-panel p {
-    font-size: 13px;
-    color: #ccc;
-    margin-bottom: 20px;
+.formulario__pie button {
+  background: none;
+  border: none;
+  color: var(--color-accent-red);
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.btn-ghost {
-    background: transparent;
-    border: 2px solid #fff;
-    color: #fff;
-    padding: 10px 25px;
-    border-radius: 8px;
-    font-weight: 800;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: 0.3s;
+.formulario__pie button:hover {
+  text-decoration: underline;
 }
 
-.btn-ghost:hover { background: #fff; color: #000; }
-
-/* --- ANIMACIÓN EXACTA DEL SLIDER --- */
-.container.right-panel-active .sign-in-container {
-    transform: translateX(100%);
-    opacity: 0;
+.olvido-password {
+  display: block;
+  text-align: right;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  margin-top: -0.6rem;
+  margin-bottom: var(--space-md);
+  cursor: pointer;
 }
 
-.container.right-panel-active .sign-up-container {
-    transform: translateX(100%);
-    opacity: 1;
-    z-index: 5;
+.olvido-password:hover {
+  color: var(--color-accent-yellow);
 }
 
-.container.right-panel-active .overlay-container {
-    transform: translateX(-100%);
+/* ---------------------------------------------------------------------
+   ZONA DE MENSAJES (alerta amarilla de verificación, errores, éxito)
+   --------------------------------------------------------------------- */
+.zona-mensajes {
+  margin-top: var(--space-md);
+}
+
+.zona-mensajes:empty {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------
+   RESPONSIVE: en pantallas angostas, el panel visual se convierte en
+   una franja superior y los formularios ocupan todo el ancho.
+   --------------------------------------------------------------------- */
+@media (max-width: 760px) {
+  .split-panel {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .panel-visual {
+    order: 1;
+    min-height: 220px;
+  }
+
+  .panel-formularios {
+    order: 2;
     border-left: none;
-    border-right: 1px solid rgba(255,255,255,0.1);
-}
+    border-top: 1px solid var(--glass-border);
+    padding: var(--space-lg) var(--space-md);
+  }
 
-.container.right-panel-active .overlay {
-    transform: translateX(50%);
-}
-
-.container.right-panel-active .overlay-left {
-    transform: translateX(0);
-}
-
-.container.right-panel-active .overlay-right {
-    transform: translateX(20%);
-}
-
-/* --- AJUSTES PARA MÓVILES --- */
-@media (max-width: 768px) {
-    .container { min-height: 450px; }
-    .form-container { padding: 0 15px; }
-    .overlay-panel { padding: 0 15px; }
-    h2 { font-size: 20px; }
-    .overlay-panel h3 { font-size: 18px; }
-    .overlay-panel p { font-size: 11px; }
-}
-
-/* --- ALERTA DE VERIFICACIÓN (BARRERA AMARILLA) --- */
-#alert-box {
-    display: none;
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #f5d142;
-    color: #000;
-    padding: 20px;
-    border-radius: 12px;
-    z-index: 1000;
-    font-weight: 700;
-    width: 90%;
-    max-width: 400px;
-    text-align: left;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    border: 2px solid #000;
-}
-
-#alert-box ol {
-    margin-top: 10px;
-    padding-left: 20px;
-    font-size: 13px;
+  .panel-visual__branding h1 {
+    font-size: var(--fs-2xl);
+  }
 }
