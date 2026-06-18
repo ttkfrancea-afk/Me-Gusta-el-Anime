@@ -1,27 +1,17 @@
 // =====================================================================
 // OTAKU NEXUS · js/app.js
-// Lógica de UI (Pestañas, Modal Ajustes) y Mini-juegos (Pokémon)
+// Controlador central de UI (Pestañas, Modal) y Mini-juegos
 // =====================================================================
 
 const app = {
-  // --- NAVEGACIÓN DE PESTAÑAS ---
+  // --- NAVEGACIÓN ---
   cambiarTab(idTab, elementoNav = null) {
-    // 1. Cerrar ajustes si están abiertos
     this.cerrarAjustes();
-
-    // 2. Ocultar todas las pestañas
-    document.querySelectorAll('.tab-pane').forEach(tab => {
-      tab.classList.remove('activa');
-    });
-
-    // 3. Mostrar la seleccionada
+    document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('activa'));
     document.getElementById(`tab-${idTab}`).classList.add('activa');
 
-    // 4. Cambiar estilo del botón inferior si se hizo clic en él
     if (elementoNav) {
-      document.querySelectorAll('.bottom-nav .nav-item').forEach(btn => {
-        btn.classList.remove('activo');
-      });
+      document.querySelectorAll('.bottom-nav .nav-item').forEach(btn => btn.classList.remove('activo'));
       elementoNav.classList.add('activo');
     }
   },
@@ -31,97 +21,87 @@ const app = {
     document.getElementById('settings-modal').classList.add('abierto');
     document.getElementById('settings-overlay').classList.add('activo');
   },
-
   cerrarAjustes() {
     document.getElementById('settings-modal').classList.remove('abierto');
     document.getElementById('settings-overlay').classList.remove('activo');
   },
 
-  // --- SISTEMA POKÉMON BATTLE ---
+  // --- ARENA POKÉMON (MEJORADA) ---
   batalla: {
-    pHP: 100,
-    eHP: 100,
-    enBatalla: false,
-    nombres: {
-      'charmander': 'Charmander',
-      'squirtle': 'Squirtle',
-      'bulbasaur': 'Bulbasaur'
-    },
+    pHP: 100, eHP: 100, enBatalla: false,
+    nombres: { charmander: 'Charmander', squirtle: 'Squirtle', bulbasaur: 'Bulbasaur' },
     sprites: {
-      'charmander': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/4.png',
-      'squirtle': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/7.png',
-      'bulbasaur': 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/1.png'
+      charmander: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/4.png',
+      squirtle: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/7.png',
+      bulbasaur: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/1.png'
     }
   },
 
-  abrirSeleccionPokemon() {
-    this.cambiarTab('pokemon-select');
-  },
+  abrirSeleccionPokemon() { this.cambiarTab('pokemon-select'); },
 
   iniciarBatalla(pokemonKey) {
-    this.batalla.pHP = 100;
-    this.batalla.eHP = 100;
-    this.batalla.enBatalla = true;
+    this.batalla.pHP = 100; this.batalla.eHP = 100; this.batalla.enBatalla = true;
     
-    // Configurar UI Visual
-    document.getElementById('player-sprite').src = this.batalla.sprites[pokemonKey];
-    document.getElementById('player-name').innerHTML = `${this.batalla.nombres[pokemonKey]} <span>Lv50</span>`;
-    this.escribirMensaje(`¡Ve, ${this.batalla.nombres[pokemonKey]}!`);
+    // Resetear Sprites
+    const pSprite = document.getElementById('player-sprite');
+    const eSprite = document.getElementById('enemy-sprite');
+    pSprite.className = 'poke-sprite'; eSprite.className = 'poke-sprite';
+    
+    pSprite.src = this.batalla.sprites[pokemonKey];
+    document.getElementById('player-name').innerHTML = `${this.batalla.nombres[pokemonKey]} <span class="text-yellow">Lv.50</span>`;
+    this.escribirMensaje(`¡Adelante, ${this.batalla.nombres[pokemonKey]}!`);
     
     this.actualizarBarras();
     this.cambiarTab('pokemon-battle');
   },
 
   actualizarBarras() {
+    const b = this.batalla;
     const pBar = document.getElementById('player-hp');
     const eBar = document.getElementById('enemy-hp');
-    const b = this.batalla;
     
-    pBar.style.width = b.pHP + '%';
-    eBar.style.width = b.eHP + '%';
-    document.getElementById('player-hp-text').innerText = `${b.pHP}/100`;
+    pBar.style.width = `${b.pHP}%`; eBar.style.width = `${b.eHP}%`;
+    document.getElementById('player-hp-text').innerText = `${b.pHP} / 100`;
 
-    // Colores según vida restante
-    pBar.style.background = b.pHP > 50 ? '#4cd97b' : b.pHP > 20 ? '#f5d142' : '#ff3131';
-    eBar.style.background = b.eHP > 50 ? '#4cd97b' : b.eHP > 20 ? '#f5d142' : '#ff3131';
+    // Cambio de color (Verde -> Amarillo -> Rojo)
+    pBar.style.background = b.pHP > 50 ? 'linear-gradient(90deg, #4cd97b, #28a745)' : b.pHP > 20 ? 'linear-gradient(90deg, #f5d142, #d4a017)' : 'linear-gradient(90deg, #ff3131, #b31b1b)';
+    eBar.style.background = b.eHP > 50 ? 'linear-gradient(90deg, #4cd97b, #28a745)' : b.eHP > 20 ? 'linear-gradient(90deg, #f5d142, #d4a017)' : 'linear-gradient(90deg, #ff3131, #b31b1b)';
   },
 
-  escribirMensaje(msg) {
-    document.getElementById('battle-text').innerText = msg;
+  escribirMensaje(msg) { document.getElementById('battle-text').innerText = msg; },
+
+  animarDanio(spriteId) {
+    const sprite = document.getElementById(spriteId);
+    sprite.classList.remove('anim-shake');
+    void sprite.offsetWidth; // Forzar reflow para reiniciar animación
+    sprite.classList.add('anim-shake');
   },
 
   atacar(dmg, nombreAtaque) {
     if (!this.batalla.enBatalla) return;
-    
     this.escribirMensaje(`¡Usaste ${nombreAtaque}!`);
     
-    // Animación de ataque al enemigo
-    const eSprite = document.getElementById('enemy-sprite');
-    eSprite.style.opacity = '0.5';
-    setTimeout(() => eSprite.style.opacity = '1', 150);
-    setTimeout(() => eSprite.style.opacity = '0.5', 300);
-    setTimeout(() => eSprite.style.opacity = '1', 450);
-
     setTimeout(() => {
+      this.animarDanio('enemy-sprite');
       this.batalla.eHP -= dmg;
       if (this.batalla.eHP < 0) this.batalla.eHP = 0;
       this.actualizarBarras();
       
       if (this.batalla.eHP === 0) {
-        this.escribirMensaje('¡Alakazam enemigo se debilitó! ¡Ganaste!');
+        this.escribirMensaje('¡Gengar enemigo se debilitó! ¡Has ganado!');
         this.batalla.enBatalla = false;
-        setTimeout(() => this.cambiarTab('games'), 3000);
+        setTimeout(() => this.cambiarTab('games'), 3500);
       } else {
         this.turnoEnemigo();
       }
-    }, 500);
+    }, 600);
   },
 
   curar() {
     if (!this.batalla.enBatalla) return;
-    this.escribirMensaje(`¡Usaste una Poción!`);
+    this.escribirMensaje(`¡Usaste una Poción Máxima!`);
     setTimeout(() => {
-      this.batalla.pHP += 40;
+      this.batalla.pHP += 50;
       if (this.batalla.pHP > 100) this.batalla.pHP = 100;
       this.actualizarBarras();
       this.turnoEnemigo();
@@ -130,29 +110,23 @@ const app = {
 
   turnoEnemigo() {
     setTimeout(() => {
-      this.escribirMensaje('¡Alakazam usó Psíquico!');
-      
-      const pSprite = document.getElementById('player-sprite');
-      pSprite.style.opacity = '0.5';
-      setTimeout(() => pSprite.style.opacity = '1', 150);
-
+      this.escribirMensaje('¡Gengar usó Bola Sombra!');
       setTimeout(() => {
-        // Daño aleatorio entre 15 y 30
-        this.batalla.pHP -= Math.floor(Math.random() * 16) + 15; 
+        this.animarDanio('player-sprite');
+        this.batalla.pHP -= Math.floor(Math.random() * 20) + 15; // Daño entre 15 y 35
         if (this.batalla.pHP < 0) this.batalla.pHP = 0;
         this.actualizarBarras();
         
         if (this.batalla.pHP === 0) {
-          this.escribirMensaje('¡Tu Pokémon se debilitó! Perdiste...');
+          this.escribirMensaje('¡Tu Pokémon se debilitó! Perdiste la batalla.');
           this.batalla.enBatalla = false;
-          setTimeout(() => this.cambiarTab('games'), 3000);
+          setTimeout(() => this.cambiarTab('games'), 3500);
         } else {
-          this.escribirMensaje('¿Qué vas a hacer?');
+          setTimeout(() => this.escribirMensaje('¿Qué debería hacer tu Pokémon?'), 1000);
         }
-      }, 500);
-    }, 1500);
+      }, 600);
+    }, 1800);
   }
 };
 
-// Exponer la app globalmente para que funcione en los onclick del HTML
 window.app = app;
