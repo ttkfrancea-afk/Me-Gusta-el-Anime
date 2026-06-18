@@ -1,92 +1,135 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Me Gusta el Anime - Login</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Urbanist:wght@400;600;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <!-- Bloqueo de zoom para sensación de App Nativa -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Otaku Nexus · Acceso</title>
 
-    <!-- Conexión a tus módulos CSS -->
-    <link rel="stylesheet" href="./css/variables.css">
-    <link rel="stylesheet" href="./css/login.css">
+  <!-- IMPORTANTE: variables.css SIEMPRE primero, define :root para todo lo demás -->
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/login.css" />
 </head>
 <body>
 
-    <div class="background-grid">
-        <img class="bg-poster" src="images (9).jpeg" alt="Solo Leveling / Demon Slayer">
-        <img class="bg-poster" src="images (8).jpeg" alt="Jujutsu Kaisen">
-        <img class="bg-poster" src="images (7).jpeg" alt="Gachiakuta">
-    </div>
+  <main class="pantalla-login">
+    <div class="split-panel glass">
 
-    <!-- El lienzo de las brasas ardientes -->
-    <canvas id="canvas-particles"></canvas>
-
-    <div class="container" id="container">
-        
-        <div class="form-container sign-up-container">
-            <!-- ID añadido para Supabase -->
-            <form id="register-form">
-                <h2>CREAR <span>CUENTA</span></h2>
-                
-                <div class="input-box" style="margin-bottom: 5px;">
-                    <select name="country" class="input-field" required style="padding: 8px 15px;">
-                        <option value="+58">🇻🇪 Venezuela (+58)</option>
-                        <option value="+57">🇨🇴 Colombia (+57)</option>
-                    </select>
-                </div>
-
-                <div class="input-box">
-                    <input type="email" name="email" class="input-field" placeholder="correo@clan.com" required>
-                </div>
-                <div class="input-box">
-                    <input type="password" name="password" class="input-field" placeholder="Contraseña" required>
-                </div>
-                <div class="input-box">
-                    <input type="password" name="confirm_password" class="input-field" placeholder="Confirmar Contraseña" required>
-                </div>
-                <button type="submit" class="btn-action">Registrarse</button>
-            </form>
+      <!-- =================================================================
+           LADO VISUAL: aquí JS (auth.js) inyecta los <div class="panel-visual__slide">
+           con las imágenes de fondo que vienen de la tabla "configuracion".
+           ================================================================= -->
+      <section class="panel-visual" id="panel-visual" aria-hidden="true">
+        <div class="panel-visual__branding">
+          <h1 class="titulo-poster">Otaku Nexus</h1>
+          <p>La comunidad donde tu conocimiento de anime se convierte en puntos, ranking y premios reales.</p>
         </div>
+      </section>
 
-        <div class="form-container sign-in-container">
-            <!-- ID añadido para Supabase -->
-            <form id="login-form">
-                <h2>INICIAR <span>SESIÓN</span></h2>
-                <div class="input-box">
-                    <label>Email del Guerrero</label>
-                    <input type="email" name="email" class="input-field" placeholder="correo@clan.com" required>
-                </div>
-                <div class="input-box">
-                    <label>Contraseña</label>
-                    <input type="password" name="password" class="input-field" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn-action" style="margin-top: 25px;">Entrar</button>
-            </form>
-        </div>
+      <!-- =================================================================
+           LADO DE FORMULARIOS
+           ================================================================= -->
+      <section class="panel-formularios">
+        <div class="formularios-wrapper">
 
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <h3>¿YA TIENES CLAN?</h3>
-                    <p>Inicia sesión y mantén tu racha de IQ para reclamar premios físicos.</p>
-                    <button class="btn-ghost" id="signIn">Entrar</button>
-                </div>
-                <div class="overlay-panel overlay-right">
-                    <h3>ÚNETE AL NEXO</h3>
-                    <p>Regístrate ahora y demuestra tu conocimiento en Manga y Anime.</p>
-                    <button class="btn-ghost" id="signUp">Registrarse</button>
-                </div>
+          <!-- ----------------------------------------------------------
+               FORMULARIO: LOGIN (visible por defecto -> clase "activo")
+               ---------------------------------------------------------- -->
+          <form id="form-login" class="formulario activo" autocomplete="on">
+            <h2 class="formulario__titulo">Iniciar Sesión</h2>
+            <p class="formulario__subtitulo">Vuelve a entrar al Nexus y sigue acumulando puntos.</p>
+
+            <div class="input-grupo">
+              <label for="login-email">Correo electrónico</label>
+              <input type="email" id="login-email" name="email" required placeholder="tucorreo@ejemplo.com" />
             </div>
+
+            <div class="input-grupo">
+              <label for="login-password">Contraseña</label>
+              <input type="password" id="login-password" name="password" required placeholder="••••••••" />
+            </div>
+
+            <span class="olvido-password" id="olvido-password">¿Olvidaste tu contraseña?</span>
+
+            <button type="submit" class="btn btn-primario">Iniciar Sesión</button>
+
+            <!-- Aquí auth.js inyecta la alerta amarilla / roja / verde -->
+            <div class="zona-mensajes" id="mensajes-login"></div>
+
+            <p class="formulario__pie">
+              ¿No tienes cuenta?
+              <button type="button" id="btn-ir-registro">Regístrate aquí</button>
+            </p>
+          </form>
+
+          <!-- ----------------------------------------------------------
+               FORMULARIO: REGISTRO (oculto por defecto)
+               ---------------------------------------------------------- -->
+          <form id="form-registro" class="formulario" autocomplete="on">
+            <h2 class="formulario__titulo">Crear Cuenta</h2>
+            <p class="formulario__subtitulo">Únete al ranking diario y compite por premios físicos.</p>
+
+            <div class="input-grupo">
+              <label for="reg-username">Nombre de usuario</label>
+              <input type="text" id="reg-username" name="username" required minlength="3" placeholder="OtakuMaster99" />
+            </div>
+
+            <!-- Fila combinada: selector de código de país + correo -->
+            <div class="input-fila">
+              <div class="input-grupo codigo-pais">
+                <label for="reg-codigo-pais">País</label>
+                <select id="reg-codigo-pais" name="pais_codigo">
+                  <option value="+58">🇻🇪 +58</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+52">🇲🇽 +52</option>
+                  <option value="+34">🇪🇸 +34</option>
+                  <option value="+57">🇨🇴 +57</option>
+                  <option value="+51">🇵🇪 +51</option>
+                  <option value="+56">🇨🇱 +56</option>
+                  <option value="+54">🇦🇷 +54</option>
+                  <option value="+593">🇪🇨 +593</option>
+                  <option value="+507">🇵🇦 +507</option>
+                  <option value="+598">🇺🇾 +598</option>
+                  <option value="+595">🇵🇾 +595</option>
+                  <option value="+591">🇧🇴 +591</option>
+                  <option value="+506">🇨🇷 +506</option>
+                </select>
+              </div>
+
+              <div class="input-grupo">
+                <label for="reg-email">Correo electrónico</label>
+                <input type="email" id="reg-email" name="email" required placeholder="tucorreo@ejemplo.com" />
+              </div>
+            </div>
+
+            <div class="input-grupo">
+              <label for="reg-password1">Contraseña</label>
+              <input type="password" id="reg-password1" name="password1" required minlength="6" placeholder="Mínimo 6 caracteres" />
+            </div>
+
+            <div class="input-grupo">
+              <label for="reg-password2">Confirmar contraseña</label>
+              <input type="password" id="reg-password2" name="password2" required minlength="6" placeholder="Repite tu contraseña" />
+            </div>
+
+            <button type="submit" class="btn btn-primario">Crear Cuenta</button>
+
+            <!-- Aquí auth.js inyecta mensajes de error/éxito del registro -->
+            <div class="zona-mensajes" id="mensajes-registro"></div>
+
+            <p class="formulario__pie">
+              ¿Ya tienes cuenta?
+              <button type="button" id="btn-ir-login">Inicia sesión</button>
+            </p>
+          </form>
+
         </div>
+      </section>
 
     </div>
+  </main>
 
-    <!-- Alerta amarilla de verificación -->
-    <div id="alert-box" style="display:none; position:fixed; bottom:20px; background:#f5d142; color:#000; padding:15px; border-radius:8px; z-index:999; font-weight:bold;"></div>
-
-    <!-- Script modular -->
-    <script type="module" src="./js/auth.js"></script>
+  <!-- type="module" es OBLIGATORIO: permite usar "import" en auth.js -->
+  <script type="module" src="js/auth.js"></script>
 </body>
 </html>
