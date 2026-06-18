@@ -1,69 +1,363 @@
-.dashboard-layout {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    height: 100vh;
-    padding: 20px;
-    gap: 20px;
+/* =====================================================================
+   OTAKU NEXUS · dashboard.css
+   ---------------------------------------------------------------------
+   Estilos exclusivos de dashboard.html. Tres bloques principales:
+     1) Navbar superior
+     2) Sección de premios (3 tarjetas: 1er, 2do, 3er lugar)
+     3) Motor de Quiz (preguntas + barra de tiempo)
+     4) Feed de videos de YouTube (grid responsivo)
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   LAYOUT GENERAL
+   --------------------------------------------------------------------- */
+.app-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
 }
 
-/* Panel Superior: Premios */
-.prizes-section {
-    display: flex;
-    justify-content: space-around;
-    padding: 20px;
-    gap: 15px;
+/* ---------------------------------------------------------------------
+   NAVBAR
+   --------------------------------------------------------------------- */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-lg);
+  position: sticky;
+  top: var(--space-sm);
+  z-index: 50;
 }
 
-.prize-card {
-    flex: 1;
-    text-align: center;
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
+.navbar__logo {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  letter-spacing: 0.1em;
+  color: #fff;
 }
 
-.prize-card img {
-    width: 100px;
-    height: 100px;
-    object-fit: contain;
-    margin-bottom: 10px;
+.navbar__logo span {
+  color: var(--color-accent-red);
 }
 
-.prize-card h3 { color: var(--alert-yellow); }
+.navbar__usuario {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
 
-/* Feed de YouTube */
+.navbar__puntos {
+  font-family: var(--font-mono);
+  font-size: var(--fs-lg);
+  color: var(--color-accent-yellow);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.navbar__puntos .etiqueta {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* ---------------------------------------------------------------------
+   SECCIÓN: PREMIOS FÍSICOS (1er, 2do, 3er lugar)
+   --------------------------------------------------------------------- */
+.seccion-titulo {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-md);
+  position: relative;
+  padding-left: var(--space-md);
+}
+
+/* Pequeño "tachón" rojo a la izquierda de cada título de sección,
+   firma visual repetida en todo el dashboard. */
+.seccion-titulo::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 5px;
+  background: var(--color-accent-red);
+  border-radius: 3px;
+}
+
+.premios-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+.premio-card {
+  padding: var(--space-md);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.premio-card__medalla {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  letter-spacing: 0.05em;
+}
+
+.premio-card--oro .premio-card__medalla   { color: #ffd700; }
+.premio-card--plata .premio-card__medalla { color: #d8d8e0; }
+.premio-card--bronce .premio-card__medalla{ color: #d18a4a; }
+
+.premio-card__media {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin: var(--space-sm) 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.premio-card__media img,
+.premio-card__media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.premio-card__titulo {
+  font-weight: 700;
+  font-size: var(--fs-sm);
+}
+
+.premio-card__descripcion {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  margin-top: 0.3rem;
+}
+
+/* ---------------------------------------------------------------------
+   SECCIÓN: MOTOR DE QUIZ
+   --------------------------------------------------------------------- */
+.quiz-card {
+  padding: var(--space-lg);
+}
+
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.quiz-header .quiz-progreso {
+  color: var(--color-accent-yellow);
+}
+
+/* Barra de tiempo: se vacía de izquierda a derecha en 10 segundos.
+   El JS controla su "width" en tiempo real. */
+.quiz-timer {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  margin-bottom: var(--space-md);
+}
+
+.quiz-timer__barra {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--color-accent-yellow), var(--color-accent-red));
+  transform-origin: left;
+  transition: width 0.1s linear, background var(--transition-mid);
+}
+
+.quiz-timer__barra.urgente {
+  background: var(--color-accent-red);
+  box-shadow: 0 0 14px var(--color-red-glow);
+}
+
+.quiz-pregunta {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  letter-spacing: 0.02em;
+  margin-bottom: var(--space-md);
+  min-height: 3.2em;
+}
+
+.quiz-opciones {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+
+.quiz-opcion {
+  text-align: left;
+  padding: var(--space-md);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.quiz-opcion .letra {
+  font-family: var(--font-mono);
+  color: var(--color-accent-yellow);
+}
+
+.quiz-opcion:hover:not(:disabled) {
+  border-color: var(--color-accent-red);
+  transform: translateY(-2px);
+}
+
+.quiz-opcion:disabled {
+  cursor: not-allowed;
+}
+
+.quiz-opcion.correcta {
+  border-color: #4cd97b;
+  background: rgba(76, 217, 123, 0.12);
+}
+
+.quiz-opcion.incorrecta {
+  border-color: var(--color-accent-red);
+  background: var(--color-red-soft);
+}
+
+.quiz-feedback {
+  margin-top: var(--space-md);
+  text-align: center;
+  font-weight: 700;
+  font-family: var(--font-body);
+}
+
+.quiz-feedback.ok { color: #4cd97b; }
+.quiz-feedback.fail { color: var(--color-accent-red); }
+
+.quiz-final {
+  text-align: center;
+}
+
+.quiz-final__puntaje {
+  font-family: var(--font-mono);
+  font-size: var(--fs-3xl);
+  color: var(--color-accent-yellow);
+  text-shadow: 0 0 20px var(--color-yellow-glow);
+}
+
+/* ---------------------------------------------------------------------
+   SECCIÓN: FEED DE VIDEOS (YouTube)
+   --------------------------------------------------------------------- */
+.feed-filtros {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.feed-filtros button {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.feed-filtros button.activo,
+.feed-filtros button:hover {
+  border-color: var(--color-accent-red);
+  color: var(--color-accent-red);
+}
+
 .feed-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    overflow-y: auto;
-    padding-right: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-md);
 }
 
-.video-wrapper {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 */
-    height: 0;
-    border-radius: 12px;
-    overflow: hidden;
+.feed-card {
+  overflow: hidden;
+  padding: 0;
 }
 
-.video-wrapper iframe {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    border: none;
+.feed-card__video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
 }
 
-/* Botón flotante Quiz */
-.quiz-fab {
-    position: fixed;
-    bottom: 30px; right: 30px;
-    background: var(--accent-red);
-    width: 60px; height: 60px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 0 20px rgba(255, 49, 49, 0.6);
-    z-index: 1000;
+.feed-card__video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.feed-card__info {
+  padding: var(--space-sm) var(--space-md);
+}
+
+.feed-card__titulo {
+  font-weight: 700;
+  font-size: var(--fs-sm);
+}
+
+.feed-card__categoria {
+  font-size: var(--fs-xs);
+  color: var(--color-accent-yellow);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.feed-vacio {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: var(--space-lg);
+}
+
+/* ---------------------------------------------------------------------
+   RESPONSIVE
+   --------------------------------------------------------------------- */
+@media (max-width: 760px) {
+  .premios-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quiz-opciones {
+    grid-template-columns: 1fr;
+  }
+
+  .navbar__logo {
+    font-size: var(--fs-lg);
+  }
+
+  .quiz-pregunta {
+    font-size: var(--fs-lg);
+    min-height: auto;
+  }
 }
