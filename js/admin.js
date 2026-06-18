@@ -1,25 +1,18 @@
 // =====================================================================
 // OTAKU NEXUS · js/admin.js
 // ---------------------------------------------------------------------
-// Lógica del panel privado (admin.html). Responsabilidades:
-//   1. Verificar que quien entra es el administrador (usuarios.es_admin
-//      = true). Si no lo es, se muestra una pantalla de "Acceso
-//      denegado" y no se carga NADA más.
-//   2. CMS de Banners: agregar/eliminar imágenes de fondo para
-//      index.html (tabla "configuracion").
-//   3. CMS de Videos: agregar/eliminar videos de YouTube del feed
-//      (tabla "contenido").
-//   4. CMS de Premios: actualizar los 3 premios físicos (tabla
-//      "premios").
-//
-// NOTA SOBRE SEGURIDAD: aunque aquí ocultamos el panel con CSS/JS si
-// no eres admin, la seguridad REAL está en las políticas RLS de
-// schema.sql ("solo admin escribe"). Aunque alguien intente forzar
-// esta página, Supabase rechazará cualquier insert/update/delete que
-// no venga de un usuario con es_admin = true.
+// Lógica del panel privado (admin.html).
+// MODIFICACIÓN QUIRÚRGICA: Autenticación local desconectada de Supabase Auth.
+// Usa credenciales fijas para un acceso rápido y directo.
 // =====================================================================
 
-import { supabase, obtenerSesion, obtenerPerfil, cerrarSesion } from './supabase.js';
+import { supabase } from './supabase.js';
+
+// ---------------------------------------------------------------------
+// 1) CREDENCIALES MAESTRAS FIJAS
+// ---------------------------------------------------------------------
+const ADMIN_USER_MASTER = 'Kleyberth07';
+const ADMIN_PASS_MASTER = 'Kley.1234#';
 
 // ---------------------------------------------------------------------
 // REFERENCIAS AL DOM
@@ -44,49 +37,96 @@ const listaVideos = document.getElementById('lista-videos');
 const formPremios = document.getElementById('form-premios');
 
 // =====================================================================
-// 1) VERIFICACIÓN DE ACCESO
+// 2) INYECCIÓN DEL LOGIN DIRECTO (Reemplaza la verificación antigua)
 // =====================================================================
-(async function verificarAcceso() {
-  const sesion = await obtenerSesion();
-
-  if (!sesion) {
-    // Nadie logueado -> ni siquiera mostramos "denegado", mandamos al login
-    window.location.href = 'index.html';
-    return;
+document.addEventListener('DOMContentLoaded', () => {
+  // Aseguramos que el "403 Denegado" antiguo no estorbe
+  if(pantallaDenegado) pantallaDenegado.classList.add('oculto');
+  
+  // Verificamos si la pestaña actual ya fue desbloqueada
+  if (sessionStorage.getItem('admin_autenticado') === 'true') {
+    mostrarPanelAdmin();
+  } else {
+    pedirCredencialesAdmin();
   }
+});
 
-  const perfil = await obtenerPerfil(sesion.user.id);
+function pedirCredencialesAdmin() {
+  pantallaPanel.classList.add('oculto');
 
-  if (!perfil || perfil.es_admin !== true) {
-    // Logueado pero NO es admin -> pantalla de acceso denegado
-    pantallaDenegado.classList.remove('oculto');
-    pantallaPanel.classList.add('oculto');
-    return;
+  // Creamos la caja de login con el mismo estilo de tu página
+  const modalLogin = document.createElement('div');
+  modalLogin.id = 'modal-admin-login';
+  modalLogin.style.cssText = `
+    position: fixed; inset: 0; background: var(--color-bg); 
+    display: flex; align-items: center; justify-content: center; z-index: 9999;
+    padding: 20px;
+  `;
+
+  modalLogin.innerHTML = `
+    <div class="glass" style="padding: 2.5rem; width: 100%; max-width: 400px; text-align: center;">
+      <h2 style="font-family: var(--font-display); font-size: var(--fs-2xl); letter-spacing: 0.1em; margin-bottom: 1.5rem;">ACCESO <span style="color:var(--color-accent-red);">ADMIN</span></h2>
+      <div id="error-admin-login" style="color: var(--color-accent-red); margin-bottom: 1rem; font-weight: 600; display: none; font-size: var(--fs-sm);"></div>
+      
+      <div style="text-align: left; margin-bottom: 1.2rem;">
+        <label style="display:block; margin-bottom:0.4rem; color:var(--color-text-muted); font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:0.08em;">Usuario</label>
+        <input type="text" id="input-admin-user" style="width:100%; padding:0.8rem; background:rgba(0,0,0,0.35); border:1px solid var(--glass-border); border-radius:var(--radius-sm); color:var(--color-text); font-size:var(--fs-base); outline:none;" placeholder="Tu usuario maestro" />
+      </div>
+
+      <div style="text-align: left; margin-bottom: 1.5rem;">
+        <label style="display:block; margin-bottom:0.4rem; color:var(--color-text-muted); font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:0.08em;">Contraseña</label>
+        <input type="password" id="input-admin-pass" style="width:100%; padding:0.8rem; background:rgba(0,0,0,0.35); border:1px solid var(--glass-border); border-radius:var(--radius-sm); color:var(--color-text); font-size:var(--fs-base); outline:none;" placeholder="••••••••" />
+      </div>
+
+      <button id="btn-entrar-admin" class="btn btn-primario" style="width:100%; padding:0.9rem;">ENTRAR AL PANEL</button>
+    </div>
+  `;
+
+  document.body.appendChild(modalLogin);
+
+  document.getElementById('btn-entrar-admin').addEventListener('click', procesarLoginAdmin);
+  document.getElementById('input-admin-pass').addEventListener('keypress', (e) => {
+    if(e.key === 'Enter') procesarLoginAdmin();
+  });
+}
+
+function procesarLoginAdmin() {
+  const userTxt = document.getElementById('input-admin-user').value.trim();
+  const passTxt = document.getElementById('input-admin-pass').value;
+  const errorDiv = document.getElementById('error-admin-login');
+
+  if (userTxt === ADMIN_USER_MASTER && passTxt === ADMIN_PASS_MASTER) {
+    sessionStorage.setItem('admin_autenticado', 'true');
+    document.getElementById('modal-admin-login').remove();
+    mostrarPanelAdmin();
+  } else {
+    errorDiv.textContent = 'Usuario o contraseña incorrectos.';
+    errorDiv.style.display = 'block';
   }
+}
 
-  // Es admin -> mostramos el panel y cargamos todo
-  pantallaDenegado.classList.add('oculto');
+function mostrarPanelAdmin() {
   pantallaPanel.classList.remove('oculto');
-
   inicializarTabs();
   cargarBanners();
   cargarVideos();
   cargarPremiosEnFormulario();
-})();
+}
 
-btnLogout?.addEventListener('click', cerrarSesion);
+btnLogout?.addEventListener('click', () => {
+  sessionStorage.removeItem('admin_autenticado');
+  window.location.reload();
+});
 
 // =====================================================================
-// 2) TABS (Banners / Videos / Premios)
+// 3) TABS (Banners / Videos / Premios)
 // =====================================================================
 function inicializarTabs() {
   tabs.forEach((tab) => {
     tab.addEventListener('click', () => {
       const objetivo = tab.dataset.tab;
-
       tabs.forEach((t) => t.classList.remove('activo'));
       tab.classList.add('activo');
-
       paneles.forEach((panel) => {
         panel.classList.toggle('activo', panel.id === `panel-${objetivo}`);
       });
@@ -95,23 +135,16 @@ function inicializarTabs() {
 }
 
 // =====================================================================
-// 3) CMS DE BANNERS (tabla "configuracion")
+// 4) CMS DE BANNERS (tabla "configuracion")
 // =====================================================================
-// Cada banner se guarda como una fila:
-//   clave = 'banner_login_<n>', valor = URL de la imagen, orden = n
 formBanner?.addEventListener('submit', async (evento) => {
   evento.preventDefault();
-
   const url = document.getElementById('banner-url').value.trim();
   if (!url) return;
 
   const btn = formBanner.querySelector('button[type="submit"]');
   btn.disabled = true;
 
-  // Calculamos el siguiente "orden" como (el mayor orden actual + 1).
-  // Usamos el MÁXIMO en vez de la CANTIDAD de filas: así, si se borró
-  // un banner intermedio, el siguiente número sigue siendo único y no
-  // se repite ninguna "clave" (ej: banner_login_2 dos veces).
   const { data: ultimoBanner } = await supabase
     .from('configuracion')
     .select('orden')
@@ -130,34 +163,17 @@ formBanner?.addEventListener('submit', async (evento) => {
   });
 
   btn.disabled = false;
-
-  if (error) {
-    alert('Error guardando el banner: ' + error.message);
-    return;
-  }
-
+  if (error) { alert('Error guardando el banner: ' + error.message); return; }
   formBanner.reset();
   cargarBanners();
 });
 
 async function cargarBanners() {
   if (!listaBanners) return;
+  const { data, error } = await supabase.from('configuracion').select('*').like('clave', 'banner_login_%').order('orden', { ascending: true });
 
-  const { data, error } = await supabase
-    .from('configuracion')
-    .select('*')
-    .like('clave', 'banner_login_%')
-    .order('orden', { ascending: true });
-
-  if (error) {
-    listaBanners.innerHTML = `<p class="admin-vacio">Error: ${error.message}</p>`;
-    return;
-  }
-
-  if (!data || data.length === 0) {
-    listaBanners.innerHTML = '<p class="admin-vacio">Todavía no hay banners. Agrega el primero arriba.</p>';
-    return;
-  }
+  if (error) { listaBanners.innerHTML = `<p class="admin-vacio">Error: ${error.message}</p>`; return; }
+  if (!data || data.length === 0) { listaBanners.innerHTML = '<p class="admin-vacio">Todavía no hay banners. Agrega el primero arriba.</p>'; return; }
 
   listaBanners.innerHTML = '';
   data.forEach((fila) => {
@@ -176,82 +192,54 @@ async function cargarBanners() {
     listaBanners.appendChild(item);
   });
 
-  // Conectamos los botones de eliminar
   listaBanners.querySelectorAll('[data-accion="eliminar-banner"]').forEach((boton) => {
     boton.addEventListener('click', async () => {
       if (!confirm('¿Eliminar este banner?')) return;
       const { error } = await supabase.from('configuracion').delete().eq('id', boton.dataset.id);
-      if (error) {
-        alert('Error eliminando: ' + error.message);
-        return;
-      }
+      if (error) { alert('Error eliminando: ' + error.message); return; }
       cargarBanners();
     });
   });
 }
 
 // =====================================================================
-// 4) CMS DE VIDEOS (tabla "contenido")
+// 5) CMS DE VIDEOS (tabla "contenido")
 // =====================================================================
 formVideo?.addEventListener('submit', async (evento) => {
   evento.preventDefault();
-
   const titulo = document.getElementById('video-titulo').value.trim();
   const urlOId = document.getElementById('video-url').value.trim();
   const categoria = document.getElementById('video-categoria').value.trim() || 'general';
 
   const youtubeId = extraerYoutubeId(urlOId);
   if (!youtubeId) {
-    alert('No se pudo reconocer el ID de YouTube. Pega el link completo (https://youtube.com/watch?v=... o https://youtu.be/...) o solo el ID de 11 caracteres.');
-    return;
+    alert('No se pudo reconocer el ID de YouTube. Pega el link completo o solo el ID.'); return;
   }
 
   const btn = formVideo.querySelector('button[type="submit"]');
   btn.disabled = true;
 
-  const { error } = await supabase.from('contenido').insert({
-    titulo,
-    youtube_id: youtubeId,
-    categoria,
-  });
+  const { error } = await supabase.from('contenido').insert({ titulo, youtube_id: youtubeId, categoria });
 
   btn.disabled = false;
-
-  if (error) {
-    alert('Error guardando el video: ' + error.message);
-    return;
-  }
-
+  if (error) { alert('Error guardando el video: ' + error.message); return; }
   formVideo.reset();
   cargarVideos();
 });
 
 async function cargarVideos() {
   if (!listaVideos) return;
+  const { data, error } = await supabase.from('contenido').select('*').order('created_at', { ascending: false });
 
-  const { data, error } = await supabase
-    .from('contenido')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if (error) {
-    listaVideos.innerHTML = `<p class="admin-vacio">Error: ${error.message}</p>`;
-    return;
-  }
-
-  if (!data || data.length === 0) {
-    listaVideos.innerHTML = '<p class="admin-vacio">Todavía no hay videos. Agrega el primero arriba.</p>';
-    return;
-  }
+  if (error) { listaVideos.innerHTML = `<p class="admin-vacio">Error: ${error.message}</p>`; return; }
+  if (!data || data.length === 0) { listaVideos.innerHTML = '<p class="admin-vacio">Todavía no hay videos. Agrega el primero arriba.</p>'; return; }
 
   listaVideos.innerHTML = '';
   data.forEach((video) => {
     const item = document.createElement('div');
     item.className = 'admin-item';
     item.innerHTML = `
-      <img class="admin-item__miniatura"
-           src="https://i3.ytimg.com/vi/${encodeURIComponent(video.youtube_id)}/hqdefault.jpg"
-           alt="thumbnail">
+      <img class="admin-item__miniatura" src="https://i3.ytimg.com/vi/${encodeURIComponent(video.youtube_id)}/hqdefault.jpg" alt="thumbnail">
       <div class="admin-item__info">
         <div class="admin-item__titulo">${escapeHTML(video.titulo)}</div>
         <div class="admin-item__detalle">${escapeHTML(video.categoria)} · ${escapeHTML(video.youtube_id)}</div>
@@ -267,61 +255,32 @@ async function cargarVideos() {
     boton.addEventListener('click', async () => {
       if (!confirm('¿Eliminar este video del feed?')) return;
       const { error } = await supabase.from('contenido').delete().eq('id', boton.dataset.id);
-      if (error) {
-        alert('Error eliminando: ' + error.message);
-        return;
-      }
+      if (error) { alert('Error eliminando: ' + error.message); return; }
       cargarVideos();
     });
   });
 }
 
-// Acepta: ID puro (11 caracteres), youtube.com/watch?v=ID, youtu.be/ID,
-// youtube.com/shorts/ID y URLs con parámetros extra (&t=, ?si=, etc.)
 function extraerYoutubeId(texto) {
   texto = texto.trim();
-
-  // Caso 1: ya es un ID de 11 caracteres (letras, números, _ y -)
   if (/^[a-zA-Z0-9_-]{11}$/.test(texto)) return texto;
-
   try {
     const url = new URL(texto);
-
-    // youtu.be/ID
-    if (url.hostname.includes('youtu.be')) {
-      return url.pathname.replace('/', '').split('/')[0];
-    }
-
-    // youtube.com/watch?v=ID
-    if (url.searchParams.has('v')) {
-      return url.searchParams.get('v');
-    }
-
-    // youtube.com/shorts/ID  o  /embed/ID
+    if (url.hostname.includes('youtu.be')) return url.pathname.replace('/', '').split('/')[0];
+    if (url.searchParams.has('v')) return url.searchParams.get('v');
     const partes = url.pathname.split('/').filter(Boolean);
-    if (partes.includes('shorts') || partes.includes('embed')) {
-      return partes[partes.length - 1];
-    }
-  } catch (e) {
-    return null;
-  }
-
+    if (partes.includes('shorts') || partes.includes('embed')) return partes[partes.length - 1];
+  } catch (e) { return null; }
   return null;
 }
 
 // =====================================================================
-// 5) CMS DE PREMIOS (tabla "premios", 3 filas fijas)
+// 6) CMS DE PREMIOS (tabla "premios", 3 filas fijas)
 // =====================================================================
-// Cargamos los valores actuales de las 3 filas en los 3 mini-formularios
 async function cargarPremiosEnFormulario() {
   if (!formPremios) return;
-
   const { data, error } = await supabase.from('premios').select('*').order('posicion', { ascending: true });
-
-  if (error) {
-    console.error('Error cargando premios:', error.message);
-    return;
-  }
+  if (error) return;
 
   data.forEach((premio) => {
     const prefijo = `premio-${premio.posicion}`;
@@ -337,16 +296,13 @@ async function cargarPremiosEnFormulario() {
   });
 }
 
-// Guardamos los 3 premios de una sola vez (un UPDATE por cada posición)
 formPremios?.addEventListener('submit', async (evento) => {
   evento.preventDefault();
-
   const btn = formPremios.querySelector('button[type="submit"]');
   btn.disabled = true;
   btn.textContent = 'Guardando...';
 
   const errores = [];
-
   for (const posicion of [1, 2, 3]) {
     const prefijo = `premio-${posicion}`;
     const titulo = document.getElementById(`${prefijo}-titulo`).value.trim();
@@ -365,16 +321,10 @@ formPremios?.addEventListener('submit', async (evento) => {
   btn.disabled = false;
   btn.textContent = 'Guardar Premios';
 
-  if (errores.length > 0) {
-    alert('Hubo errores:\n' + errores.join('\n'));
-  } else {
-    alert('¡Premios actualizados! Los usuarios verán los cambios al recargar el dashboard.');
-  }
+  if (errores.length > 0) alert('Hubo errores:\n' + errores.join('\n'));
+  else alert('¡Premios actualizados! Los usuarios verán los cambios al recargar el dashboard.');
 });
 
-// ---------------------------------------------------------------------
-// Utilidad: evitar inyección de HTML
-// ---------------------------------------------------------------------
 function escapeHTML(texto = '') {
   const div = document.createElement('div');
   div.textContent = texto;
