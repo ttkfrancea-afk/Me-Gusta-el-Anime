@@ -7,9 +7,9 @@
 //   2. Animar el "split panel" (alternar Login <-> Registro).
 //   3. Cargar los banners de fondo desde la tabla "configuracion".
 //   4. Registrar usuarios nuevos (signUp) guardando username y país.
-//   5. Iniciar sesión y BLOQUEAR si el correo no está verificado,
-//      mostrando la alerta amarilla pedida en el brief.
-//   6. Recuperación de contraseña ("¿Olvidaste tu contraseña?").
+//      (FRICCIÓN CERO: Redirección inmediata al dashboard tras registrar).
+//   5. Iniciar sesión y validar el correo si se configuró.
+//   6. Recuperación de contraseña profesional sin prompt nativo del navegador.
 // =====================================================================
 
 import { supabase, obtenerSesion } from './supabase.js';
@@ -17,17 +17,16 @@ import { supabase, obtenerSesion } from './supabase.js';
 // ---------------------------------------------------------------------
 // 0) REFERENCIAS AL DOM
 // ---------------------------------------------------------------------
-// Guardamos en variables todos los elementos del HTML con los que
-// vamos a interactuar. Si cambias un id en index.html, cámbialo
-// también aquí.
 const formLogin = document.getElementById('form-login');
 const formRegistro = document.getElementById('form-registro');
+const formRestablecer = document.getElementById('form-restablecer'); // Formulario inyectado
 
 const btnIrARegistro = document.getElementById('btn-ir-registro');
 const btnIrALogin = document.getElementById('btn-ir-login');
 
 const zonaMensajesLogin = document.getElementById('mensajes-login');
 const zonaMensajesRegistro = document.getElementById('mensajes-registro');
+const zonaMensajesRestablecer = document.getElementById('mensajes-restablecer');
 
 const enlaceOlvidoPassword = document.getElementById('olvido-password');
 
@@ -44,21 +43,24 @@ const panelVisual = document.getElementById('panel-visual');
 })();
 
 // ---------------------------------------------------------------------
-// 2) ANIMACIÓN DEL SPLIT PANEL (Login <-> Registro)
+// 2) ANIMACIÓN DEL SPLIT PANEL (Login <-> Registro <-> Restablecer)
 // ---------------------------------------------------------------------
-// Ambos formularios existen siempre en el HTML. Solo agregamos o
-// quitamos la clase ".activo" para que login.css haga el slide.
 function mostrarFormulario(nombre) {
+  formLogin.classList.remove('activo');
+  formRegistro.classList.remove('activo');
+  if (formRestablecer) formRestablecer.classList.remove('activo');
+
   if (nombre === 'registro') {
-    formLogin.classList.remove('activo');
     formRegistro.classList.add('activo');
+  } else if (nombre === 'restablecer' && formRestablecer) {
+    formRestablecer.classList.add('activo');
   } else {
-    formRegistro.classList.remove('activo');
     formLogin.classList.add('activo');
   }
-  // Limpiamos mensajes de error/alerta al cambiar de formulario
+  
   limpiarMensajes(zonaMensajesLogin);
   limpiarMensajes(zonaMensajesRegistro);
+  if (zonaMensajesRestablecer) limpiarMensajes(zonaMensajesRestablecer);
 }
 
 btnIrARegistro?.addEventListener('click', () => mostrarFormulario('registro'));
@@ -73,16 +75,12 @@ function limpiarMensajes(zona) {
 
 function mostrarMensaje(zona, texto, tipo = 'roja') {
   if (!zona) return;
-  // tipo puede ser: 'roja' (error), 'amarilla' (verificación) o 'verde' (éxito)
   zona.innerHTML = `<div class="alerta-${tipo}">${texto}</div>`;
 }
 
 // ---------------------------------------------------------------------
 // 4) CARGAR BANNERS DE FONDO DESDE SUPABASE (tabla "configuracion")
 // ---------------------------------------------------------------------
-// Buscamos todas las filas cuya "clave" empiece con "banner_login_" y
-// estén marcadas como activas, ordenadas por la columna "orden".
-// Con esas URLs creamos un pequeño carrusel de fondo.
 async function cargarBannersLogin() {
   if (!panelVisual) return;
 
@@ -93,24 +91,19 @@ async function cargarBannersLogin() {
     .eq('activo', true)
     .order('orden', { ascending: true });
 
-  // Si hay un error o no hay banners configurados todavía, dejamos un
-  // fondo oscuro de respaldo (definido en login.css con :root) y no
-  // rompemos la página.
   if (error || !data || data.length === 0) {
     console.warn('No se encontraron banners en "configuracion". Usando fondo por defecto.');
     return;
   }
 
-  // Creamos un <div class="panel-visual__slide"> por cada imagen
   data.forEach((fila, indice) => {
     const slide = document.createElement('div');
     slide.className = 'panel-visual__slide';
     slide.style.backgroundImage = `url('${fila.valor}')`;
     if (indice === 0) slide.classList.add('activa');
-    panelVisual.prepend(slide); // prepend para que quede DETRÁS del degradado y el branding
+    panelVisual.prepend(slide);
   });
 
-  // Si hay más de un banner, rotamos cada 6 segundos
   const slides = panelVisual.querySelectorAll('.panel-visual__slide');
   if (slides.length > 1) {
     let actual = 0;
@@ -125,21 +118,18 @@ async function cargarBannersLogin() {
 cargarBannersLogin();
 
 // ---------------------------------------------------------------------
-// 5) REGISTRO DE USUARIO NUEVO
+// 5) REGISTRO DE USUARIO NUEVO (FRICCIÓN CERO -> DASHBOARD)
 // ---------------------------------------------------------------------
 formRegistro?.addEventListener('submit', async (evento) => {
   evento.preventDefault();
   limpiarMensajes(zonaMensajesRegistro);
 
-  // Tomamos los valores de los campos del formulario de registro
   const username = document.getElementById('reg-username').value.trim();
   const codigoPais = document.getElementById('reg-codigo-pais').value;
   const email = document.getElementById('reg-email').value.trim();
   const password1 = document.getElementById('reg-password1').value;
   const password2 = document.getElementById('reg-password2').value;
 
-  // --- Validaciones básicas en el cliente (la validación real y de
-  // seguridad ocurre siempre en Supabase / la base de datos) ---
   if (username.length < 3) {
     mostrarMensaje(zonaMensajesRegistro, 'El nombre de usuario debe tener al menos 3 caracteres.', 'roja');
     return;
@@ -157,9 +147,6 @@ formRegistro?.addEventListener('submit', async (evento) => {
   btnSubmit.disabled = true;
   btnSubmit.textContent = 'Creando cuenta...';
 
-  // signUp() crea el usuario en auth.users. Los datos que mandamos en
-  // "options.data" llegan a "raw_user_meta_data" y el TRIGGER que
-  // creamos en schema.sql los usa para llenar la tabla "usuarios".
   const { data, error } = await supabase.auth.signUp({
     email,
     password: password1,
@@ -179,13 +166,14 @@ formRegistro?.addEventListener('submit', async (evento) => {
     return;
   }
 
-  // --- MODIFICACIÓN DE CIRUGÍA: FRICCIÓN CERO ---
-  // El usuario ya se registró, salta directamente al dashboard.
+  // --- REGISTRO FRICCIÓN CERO COMPILADO PERFECTO ---
+  // El usuario ya se creó la cuenta en Supabase. Al apagar la confirmación en Supabase,
+  // el SDK nos devuelve una sesión activa de inmediato. Saltamos directo al Dashboard.
   window.location.href = 'dashboard.html';
 });
 
 // ---------------------------------------------------------------------
-// 6) INICIO DE SESIÓN + BLOQUEO POR CORREO NO VERIFICADO
+// 6) INICIO DE SESIÓN
 // ---------------------------------------------------------------------
 formLogin?.addEventListener('submit', async (evento) => {
   evento.preventDefault();
@@ -204,13 +192,10 @@ formLogin?.addEventListener('submit', async (evento) => {
   btnSubmit.textContent = 'Iniciar Sesión';
 
   if (error) {
-    // Supabase devuelve el mensaje "Email not confirmed" cuando el
-    // usuario existe pero no ha hecho clic en el enlace del correo.
-    // Aquí es donde mostramos la alerta AMARILLA pedida en el brief.
     if (error.message.toLowerCase().includes('email not confirmed')) {
       mostrarMensaje(
         zonaMensajesLogin,
-        'Verifica tu correo electrónico siguiendo los pasos 1, 2, 3 y 4 antes de ingresar.',
+        'Verifica tu correo electrónico para validar la cuenta y ganar tus primeros puntos.',
         'amarilla'
       );
       return;
@@ -225,7 +210,7 @@ formLogin?.addEventListener('submit', async (evento) => {
 });
 
 // ---------------------------------------------------------------------
-// 7) "¿OLVIDASTE TU CONTRASEÑA?"
+// 7) "¿OLVIDASTE TU CONTRASEÑA?" (RECUPERACIÓN TOTAL DE CLAVE)
 // ---------------------------------------------------------------------
 enlaceOlvidoPassword?.addEventListener('click', async () => {
   limpiarMensajes(zonaMensajesLogin);
@@ -233,17 +218,11 @@ enlaceOlvidoPassword?.addEventListener('click', async () => {
   const email = document.getElementById('login-email').value.trim();
 
   if (!email) {
-    mostrarMensaje(zonaMensajesLogin, 'Escribe primero tu correo en el campo de arriba.', 'roja');
+    mostrarMensaje(zonaMensajesLogin, 'Escribe primero tu correo electrónico en el campo de arriba.', 'roja');
     return;
   }
 
-  // redirectTo: a dónde te lleva Supabase DESPUÉS de hacer clic en el
-  // enlace del correo de recuperación. Debe ser una página de tu sitio
-  // donde el usuario pueda escribir su nueva contraseña.
-  // Por simplicidad lo mandamos a index.html; Supabase abrirá una
-  // sesión temporal y podrías mostrar un formulario de "nueva
-  // contraseña" detectando el evento "PASSWORD_RECOVERY" (ver nota
-  // abajo).
+  // Se envía el email de recuperación que redirecciona a index.html
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: window.location.origin + '/index.html',
   });
@@ -255,30 +234,41 @@ enlaceOlvidoPassword?.addEventListener('click', async () => {
 
   mostrarMensaje(
     zonaMensajesLogin,
-    'Te enviamos un correo con instrucciones para restablecer tu contraseña.',
+    'Te enviamos un correo con el link de recuperación. Abre el enlace para cambiar tu contraseña.',
     'verde'
   );
 });
 
 // ---------------------------------------------------------------------
-// 8) DETECTAR EL EVENTO "PASSWORD_RECOVERY"
+// 8) DETECTAR EVENTOS Y ESTADOS DE RECUPERACIÓN (UI PROFESIONAL)
 // ---------------------------------------------------------------------
-// Cuando el usuario llega desde el enlace del correo de recuperación,
-// Supabase dispara este evento. Aquí simplemente le pedimos una nueva
-// contraseña con un prompt sencillo (puedes reemplazar esto por un
-// formulario propio más adelante si quieres mejorarlo).
+// En lugar de usar un prompt feo que interrumpe la página, mostramos
+// de manera nativa y elegante el formulario oculto en la UI para restablecer.
 supabase.auth.onAuthStateChange(async (evento, sesion) => {
   if (evento === 'PASSWORD_RECOVERY') {
-    const nuevaPassword = prompt('Escribe tu nueva contraseña (mínimo 6 caracteres):');
-    if (nuevaPassword && nuevaPassword.length >= 6) {
-      const { error } = await supabase.auth.updateUser({ password: nuevaPassword });
-      if (error) {
-        alert('No se pudo actualizar la contraseña: ' + error.message);
-      } else {
-        alert('Contraseña actualizada. Ahora puedes iniciar sesión normalmente.');
-        window.location.href = 'index.html';
-      }
-    }
+    mostrarFormulario('restablecer');
+  }
+});
+
+formRestablecer?.addEventListener('submit', async (evento) => {
+  evento.preventDefault();
+  limpiarMensajes(zonaMensajesRestablecer);
+
+  const nuevaPassword = document.getElementById('nueva-password').value;
+  const btnSubmit = formRestablecer.querySelector('button[type="submit"]');
+  btnSubmit.disabled = true;
+  btnSubmit.textContent = 'Actualizando contraseña...';
+
+  const { error } = await supabase.auth.updateUser({ password: nuevaPassword });
+
+  btnSubmit.disabled = false;
+  btnSubmit.textContent = 'Guardar Contraseña';
+
+  if (error) {
+    mostrarMensaje(zonaMensajesRestablecer, 'Error actualizando contraseña: ' + error.message, 'roja');
+  } else {
+    alert('¡Contraseña actualizada con éxito! Redirigiendo al inicio...');
+    window.location.href = 'index.html';
   }
 });
 
@@ -302,4 +292,4 @@ function traducirErrorSupabase(error) {
   }
 
   return 'Ocurrió un error: ' + error.message;
-  }
+}
