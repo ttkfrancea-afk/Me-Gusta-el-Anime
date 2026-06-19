@@ -1,5 +1,5 @@
 // =====================================================================
-// OTAKU NEXUS · js/supabase.js
+// ME GUSTA EL ANIME · js/supabase.js
 // ---------------------------------------------------------------------
 // Este archivo tiene UNA sola responsabilidad: crear la conexión
 // ("cliente") hacia tu proyecto de Supabase y exportarla para que
