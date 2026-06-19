@@ -90,6 +90,23 @@
   text-shadow: 0 0 24px var(--color-red-glow);
 }
 
+/* INYECCIÓN DEL ESTILO LOGO GRAFFITI AMARILLO */
+.logo-graffiti {
+  font-family: var(--font-logo);
+  font-size: var(--fs-3xl);
+  line-height: 1.1;
+  color: var(--color-accent-yellow) !important;
+  text-shadow: 
+    3px 3px 0 #000, 
+    -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000,
+    0 10px 20px rgba(0,0,0,0.8) !important;
+  transform: rotate(-3deg);
+  margin-bottom: var(--space-sm);
+}
+
 .panel-visual__branding p {
   margin-top: var(--space-xs);
   color: var(--color-text-muted);
@@ -229,4 +246,21 @@
   .panel-visual__branding h1 {
     font-size: var(--fs-2xl);
   }
+}
+
+/* Clase utilitaria para ocultar elementos sin quitarlos del DOM */
+.oculto {
+  display: none !important;
+}
+
+/* Scrollbar oscuro y delgado, acorde al tema */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-soft);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent-red);
+  border-radius: 4px;
 }
