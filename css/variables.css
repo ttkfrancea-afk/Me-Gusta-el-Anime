@@ -15,8 +15,9 @@
 /* Tipografías de Google Fonts:
    - "Bebas Neue"  -> títulos grandes, condensados, tipo "póster".
    - "Rajdhani"    -> textos de interfaz, botones, labels (look "gamer").
-   - "Share Tech Mono" -> números, temporizador del quiz, puntajes. */
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
+   - "Share Tech Mono" -> números, temporizador del quiz, puntajes. 
+   - "Permanent Marker" -> Logo estilo graffiti. */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
 
 :root {
   /* ---------- COLORES BASE (definidos por el brief) ---------- */
@@ -43,6 +44,7 @@
   --color-yellow-soft: rgba(245, 209, 66, 0.12);
 
   /* ---------- TIPOGRAFÍA ---------- */
+  --font-logo: 'Permanent Marker', cursive;           /* Logo Graffiti */
   --font-display: 'Bebas Neue', 'Oswald', sans-serif; /* Títulos / logos */
   --font-body: 'Rajdhani', 'Segoe UI', sans-serif;     /* Interfaz general */
   --font-mono: 'Share Tech Mono', monospace;            /* Números / timer */
@@ -275,21 +277,4 @@ img, iframe, video {
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-sm);
   text-align: center;
-}
-
-/* Clase utilitaria para ocultar elementos sin quitarlos del DOM */
-.oculto {
-  display: none !important;
-}
-
-/* Scrollbar oscuro y delgado, acorde al tema */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-bg-soft);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-accent-red);
-  border-radius: 4px;
 }
