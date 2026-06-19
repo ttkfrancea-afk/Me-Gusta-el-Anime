@@ -5,13 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Me Gusta el Anime · Dashboard Pro</title>
 
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   
+  <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
     /* =====================================================================
-       VARIABLES GLOBALES Y RESET (Preservado Intacto)
+       VARIABLES GLOBALES Y RESET
        ===================================================================== */
     :root {
       --color-bg: #030303; 
@@ -49,7 +51,7 @@
     button { cursor: pointer; border: none; outline: none; }
 
     /* =====================================================================
-       DISEÑO BASE (DASHBOARD HUB - FIX UX INAMOVIBLE)
+       DISEÑO BASE (DASHBOARD HUB)
        ===================================================================== */
     .app-shell { 
       max-width: 600px; margin: 0 auto; height: 100vh; 
@@ -75,8 +77,11 @@
     .navbar__puntos { font-family: var(--font-mono); font-size: var(--fs-lg); color: var(--color-accent-yellow); display: flex; align-items: center; gap: 0.4rem; }
     .navbar__puntos .etiqueta { font-family: var(--font-body); font-size: var(--fs-xs); text-transform: uppercase; color: var(--color-text-muted); }
 
+    /* Ajustado el margen inferior dinámico para soportar las barras de Android */
     .main-content { 
-      flex: 1; overflow-y: auto; padding: 0 var(--space-md) 100px var(--space-md); 
+      flex: 1; 
+      overflow-y: auto; 
+      padding: 0 var(--space-md) calc(110px + env(safe-area-inset-bottom)) var(--space-md); 
       scroll-behavior: smooth; 
     }
     .main-content::-webkit-scrollbar { display: none; }
@@ -92,7 +97,7 @@
     }
 
     /* =====================================================================
-       PREMIOS Y FEED (PRESERVADO Y ROBUSTO)
+       PREMIOS Y FEED
        ===================================================================== */
     .premios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-sm); }
     .premio-card { padding: var(--space-sm); text-align: center; border-radius: var(--radius-md); background: var(--glass-bg); border: 1px solid var(--glass-border); }
@@ -121,17 +126,32 @@
     .feed-loading { text-align: center; padding: var(--space-md); font-family: var(--font-mono); color: var(--color-accent-yellow); font-size: var(--fs-sm); }
 
     /* =====================================================================
-       TABS Y NAVEGACIÓN (Fija 100%)
+       TABS Y NAVEGACIÓN (CON FIX PARA BARRAS ANDROID)
        ===================================================================== */
     .tab-pane { display: none; animation: fadeIn 0.3s ease; }
     .tab-pane.activa { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     
-    .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: 70px; display: flex; justify-content: space-around; align-items: center; z-index: 100; border-top: 1px solid var(--glass-border); background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(15px); }
+    /* Subimos el menú inferior añadiendo padding en el fondo basado en el entorno de la pantalla */
+    .bottom-nav { 
+      position: absolute; 
+      bottom: 0; 
+      left: 0; 
+      width: 100%; 
+      height: calc(75px + env(safe-area-inset-bottom)); 
+      padding-bottom: calc(env(safe-area-inset-bottom) + 12px); 
+      display: flex; 
+      justify-content: space-around; 
+      align-items: center; 
+      z-index: 100; 
+      border-top: 1px solid var(--glass-border); 
+      background: rgba(10, 10, 15, 0.95); 
+      backdrop-filter: blur(15px); 
+    }
+    
     .bottom-nav .nav-item { color: var(--color-text-muted); font-size: 1.5rem; cursor: pointer; transition: all 0.3s; position: relative; width: 50px; text-align: center; }
     .bottom-nav .nav-item.activo { color: #fff; transform: translateY(-5px); text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
     .bottom-nav .nav-item.activo::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 5px; height: 5px; background: var(--color-accent-red); border-radius: 50%; box-shadow: 0 0 8px var(--color-accent-red); }
-
     /* =====================================================================
        MODALES Y COMPONENTES
        ===================================================================== */
@@ -160,6 +180,7 @@
 <body>
 
   <div class="app-shell">
+    <!-- NAVBAR SUPERIOR -->
     <header class="navbar">
       <div class="navbar__logo">ME GUSTA<br>EL ANIME</div>
       <div class="navbar__usuario">
@@ -171,8 +192,10 @@
       </div>
     </header>
 
+    <!-- ÁREA DE CONTENIDO (Pestañas con Scroll Protegido Dinámico) -->
     <main class="main-content" id="main-scroll-container">
       
+      <!-- PESTAÑA 1: INICIO (FEED Y PREMIOS PERMANENTES) -->
       <div id="tab-home" class="tab-pane activa">
         <section class="mt-4">
           <h2 class="seccion-titulo">Premios del Torneo</h2>
@@ -188,6 +211,7 @@
         </section>
       </div>
 
+      <!-- PESTAÑA 2: BÚSQUEDA -->
       <div id="tab-search" class="tab-pane">
         <section class="mt-4">
           <h2 class="seccion-titulo" style="color: var(--color-accent-red);"><i class="fa-solid fa-magnifying-glass"></i> Explorar</h2>
@@ -202,23 +226,28 @@
         </section>
       </div>
 
+      <!-- PESTAÑA 3: ZONA ARCADE (DINÁMICA DESDE SUPABASE) -->
       <div id="tab-games" class="tab-pane">
         <section class="mt-4">
           <h2 class="seccion-titulo" style="color: var(--color-accent-red);"><i class="fa-solid fa-khanda"></i> Zona Arcade</h2>
           <div id="games-grid">
-            </div>
+            <!-- Cargando dinámicamente -->
+          </div>
         </section>
       </div>
 
+      <!-- PESTAÑA 4: QUIZ (DINÁMICA DESDE SUPABASE) -->
       <div id="tab-quiz" class="tab-pane">
         <section class="mt-4">
           <h2 class="seccion-titulo"><i class="fa-solid fa-brain" style="color: var(--color-accent-red);"></i> Zona Quiz</h2>
           <div id="quiz-grid">
-            </div>
+            <!-- Cargando dinámicamente -->
+          </div>
         </section>
       </div>
     </main>
 
+    <!-- BARRA DE NAVEGACIÓN INFERIOR (100% FIJA Y LEVANTADA) -->
     <nav class="bottom-nav">
       <div class="nav-item activo" onclick="app.cambiarTab('home', this)"><i class="fa-solid fa-house"></i></div>
       <div class="nav-item" onclick="app.cambiarTab('search', this)"><i class="fa-solid fa-magnifying-glass"></i></div>
@@ -227,6 +256,7 @@
       <div class="nav-item" onclick="app.abrirAjustes()"><i class="fa-solid fa-gear"></i></div>
     </nav>
 
+    <!-- MODAL DE AJUSTES (REDIRIGE EXTERNAMENTE) -->
     <div id="settings-overlay" class="modal-overlay" onclick="app.cerrarAjustes()"></div>
     <div id="settings-modal" class="modal-bottom-sheet">
       <div class="modal-handle"></div>
@@ -309,9 +339,8 @@
         contenedor.innerHTML += `<article class="premio-card ${etiqueta.clase}"><div class="premio-card__medalla">${etiqueta.medalla}</div><div class="premio-card__media">${mediaHTML}</div><div class="premio-card__titulo">${escapeHTML(premio.titulo)}</div></article>`;
       });
     }
-
-    // =====================================================================
-    // DETECCIÓN Y LÓGICA DE SCROLL INFINITO (INTEGRADO)
+   // =====================================================================
+    // DETECCIÓN Y LÓGICA DE SCROLL INFINITO
     // =====================================================================
     async function cargarFeed(reiniciar = false) {
       if (cargandoFeed || (totalAlcanzado && !reiniciar)) return;
@@ -349,7 +378,6 @@
     }
 
     async function construirFiltrosIniciales() {
-      // Obtenemos categorías globales solo una vez para armar la barra de filtros
       const { data } = await supabase.from('contenido').select('categoria');
       if (!data) return;
       const contenedor = document.getElementById('feed-filtros');
@@ -379,14 +407,13 @@
     // Escuchador de scroll en el contenedor principal
     document.getElementById('main-scroll-container').addEventListener('scroll', (e) => {
       const { scrollTop, scrollHeight, clientHeight } = e.target;
-      // Si falta menos de 100px para llegar al fondo, dispara la carga
       if (scrollHeight - scrollTop - clientHeight < 100) {
         cargarFeed(false);
       }
     });
 
     // =====================================================================
-    // CARGA DINÁMICA DE MODULOS: ARCADE Y QUIZ (INTEGRADO)
+    // CARGA DINÁMICA DE MODULOS: ARCADE Y QUIZ
     // =====================================================================
     async function cargarJuegosDinamicos() {
       const contenedor = document.getElementById('games-grid');
