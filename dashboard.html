@@ -77,11 +77,34 @@
     .navbar__puntos { font-family: var(--font-mono); font-size: var(--fs-lg); color: var(--color-accent-yellow); display: flex; align-items: center; gap: 0.4rem; }
     .navbar__puntos .etiqueta { font-family: var(--font-body); font-size: var(--fs-xs); text-transform: uppercase; color: var(--color-text-muted); }
 
-    /* Ajustado el margen inferior dinámico para soportar las barras de Android */
+    /* =====================================================================
+       NUEVA NAVEGACIÓN SUPERIOR (ESTILO FACEBOOK)
+       ===================================================================== */
+    .top-nav { 
+      width: 100%; height: 60px; display: flex; justify-content: space-around; 
+      align-items: center; z-index: 49; border-bottom: 1px solid var(--glass-border); 
+      background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(15px); flex-shrink: 0;
+    }
+    .top-nav .nav-item { 
+      color: var(--color-text-muted); font-size: 1.5rem; cursor: pointer; 
+      transition: all 0.3s; position: relative; width: 50px; text-align: center; 
+      padding: 10px 0;
+    }
+    .top-nav .nav-item.activo { 
+      color: #fff; text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); 
+    }
+    /* La rayita indicadora ahora sale por debajo del icono */
+    .top-nav .nav-item.activo::after { 
+      content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); 
+      width: 25px; height: 3px; background: var(--color-accent-red); 
+      border-radius: 2px; box-shadow: 0 0 8px var(--color-accent-red); 
+    }
+
+    /* CONTENEDOR PRINCIPAL AJUSTADO */
     .main-content { 
-      flex: 1; 
-      overflow-y: auto; 
-      padding: 0 var(--space-md) calc(110px + env(safe-area-inset-bottom)) var(--space-md); 
+      flex: 1; overflow-y: auto; 
+      /* Dejamos un margen seguro solo abajo para que el último video no se pegue al marco del celular */
+      padding: var(--space-sm) var(--space-md) calc(40px + env(safe-area-inset-bottom)) var(--space-md); 
       scroll-behavior: smooth; 
     }
     .main-content::-webkit-scrollbar { display: none; }
@@ -89,7 +112,7 @@
     .seccion-titulo { 
       font-family: var(--font-display); font-size: var(--fs-xl); letter-spacing: 0.08em; 
       text-transform: uppercase; margin-bottom: var(--space-sm); position: relative; 
-      padding-left: var(--space-sm); color: #fff; 
+      padding-left: var(--space-sm); color: #fff; margin-top: 1.5rem;
     }
     .seccion-titulo::before { 
       content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; 
@@ -126,32 +149,12 @@
     .feed-loading { text-align: center; padding: var(--space-md); font-family: var(--font-mono); color: var(--color-accent-yellow); font-size: var(--fs-sm); }
 
     /* =====================================================================
-       TABS Y NAVEGACIÓN (CON FIX PARA BARRAS ANDROID)
+       TABS PANE (Contenido)
        ===================================================================== */
     .tab-pane { display: none; animation: fadeIn 0.3s ease; }
     .tab-pane.activa { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-    
-    /* Subimos el menú inferior añadiendo padding en el fondo basado en el entorno de la pantalla */
-    .bottom-nav { 
-      position: absolute; 
-      bottom: 0; 
-      left: 0; 
-      width: 100%; 
-      height: calc(75px + env(safe-area-inset-bottom)); 
-      padding-bottom: calc(env(safe-area-inset-bottom) + 12px); 
-      display: flex; 
-      justify-content: space-around; 
-      align-items: center; 
-      z-index: 100; 
-      border-top: 1px solid var(--glass-border); 
-      background: rgba(10, 10, 15, 0.95); 
-      backdrop-filter: blur(15px); 
-    }
-    
-    .bottom-nav .nav-item { color: var(--color-text-muted); font-size: 1.5rem; cursor: pointer; transition: all 0.3s; position: relative; width: 50px; text-align: center; }
-    .bottom-nav .nav-item.activo { color: #fff; transform: translateY(-5px); text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
-    .bottom-nav .nav-item.activo::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 5px; height: 5px; background: var(--color-accent-red); border-radius: 50%; box-shadow: 0 0 8px var(--color-accent-red); }
+
     /* =====================================================================
        MODALES Y COMPONENTES
        ===================================================================== */
@@ -173,14 +176,12 @@
     .game-card__info { flex: 1; }
     .game-card__info h3 { font-weight: 700; font-size: var(--fs-base); color: #fff; }
     .game-card__info p { font-size: var(--fs-xs); color: var(--color-text-muted); }
-    
-    .mt-4 { margin-top: 1.5rem; } 
   </style>
 </head>
 <body>
 
   <div class="app-shell">
-    <!-- NAVBAR SUPERIOR -->
+    <!-- NAVBAR SUPERIOR (Logo y Puntos) -->
     <header class="navbar">
       <div class="navbar__logo">ME GUSTA<br>EL ANIME</div>
       <div class="navbar__usuario">
@@ -192,16 +193,25 @@
       </div>
     </header>
 
-    <!-- ÁREA DE CONTENIDO (Pestañas con Scroll Protegido Dinámico) -->
+    <!-- TOP NAV (AHORA ESTÁ ARRIBA COMO FACEBOOK) -->
+    <nav class="top-nav">
+      <div class="nav-item activo" onclick="app.cambiarTab('home', this)"><i class="fa-solid fa-house"></i></div>
+      <div class="nav-item" onclick="app.cambiarTab('search', this)"><i class="fa-solid fa-magnifying-glass"></i></div>
+      <div class="nav-item" onclick="app.cambiarTab('games', this)"><i class="fa-solid fa-khanda"></i></div>
+      <div class="nav-item" onclick="app.cambiarTab('quiz', this)"><i class="fa-solid fa-brain"></i></div>
+      <div class="nav-item" onclick="app.abrirAjustes()"><i class="fa-solid fa-gear"></i></div>
+    </nav>
+
+    <!-- ÁREA DE CONTENIDO (Pestañas con Scroll Independiente) -->
     <main class="main-content" id="main-scroll-container">
       
       <!-- PESTAÑA 1: INICIO (FEED Y PREMIOS PERMANENTES) -->
       <div id="tab-home" class="tab-pane activa">
-        <section class="mt-4">
+        <section>
           <h2 class="seccion-titulo">Premios del Torneo</h2>
           <div id="premios-grid" class="premios-grid"></div>
         </section>
-        <section class="mt-4">
+        <section>
           <h2 class="seccion-titulo">Feed de la Comunidad</h2>
           <div id="feed-filtros" class="feed-filtros"></div>
           <div id="feed-grid" class="feed-grid"></div>
@@ -213,7 +223,7 @@
 
       <!-- PESTAÑA 2: BÚSQUEDA -->
       <div id="tab-search" class="tab-pane">
-        <section class="mt-4">
+        <section>
           <h2 class="seccion-titulo" style="color: var(--color-accent-red);"><i class="fa-solid fa-magnifying-glass"></i> Explorar</h2>
           <div class="search-container">
             <i class="fa-solid fa-search search-icon"></i>
@@ -228,7 +238,7 @@
 
       <!-- PESTAÑA 3: ZONA ARCADE (DINÁMICA DESDE SUPABASE) -->
       <div id="tab-games" class="tab-pane">
-        <section class="mt-4">
+        <section>
           <h2 class="seccion-titulo" style="color: var(--color-accent-red);"><i class="fa-solid fa-khanda"></i> Zona Arcade</h2>
           <div id="games-grid">
             <!-- Cargando dinámicamente -->
@@ -238,7 +248,7 @@
 
       <!-- PESTAÑA 4: QUIZ (DINÁMICA DESDE SUPABASE) -->
       <div id="tab-quiz" class="tab-pane">
-        <section class="mt-4">
+        <section>
           <h2 class="seccion-titulo"><i class="fa-solid fa-brain" style="color: var(--color-accent-red);"></i> Zona Quiz</h2>
           <div id="quiz-grid">
             <!-- Cargando dinámicamente -->
@@ -247,20 +257,11 @@
       </div>
     </main>
 
-    <!-- BARRA DE NAVEGACIÓN INFERIOR (100% FIJA Y LEVANTADA) -->
-    <nav class="bottom-nav">
-      <div class="nav-item activo" onclick="app.cambiarTab('home', this)"><i class="fa-solid fa-house"></i></div>
-      <div class="nav-item" onclick="app.cambiarTab('search', this)"><i class="fa-solid fa-magnifying-glass"></i></div>
-      <div class="nav-item" onclick="app.cambiarTab('games', this)"><i class="fa-solid fa-khanda"></i></div>
-      <div class="nav-item" onclick="app.cambiarTab('quiz', this)"><i class="fa-solid fa-brain"></i></div>
-      <div class="nav-item" onclick="app.abrirAjustes()"><i class="fa-solid fa-gear"></i></div>
-    </nav>
-
     <!-- MODAL DE AJUSTES (REDIRIGE EXTERNAMENTE) -->
     <div id="settings-overlay" class="modal-overlay" onclick="app.cerrarAjustes()"></div>
     <div id="settings-modal" class="modal-bottom-sheet">
       <div class="modal-handle"></div>
-      <h3 class="seccion-titulo" style="font-size: 1.2rem; margin-bottom: 1rem;">Ajustes de Cuenta</h3>
+      <h3 class="seccion-titulo" style="font-size: 1.2rem; margin-bottom: 1rem; margin-top:0;">Ajustes de Cuenta</h3>
       <div class="settings-list">
         <button class="settings-btn" onclick="window.location.href='perfil.html'"><i class="fa-solid fa-user"></i> <span>Mi Perfil</span></button>
         <button class="settings-btn" onclick="window.location.href='legal.html'"><i class="fa-solid fa-scale-balanced"></i> <span>Información Legal</span></button>
@@ -290,7 +291,8 @@
         document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('activa'));
         document.getElementById(`tab-${idTab}`).classList.add('activa');
         if (elementoNav) {
-          document.querySelectorAll('.bottom-nav .nav-item').forEach(b => b.classList.remove('activo'));
+          /* Cambiamos el selector porque ahora la clase es .top-nav */
+          document.querySelectorAll('.top-nav .nav-item').forEach(b => b.classList.remove('activo'));
           elementoNav.classList.add('activo');
         }
         // Ejecutar cargas dinámicas según pestaña abierta
@@ -339,7 +341,8 @@
         contenedor.innerHTML += `<article class="premio-card ${etiqueta.clase}"><div class="premio-card__medalla">${etiqueta.medalla}</div><div class="premio-card__media">${mediaHTML}</div><div class="premio-card__titulo">${escapeHTML(premio.titulo)}</div></article>`;
       });
     }
-   // =====================================================================
+
+    // =====================================================================
     // DETECCIÓN Y LÓGICA DE SCROLL INFINITO
     // =====================================================================
     async function cargarFeed(reiniciar = false) {
