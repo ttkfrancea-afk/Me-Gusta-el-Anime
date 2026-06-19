@@ -8,12 +8,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
-    /* VARIABLES DINÁMICAS (Se cambiarán solas según el anime) */
     :root {
-      --color-primary: #ff3131;    /* Color base de ventanas/acentos */
-      --color-secondary: #a52a2a;  /* Color base de botones */
-      --color-accent: #ffc0cb;     /* Detalles/Bordes glow */
+      --color-primary: #ff3131;    
+      --color-secondary: #a52a2a;  
+      --color-accent: #ffc0cb;     
       --color-bg: #030303;
       --glass-bg: rgba(255, 255, 255, 0.04);
       --glass-border: rgba(255, 255, 255, 0.12);
@@ -35,7 +36,6 @@
       align-items: center;
     }
 
-    /* Contenedor tipo celular igual al Shell del Dashboard */
     .quiz-shell {
       width: 100%;
       max-width: 600px;
@@ -48,7 +48,7 @@
       padding: 20px;
     }
 
-    /* EFECTO AKATSUKI (CAPA DE ENTRADA) */
+    /* EFECTO AKATSUKI */
     #akatsuki-overlay {
       position: absolute;
       inset: 0;
@@ -68,7 +68,6 @@
       animation: pulse 1.5s infinite;
     }
 
-    /* CONTENEDOR DE ESTADOS DEL QUIZ */
     .quiz-box {
       flex: 1;
       display: flex;
@@ -77,7 +76,7 @@
       gap: 20px;
     }
 
-    /* ESTADO 1: LA NUBE/VENTANA DE LA PREGUNTA */
+    /* ESTADO 1: PREGUNTA */
     .question-card {
       background: var(--glass-bg);
       border: 2px solid var(--glass-border);
@@ -95,7 +94,6 @@
       line-height: 1.3;
     }
 
-    /* BARRA DE TIEMPO DELIZANTE (Amarillo a Naranja Ladrillo) */
     .timer-container {
       width: 100%;
       height: 6px;
@@ -110,10 +108,9 @@
       background: linear-gradient(90deg, #f5d142 0%, #ff5722 100%);
       border-radius: 10px;
       transform-origin: left;
-      /* La animación de 6s se controlará dinámicamente con JS */
     }
 
-    /* ESTADO 2: BLOQUES DE RESPUESTAS A, B, C, D */
+    /* ESTADO 2: OPCIONES */
     .options-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -133,6 +130,7 @@
       align-items: center;
       gap: 15px;
       cursor: pointer;
+      width: 100%;
       transition: all 0.2s ease;
     }
     .option-btn .badge {
@@ -147,11 +145,9 @@
       color: var(--color-accent);
       border: 1px solid rgba(255,255,255,0.2);
     }
-    .option-btn:active {
-      transform: scale(0.98);
-    }
+    .option-btn:active { transform: scale(0.98); }
 
-    /* ESTADO 3: VENTANA DE RETROALIMENTACIÓN CINEMÁTICA */
+    /* ESTADO 3: RETROALIMENTACIÓN */
     .feedback-card {
       background: rgba(5, 5, 5, 0.95);
       border: 2px solid var(--color-primary);
@@ -164,8 +160,6 @@
       gap: 15px;
       animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
     }
-
-    /* Cabecera del Estado (Éxito / Incorrecto) */
     .feedback-header {
       font-family: var(--font-display);
       font-size: 2.2rem;
@@ -176,16 +170,13 @@
     .feedback-header.exito { color: #4caf50; text-shadow: 0 0 10px rgba(76,175,80,0.3); }
     .feedback-header.error { color: #f44336; text-shadow: 0 0 10px rgba(244,67,54,0.3); }
 
-    /* Bloque Medio: Info + Sticker Flotante estilo Jujutsu */
     .feedback-body {
       display: flex;
       gap: 15px;
       align-items: center;
       min-height: 140px;
     }
-    .feedback-info {
-      flex: 1;
-    }
+    .feedback-info { flex: 1; }
     .feedback-info .correct-answer-title {
       font-size: 0.85rem;
       text-transform: uppercase;
@@ -204,14 +195,7 @@
       color: #a3a3ad;
       line-height: 1.4;
     }
-
-    /* Sticker de Personaje Animado Flotante */
-    .sticker-container {
-      width: 110px;
-      height: 140px;
-      position: relative;
-      flex-shrink: 0;
-    }
+    .sticker-container { width: 110px; height: 140px; position: relative; flex-shrink: 0; }
     .character-sticker {
       width: 100%;
       height: 100%;
@@ -220,7 +204,6 @@
       animation: floatEffect 4s ease-in-out infinite;
     }
 
-    /* BOTÓN SIGUIENTE ACCIONABLE (Abajo del todo) */
     .action-btn {
       width: 100%;
       background: var(--color-secondary);
@@ -233,7 +216,6 @@
       letter-spacing: 1px;
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-      transition: background 0.3s;
     }
 
     /* PANTALLA FINAL */
@@ -253,39 +235,197 @@
       text-shadow: 0 0 15px rgba(245,209,66,0.4);
     }
 
-    /* ANIMACIONES CSS */
     @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
     @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
     @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes floatEffect {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
+    @keyframes floatEffect { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
   </style>
 </head>
 <body>
 
   <div class="quiz-shell">
-
     <div id="akatsuki-overlay">
       <div class="loading-text"><i class="fa-solid fa-cloud" style="margin-right: 10px;"></i>Invocando Quiz...</div>
     </div>
 
-    <div class="quiz-box" id="quiz-box">
-      
-      </div>
-
+    <div class="quiz-box" id="quiz-box"></div>
   </div>
 
   <script>
-    // Esto asegura que la capa Akatsuki desaparezca a los 1.5 segundos para que veas el fondo
-    setTimeout(() => {
-      const overlay = document.getElementById('akatsuki-overlay');
-      if(overlay) overlay.style.opacity = '0';
-      setTimeout(() => overlay.style.display = 'none', 500);
-    }, 1500);
-  </script>
+    // =====================================================================
+    // CONFIGURACIÓN DE SUPABASE (Heredada del ecosistema existente)
+    // =====================================================================
+    const SUPABASE_URL = "https://thbzfshwcurgscvldmby.supabase.co"; 
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoYnpmc2h3Y3VyZ3NjdWxkbWJ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTY4NDA1NDcsImV4cCI6MjAzMjQxNjU0N30.1X2xf8z4-G4M8K5k2k2k2k2k2k2k2k2k2k2k2k2k2k2k"; // Reemplaza por tu clave Anon exacta si difiere
+    const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    // Variables de control de juego
+    let preguntas = [];
+    let indicePreguntaActual = 0;
+    let aciertos = 0;
+    let timerInterval = null;
+
+    // 1. Detectar el anime desde la URL (?anime=onepiece)
+    const urlParams = new URLSearchParams(window.location.search);
+    const animeSeleccionado = urlParams.get('anime') || 'onepiece';
+
+    // 2. Inicializar la carga al abrir el archivo
+    window.addEventListener('DOMContentLoaded', cargarPreguntasDelAnime);
+
+    async function cargarPreguntasDelAnime() {
+      try {
+        const { data, error } = await supabase
+          .from('preguntas_quiz')
+          .select('*')
+          .eq('anime_id', animeSeleccionado);
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          document.getElementById('quiz-box').innerHTML = `<p style="text-align:center; padding:20px;">No hay preguntas disponibles para este anime aún.</p>`;
+          ocultarAkatsuki();
+          return;
+        }
+
+        preguntas = data;
+        
+        // Aplicar la paleta de colores dinámicos guardada en el primer registro
+        const tema = preguntas[0];
+        document.documentElement.style.setProperty('--color-primary', tema.color_primario);
+        document.documentElement.style.setProperty('--color-secondary', tema.color_secundario);
+        document.documentElement.style.setProperty('--color-accent', tema.color_acento);
+
+        setTimeout(() => {
+          ocultarAkatsuki();
+          mostrarFasePregunta();
+        }, 1200);
+
+      } catch (err) {
+        console.error("Error cargando el Quiz:", err);
+        document.getElementById('quiz-box').innerHTML = `<p style="text-align:center; color:#f44336;">Error de conexión con la base de datos.</p>`;
+        ocultarAkatsuki();
+      }
+    }
+
+    function ocultarAkatsuki() {
+      const overlay = document.getElementById('akatsuki-overlay');
+      if(overlay) {
+        overlay.style.opacity = '0';
+        setTimeout(() => overlay.style.display = 'none', 500);
+      }
+    }
+
+    // FASE 1: MOSTRAR LA PREGUNTA CON SU REFUERZO DE TIEMPO (6 Segundos)
+    function mostrarFasePregunta() {
+      const p = preguntas[indicePreguntaActual];
+      const contenedor = document.getElementById('quiz-box');
+      
+      contenedor.innerHTML = `
+        <div class="question-card">
+          <h2>${p.pregunta}</h2>
+          <div class="timer-container">
+            <div class="timer-bar" id="t-bar"></div>
+          </div>
+        </div>
+      `;
+
+      let tiempoRestante = 100; 
+      const paso = 100 / 60; // 60 intervalos (100ms por 6 segundos = 60 iteraciones)
+      const bar = document.getElementById('t-bar');
+
+      timerInterval = setInterval(() => {
+        tiempoRestante -= paso;
+        if (tiempoRestante <= 0) {
+          clearInterval(timerInterval);
+          bar.style.transform = `scaleX(0)`;
+          // Pasados los 6 segundos de lectura, cambia automáticamente a la fase de respuestas
+          mostrarFaseOpciones();
+        } else {
+          bar.style.transform = `scaleX(${tiempoRestante / 100})`;
+        }
+      }, 100);
+    }
+
+    // FASE 2: MOSTRAR LOS 4 BLOQUES DE RESPUESTA A, B, C, D
+    function mostrarFaseOpciones() {
+      const p = preguntas[indicePreguntaActual];
+      const contenedor = document.getElementById('quiz-box');
+
+      contenedor.innerHTML = `
+        <div class="options-grid">
+          <button class="option-btn" onclick="evaluarRespuesta('a')"><div class="badge">A</div> ${p.opcion_a}</button>
+          <button class="option-btn" onclick="evaluarRespuesta('b')"><div class="badge">B</div> ${p.opcion_b}</button>
+          <button class="option-btn" onclick="evaluarRespuesta('c')"><div class="badge">C</div> ${p.opcion_c}</button>
+          <button class="option-btn" onclick="evaluarRespuesta('d')"><div class="badge">D</div> ${p.opcion_d}</button>
+        </div>
+      `;
+    }
+
+    // FASE 3: RETROALIMENTACIÓN CINEMÁTICA CON STICKER E INFO EXTRA (BOTÓN BLOQUEADO)
+    function evaluarRespuesta(opcionSeleccionada) {
+      const p = preguntas[indicePreguntaActual];
+      const contenedor = document.getElementById('quiz-box');
+      
+      const esCorrecta = (opcionSeleccionada === p.correcta);
+      if (esCorrecta) aciertos++;
+
+      // Conseguir el texto puro de la opción correcta para mostrarlo en grande
+      let textoCorrecto = "";
+      if(p.correcta === 'a') textoCorrecto = p.opcion_a;
+      if(p.correcta === 'b') textoCorrecto = p.opcion_b;
+      if(p.correcta === 'c') textoCorrecto = p.opcion_c;
+      if(p.correcta === 'd') textoCorrecto = p.opcion_d;
+
+      contenedor.innerHTML = `
+        <div class="feedback-card">
+          <div class="feedback-header ${esCorrecta ? 'exito' : 'error'}">
+            ${esCorrecta ? '<i class="fa-solid fa-circle-check"></i> ¡Éxito!' : '<i class="fa-solid fa-circle-xmark"></i> Incorrecto'}
+          </div>
+          
+          <div class="feedback-body">
+            <div class="feedback-info">
+              <div class="correct-answer-title">Respuesta Correcta:</div>
+              <div class="correct-text">${textoCorrecto}</div>
+              <div class="extra-explanation">${p.informacion_extra || 'Sin descripción adicional disponible.'}</div>
+            </div>
+            
+            <div class="sticker-container">
+              <img src="${p.personaje_sticker || 'https://via.placeholder.com/110x140?text=Anime'}" class="character-sticker" alt="Personaje">
+            </div>
+          </div>
+
+          <button class="action-btn" onclick="avanzarPregunta()">Siguiente <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      `;
+    }
+
+    function avanzarPregunta() {
+      indicePreguntaActual++;
+      if (indicePreguntaActual < preguntas.length) {
+        mostrarFasePregunta();
+      } else {
+        mostrarPantallaFinal();
+      }
+    }
+
+    // FASE FINAL: CÁLCULO DE PUNTOS UTILIZANDO EL ALGORITMO ACORDADO
+    function mostrarPantallaFinal() {
+      const contenedor = document.getElementById('quiz-box');
+      
+      // Algoritmo: P = (Aciertos / Total_Preguntas) * 10
+      const puntuacionFinal = ((aciertos / preguntas.length) * 10).toFixed(2);
+
+      contenedor.innerHTML = `
+        <div class="score-card">
+          <h2>¡Quiz Completado!</h2>
+          <p style="margin-top:10px; color:var(--color-text-muted);">Tu nivel de efectividad se ha calculado con éxito.</p>
+          <div class="score-number">${puntuacionFinal} / 10.00</div>
+          <p style="color:#4caf50; font-weight:600; margin-bottom:25px;">Aciertos totales: ${aciertos} de ${preguntas.length}</p>
+          <button class="action-btn" onclick="window.location.href='dashboard.html'">Volver al Dashboard</button>
+        </div>
+      `;
+    }
+  </script>
 </body>
 </html>
