@@ -4,11 +4,42 @@
   <meta charset="UTF-8" />
   <!-- Bloqueo de zoom para sensación de App Nativa -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Otaku Nexus · Acceso</title>
+  <title>Me Gusta el Anime · Acceso</title>
+
+  <!-- Google Fonts para tipografías condensadas y el logo estilo graffiti -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
 
   <!-- IMPORTANTE: variables.css SIEMPRE primero, define :root para todo lo demás -->
   <link rel="stylesheet" href="css/variables.css" />
   <link rel="stylesheet" href="css/login.css" />
+
+  <style>
+    /* Estilos inyectados quirúrgicamente para el logo Graffiti de tu imagen */
+    .logo-graffiti-amarillo {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 3.5rem;
+      line-height: 1.1;
+      color: #f5d142;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      transform: rotate(-3deg);
+      display: inline-block;
+      margin-bottom: var(--space-md);
+      text-shadow: 
+        3px 3px 0px #000, 
+        -3px -3px 0px #000,  
+        3px -3px 0px #000,
+        -3px 3px 0px #000,
+        0px 10px 20px rgba(0, 0, 0, 0.8);
+      filter: drop-shadow(0 0 15px rgba(245, 209, 66, 0.4));
+    }
+
+    @media (max-width: 760px) {
+      .logo-graffiti-amarillo {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -21,7 +52,7 @@
            ================================================================= -->
       <section class="panel-visual" id="panel-visual" aria-hidden="true">
         <div class="panel-visual__branding">
-          <h1 class="titulo-poster">Otaku Nexus</h1>
+          <h1 class="logo-graffiti-amarillo">Me Gusta<br>el Anime</h1>
           <p>La comunidad donde tu conocimiento de anime se convierte en puntos, ranking y premios reales.</p>
         </div>
       </section>
@@ -37,7 +68,7 @@
                ---------------------------------------------------------- -->
           <form id="form-login" class="formulario activo" autocomplete="on">
             <h2 class="formulario__titulo">Iniciar Sesión</h2>
-            <p class="formulario__subtitulo">Vuelve a entrar al Nexus y sigue acumulando puntos.</p>
+            <p class="formulario__subtitulo">Vuelve a entrar y sigue acumulando puntos.</p>
 
             <div class="input-grupo">
               <label for="login-email">Correo electrónico</label>
@@ -121,6 +152,23 @@
               ¿Ya tienes cuenta?
               <button type="button" id="btn-ir-login">Inicia sesión</button>
             </p>
+          </form>
+
+          <!-- ----------------------------------------------------------
+               FORMULARIO: RECUPERACIÓN (Para ingresar nueva contraseña directamente en la UI)
+               ---------------------------------------------------------- -->
+          <form id="form-restablecer" class="formulario" autocomplete="off">
+            <h2 class="formulario__titulo" style="color: var(--color-accent-yellow);">Nueva Contraseña</h2>
+            <p class="formulario__subtitulo">Escribe tu nueva contraseña de acceso.</p>
+
+            <div class="input-grupo">
+              <label for="nueva-password">Nueva Contraseña</label>
+              <input type="password" id="nueva-password" required minlength="6" placeholder="Mínimo 6 caracteres" />
+            </div>
+
+            <button type="submit" class="btn btn-primario" style="background: var(--color-accent-yellow); color: #000; box-shadow: 0 6px 20px var(--color-yellow-glow);">Guardar Contraseña</button>
+
+            <div class="zona-mensajes" id="mensajes-restablecer"></div>
           </form>
 
         </div>
