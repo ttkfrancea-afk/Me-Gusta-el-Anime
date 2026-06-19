@@ -26,887 +26,134 @@
       --glass-bg: rgba(255, 255, 255, 0.04);
       --color-red-glow: rgba(255, 49, 49, 0.45); 
       --color-yellow-glow: rgba(245, 209, 66, 0.35);
-      --color-red-soft: rgba(255, 49, 49, 0.12);
       
       --font-logo: 'Permanent Marker', cursive;
       --font-display: 'Bebas Neue', 'Oswald', sans-serif;
       --font-body: 'Rajdhani', 'Segoe UI', sans-serif;
       --font-mono: 'Share Tech Mono', monospace;
       
-      --fs-xs: 0.75rem; 
-      --fs-sm: 0.875rem; 
-      --fs-base: 1rem; 
-      --fs-lg: 1.25rem; 
-      --fs-xl: 1.75rem; 
-      --fs-2xl: 2.5rem; 
-      --fs-3xl: 4rem;
+      --fs-xs: 0.75rem; --fs-sm: 0.875rem; --fs-base: 1rem; 
+      --fs-lg: 1.25rem; --fs-xl: 1.75rem; --fs-2xl: 2.5rem; 
       
-      --space-xs: 0.4rem; 
-      --space-sm: 0.8rem; 
-      --space-md: 1.4rem; 
-      --space-lg: 2.2rem;
-      
-      --radius-sm: 8px; 
-      --radius-md: 14px; 
-      --radius-lg: 24px;
-      
-      --transition-fast: 0.18s ease; 
-      --transition-mid: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      --space-xs: 0.4rem; --space-sm: 0.8rem; --space-md: 1.4rem; --space-lg: 2.2rem;
+      --radius-sm: 8px; --radius-md: 14px; --radius-lg: 24px;
     }
 
-    * { 
-      margin: 0; 
-      padding: 0; 
-      box-sizing: border-box; 
-    }
-    
-    html, body { 
-      height: 100%; 
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
     
     body { 
-      background-color: var(--color-bg); 
-      color: var(--color-text); 
-      font-family: var(--font-body); 
-      font-size: var(--fs-base); 
-      line-height: 1.5; 
-      -webkit-font-smoothing: antialiased; 
+      background-color: var(--color-bg); color: var(--color-text); 
+      font-family: var(--font-body); font-size: var(--fs-base); 
+      line-height: 1.5; -webkit-font-smoothing: antialiased; 
     }
-    
-    a { 
-      color: inherit; 
-      text-decoration: none; 
-    }
-    
-    img, iframe, video { 
-      max-width: 100%; 
-      display: block; 
-    }
-    
-    button { 
-      cursor: pointer; 
-      border: none; 
-      outline: none; 
-    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; outline: none; }
 
     /* =====================================================================
-       DISEÑO DE APP NATIVA (DASHBOARD)
+       DISEÑO BASE (DASHBOARD HUB)
        ===================================================================== */
     .app-shell { 
-      max-width: 600px; 
-      margin: 0 auto; 
-      height: 100vh; 
-      display: flex; 
-      flex-direction: column; 
-      position: relative; 
-      background-color: var(--color-bg); 
-      box-shadow: 0 0 30px rgba(0,0,0,0.8); 
+      max-width: 600px; margin: 0 auto; height: 100vh; 
+      display: flex; flex-direction: column; position: relative; 
+      background-color: var(--color-bg); box-shadow: 0 0 30px rgba(0,0,0,0.8); 
       overflow: hidden; 
     }
     
     .navbar { 
-      display: flex; 
-      align-items: center; 
-      justify-content: space-between; 
-      padding: var(--space-sm) var(--space-md); 
-      z-index: 50; 
+      display: flex; align-items: center; justify-content: space-between; 
+      padding: var(--space-sm) var(--space-md); z-index: 50; 
       border-bottom: 1px solid var(--glass-border); 
-      background: rgba(10, 10, 15, 0.95); 
-      backdrop-filter: blur(10px); 
+      background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(10px); 
     }
     
-    /* Marca con nueva fuente Graffiti */
     .navbar__logo { 
-      font-family: var(--font-logo); 
-      font-size: var(--fs-xl); 
-      color: var(--color-accent-yellow); 
-      text-transform: uppercase; 
-      text-shadow: 2px 2px 0px #000;
-      line-height: 1.1;
+      font-family: var(--font-logo); font-size: var(--fs-xl); 
+      color: var(--color-accent-yellow); text-transform: uppercase; 
+      text-shadow: 2px 2px 0px #000; line-height: 1.1;
     }
     
-    .navbar__usuario { 
-      display: flex; 
-      align-items: center; 
-      gap: var(--space-sm); 
-    }
-    
-    .navbar__puntos { 
-      font-family: var(--font-mono); 
-      font-size: var(--fs-lg); 
-      color: var(--color-accent-yellow); 
-      display: flex; 
-      align-items: center; 
-      gap: 0.4rem; 
-    }
-    
-    .navbar__puntos .etiqueta { 
-      font-family: var(--font-body); 
-      font-size: var(--fs-xs); 
-      text-transform: uppercase; 
-      color: var(--color-text-muted); 
-    }
+    .navbar__usuario { display: flex; align-items: center; gap: var(--space-sm); }
+    .navbar__puntos { font-family: var(--font-mono); font-size: var(--fs-lg); color: var(--color-accent-yellow); display: flex; align-items: center; gap: 0.4rem; }
+    .navbar__puntos .etiqueta { font-family: var(--font-body); font-size: var(--fs-xs); text-transform: uppercase; color: var(--color-text-muted); }
 
     .main-content { 
-      flex: 1; 
-      overflow-y: auto; 
-      padding: 0 var(--space-md) 90px var(--space-md); 
+      flex: 1; overflow-y: auto; padding: 0 var(--space-md) 90px var(--space-md); 
       scroll-behavior: smooth; 
     }
-    
-    .main-content::-webkit-scrollbar { 
-      display: none; 
-    }
+    .main-content::-webkit-scrollbar { display: none; }
 
     .seccion-titulo { 
-      font-family: var(--font-display); 
-      font-size: var(--fs-xl); 
-      letter-spacing: 0.08em; 
-      text-transform: uppercase; 
-      margin-bottom: var(--space-sm); 
-      position: relative; 
-      padding-left: var(--space-sm); 
-      color: #fff; 
+      font-family: var(--font-display); font-size: var(--fs-xl); letter-spacing: 0.08em; 
+      text-transform: uppercase; margin-bottom: var(--space-sm); position: relative; 
+      padding-left: var(--space-sm); color: #fff; 
     }
-    
     .seccion-titulo::before { 
-      content: ''; 
-      position: absolute; 
-      left: 0; 
-      top: 6px; 
-      bottom: 6px; 
-      width: 4px; 
-      background: var(--color-accent-red); 
-      border-radius: 2px; 
-    }
-    
-    .titulo-poster { 
-      font-family: var(--font-display); 
-      letter-spacing: 0.08em; 
-      text-transform: uppercase; 
-      color: #fff; 
+      content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; 
+      width: 4px; background: var(--color-accent-red); border-radius: 2px; 
     }
 
     /* =====================================================================
-       PREMIOS (Diseño Original Restaurado y Formateado)
+       PREMIOS Y FEED
        ===================================================================== */
-    .premios-grid { 
-      display: grid; 
-      grid-template-columns: repeat(3, 1fr); 
-      gap: var(--space-sm); 
-    }
+    .premios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-sm); }
+    .premio-card { padding: var(--space-sm); text-align: center; border-radius: var(--radius-md); background: var(--glass-bg); border: 1px solid var(--glass-border); }
+    .premio-card__medalla { font-family: var(--font-display); font-size: var(--fs-xl); }
+    .premio-card--oro .premio-card__medalla { color: #ffd700; text-shadow: 0 0 10px rgba(255,215,0,0.5); }
+    .premio-card--plata .premio-card__medalla { color: #d8d8e0; }
+    .premio-card--bronce .premio-card__medalla{ color: #d18a4a; }
+    .premio-card__media { width: 100%; aspect-ratio: 1/1; border-radius: var(--radius-sm); overflow: hidden; margin: var(--space-xs) 0; background: rgba(0,0,0,0.4); }
+    .premio-card__media img, .premio-card__media video { width: 100%; height: 100%; object-fit: cover; }
+    .premio-card__titulo { font-weight: 700; font-size: var(--fs-xs); color: #fff; }
     
-    .premio-card { 
-      padding: var(--space-sm); 
-      text-align: center; 
-      position: relative; 
-      overflow: hidden; 
-      border-radius: var(--radius-md); 
-      background: var(--glass-bg); 
-      border: 1px solid var(--glass-border); 
-    }
+    .feed-filtros { display: flex; gap: var(--space-xs); margin-bottom: var(--space-md); overflow-x: auto; padding-bottom: 5px; }
+    .feed-filtros::-webkit-scrollbar { display: none; }
+    .feed-filtros button { font-family: var(--font-body); font-size: var(--fs-xs); text-transform: uppercase; padding: 0.4rem 0.8rem; border-radius: 20px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--color-text-muted); white-space: nowrap; }
+    .feed-filtros button.activo { border-color: var(--color-accent-red); color: var(--color-accent-red); background: rgba(255,49,49,0.1); }
     
-    .premio-card__medalla { 
-      font-family: var(--font-display); 
-      font-size: var(--fs-xl); 
-      letter-spacing: 0.05em; 
-    }
-    
-    .premio-card--oro .premio-card__medalla { 
-      color: #ffd700; 
-      text-shadow: 0 0 10px rgba(255,215,0,0.5); 
-    }
-    
-    .premio-card--plata .premio-card__medalla { 
-      color: #d8d8e0; 
-    }
-    
-    .premio-card--bronce .premio-card__medalla{ 
-      color: #d18a4a; 
-    }
-    
-    .premio-card__media { 
-      width: 100%; 
-      aspect-ratio: 1 / 1; 
-      border-radius: var(--radius-sm); 
-      overflow: hidden; 
-      margin: var(--space-xs) 0; 
-      background: rgba(0, 0, 0, 0.4); 
-    }
-    
-    .premio-card__media img, .premio-card__media video { 
-      width: 100%; 
-      height: 100%; 
-      object-fit: cover; 
-    }
-    
-    .premio-card__titulo { 
-      font-weight: 700; 
-      font-size: var(--fs-xs); 
-      color: #fff; 
-    }
-    
-    .premio-card__descripcion { 
-      font-size: 0.65rem; 
-      color: var(--color-text-muted); 
-      margin-top: 0.2rem; 
-    }
-
-    /* =====================================================================
-       FEED ESTILO NEÓN (SOLO LEVELING)
-       ===================================================================== */
-    .feed-filtros { 
-      display: flex; 
-      gap: var(--space-xs); 
-      margin-bottom: var(--space-md); 
-      overflow-x: auto; 
-      padding-bottom: 5px; 
-    }
-    
-    .feed-filtros::-webkit-scrollbar { 
-      display: none; 
-    }
-    
-    .feed-filtros button { 
-      font-family: var(--font-body); 
-      font-size: var(--fs-xs); 
-      text-transform: uppercase; 
-      padding: 0.4rem 0.8rem; 
-      border-radius: 20px; 
-      border: 1px solid var(--glass-border); 
-      background: var(--glass-bg); 
-      color: var(--color-text-muted); 
-      white-space: nowrap; 
-    }
-    
-    .feed-filtros button.activo { 
-      border-color: var(--color-accent-red); 
-      color: var(--color-accent-red); 
-      background: rgba(255,49,49,0.1); 
-    }
-    
-    .feed-grid { 
-      display: flex; 
-      flex-direction: column; 
-      gap: var(--space-lg); 
-    }
-    
-    .feed-card { 
-      overflow: hidden; 
-      padding: 0; 
-      border-radius: var(--radius-md); 
-      border: 1px solid var(--color-accent-red); 
-      box-shadow: 0 0 15px var(--color-red-glow), inset 0 0 10px var(--color-red-glow); 
-      background: #050505; 
-    }
-    
-    .feed-card__video { 
-      position: relative; 
-      width: 100%; 
-      aspect-ratio: 16 / 9; 
-      background: #000; 
-    }
-    
-    .feed-card__video iframe { 
-      position: absolute; 
-      inset: 0; 
-      width: 100%; 
-      height: 100%; 
-      border: 0; 
-    }
-    
-    .feed-card__info { 
-      padding: var(--space-sm) var(--space-md); 
-      display: flex; 
-      flex-direction: column; 
-      gap: 5px; 
-    }
-    
-    .feed-card__categoria { 
-      font-size: var(--fs-xs); 
-      color: var(--color-accent-red); 
-      text-transform: uppercase; 
-      letter-spacing: 0.08em; 
-      font-weight: 700; 
-    }
-    
-    .feed-card__titulo { 
-      font-weight: 700; 
-      font-size: var(--fs-sm); 
-      color: #fff; 
-    }
+    .feed-grid { display: flex; flex-direction: column; gap: var(--space-lg); }
+    .feed-card { overflow: hidden; border-radius: var(--radius-md); border: 1px solid var(--color-accent-red); box-shadow: 0 0 15px var(--color-red-glow), inset 0 0 10px var(--color-red-glow); background: #050505; }
+    .feed-card__video { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; }
+    .feed-card__video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .feed-card__info { padding: var(--space-sm) var(--space-md); display: flex; flex-direction: column; gap: 5px; }
+    .feed-card__categoria { font-size: var(--fs-xs); color: var(--color-accent-red); text-transform: uppercase; font-weight: 700; }
+    .feed-card__titulo { font-weight: 700; font-size: var(--fs-sm); color: #fff; }
 
     /* =====================================================================
        TABS Y NAVEGACIÓN
        ===================================================================== */
-    .tab-pane { 
-      display: none; 
-      animation: fadeIn 0.3s ease; 
-    }
+    .tab-pane { display: none; animation: fadeIn 0.3s ease; }
+    .tab-pane.activa { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     
-    .tab-pane.activa { 
-      display: block; 
-    }
-    
-    @keyframes fadeIn { 
-      from { opacity: 0; transform: translateY(15px); } 
-      to { opacity: 1; transform: translateY(0); } 
-    }
-    
-    .bottom-nav { 
-      position: absolute; 
-      bottom: 0; 
-      left: 0; 
-      width: 100%; 
-      height: 70px; 
-      display: flex; 
-      justify-content: space-around; 
-      align-items: center; 
-      z-index: 100; 
-      border-top: 1px solid var(--glass-border); 
-      background: rgba(10, 10, 15, 0.95); 
-      backdrop-filter: blur(15px); 
-    }
-    
-    .bottom-nav .nav-item { 
-      color: var(--color-text-muted); 
-      font-size: 1.5rem; 
-      cursor: pointer; 
-      transition: all 0.3s; 
-      position: relative; 
-      width: 50px; 
-      text-align: center; 
-    }
-    
-    .bottom-nav .nav-item.activo { 
-      color: #fff; 
-      transform: translateY(-5px); 
-      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); 
-    }
-    
-    .bottom-nav .nav-item.activo::after { 
-      content: ''; 
-      position: absolute; 
-      bottom: -8px; 
-      left: 50%; 
-      transform: translateX(-50%); 
-      width: 5px; 
-      height: 5px; 
-      background: var(--color-accent-red); 
-      border-radius: 50%; 
-      box-shadow: 0 0 8px var(--color-accent-red); 
-    }
+    .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; height: 70px; display: flex; justify-content: space-around; align-items: center; z-index: 100; border-top: 1px solid var(--glass-border); background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(15px); }
+    .bottom-nav .nav-item { color: var(--color-text-muted); font-size: 1.5rem; cursor: pointer; transition: all 0.3s; position: relative; width: 50px; text-align: center; }
+    .bottom-nav .nav-item.activo { color: #fff; transform: translateY(-5px); text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
+    .bottom-nav .nav-item.activo::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 5px; height: 5px; background: var(--color-accent-red); border-radius: 50%; box-shadow: 0 0 8px var(--color-accent-red); }
 
     /* =====================================================================
-       MODAL AJUSTES (TUERCA)
+       MODAL AJUSTES Y COMPONENTES REUTILIZABLES
        ===================================================================== */
-    .modal-overlay { 
-      position: absolute; 
-      inset: 0; 
-      background: rgba(0,0,0,0.8); 
-      z-index: 101; 
-      opacity: 0; 
-      pointer-events: none; 
-      transition: opacity 0.3s; 
-    }
+    .modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.8); z-index: 101; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .modal-overlay.activo { opacity: 1; pointer-events: auto; }
+    .modal-bottom-sheet { position: absolute; bottom: 0; left: 0; width: 100%; border-radius: var(--radius-lg) var(--radius-lg) 0 0; z-index: 102; padding: var(--space-lg); transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--glass-border); }
+    .modal-bottom-sheet.abierto { transform: translateY(0); box-shadow: 0 -10px 40px rgba(0,0,0,0.8); }
+    .modal-handle { width: 40px; height: 5px; background: var(--glass-border); border-radius: 10px; margin: 0 auto 20px auto; }
+    .settings-btn { width: 100%; display: flex; align-items: center; gap: 15px; padding: 15px 10px; background: transparent; border-bottom: 1px solid var(--glass-border); color: var(--color-text); font-family: var(--font-body); font-size: var(--fs-base); text-align: left; }
+    .settings-btn i { width: 20px; text-align: center; color: var(--color-text-muted); }
     
-    .modal-overlay.activo { 
-      opacity: 1; 
-      pointer-events: auto; 
-    }
+    .search-container { position: relative; border-radius: var(--radius-md); background: var(--glass-bg); border: 1px solid var(--glass-border); margin-bottom: 1rem; }
+    .search-input { width: 100%; background: transparent; border: none; padding: 15px 15px 15px 45px; color: #fff; outline: none; }
+    .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); }
     
-    .modal-bottom-sheet { 
-      position: absolute; 
-      bottom: 0; 
-      left: 0; 
-      width: 100%; 
-      border-top-left-radius: var(--radius-lg); 
-      border-top-right-radius: var(--radius-lg); 
-      z-index: 102; 
-      padding: var(--space-lg); 
-      transform: translateY(100%); 
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-      background: rgba(10, 10, 15, 0.95); 
-      backdrop-filter: blur(15px); 
-      border-top: 1px solid var(--glass-border); 
-    }
+    .game-card { display: flex; align-items: center; gap: 15px; padding: 15px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); background: var(--glass-bg); margin-bottom: 15px; cursor: pointer; transition: transform 0.2s;}
+    .game-card:active { transform: scale(0.98); }
+    .game-card__icon { width: 50px; height: 50px; background: rgba(0,0,0,0.5); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 1px solid var(--glass-border); }
+    .game-card__info { flex: 1; }
+    .game-card__info h3 { font-weight: 700; font-size: var(--fs-base); color: #fff; }
+    .game-card__info p { font-size: var(--fs-xs); color: var(--color-text-muted); }
     
-    .modal-bottom-sheet.abierto { 
-      transform: translateY(0); 
-      box-shadow: 0 -10px 40px rgba(0,0,0,0.8); 
-    }
-    
-    .modal-handle { 
-      width: 40px; 
-      height: 5px; 
-      background: var(--glass-border); 
-      border-radius: 10px; 
-      margin: 0 auto 20px auto; 
-    }
-    
-    .settings-btn { 
-      width: 100%; 
-      display: flex; 
-      align-items: center; 
-      gap: 15px; 
-      padding: 15px 10px; 
-      background: transparent; 
-      border-bottom: 1px solid var(--glass-border); 
-      color: var(--color-text); 
-      font-family: var(--font-body); 
-      font-size: var(--fs-base); 
-      text-align: left; 
-      transition: background 0.2s; 
-    }
-    
-    .settings-btn i { 
-      width: 20px; 
-      text-align: center; 
-      color: var(--color-text-muted); 
-    }
-    
-    .settings-btn .text-accent, .settings-btn.text-accent i { 
-      color: var(--color-accent-red); 
-    }
-
-    /* =====================================================================
-       BÚSQUEDA Y ARCADE
-       ===================================================================== */
-    .search-container { 
-      position: relative; 
-      border-radius: var(--radius-md); 
-      overflow: hidden; 
-      background: var(--glass-bg); 
-      border: 1px solid var(--glass-border); 
-      margin-bottom: 1rem; 
-    }
-    
-    .search-input { 
-      width: 100%; 
-      background: transparent; 
-      border: none; 
-      padding: 15px 15px 15px 45px; 
-      color: #fff; 
-      font-family: var(--font-body); 
-      outline: none; 
-      font-size: var(--fs-base); 
-    }
-    
-    .search-icon { 
-      position: absolute; 
-      left: 15px; 
-      top: 50%; 
-      transform: translateY(-50%); 
-      color: var(--color-text-muted); 
-    }
-    
-    .game-card { 
-      display: flex; 
-      align-items: center; 
-      gap: 15px; 
-      padding: 15px; 
-      border-radius: var(--radius-md); 
-      border: 1px solid var(--glass-border); 
-      background: var(--glass-bg); 
-      margin-bottom: 15px; 
-      cursor: pointer;
-    }
-    
-    .game-card__icon { 
-      width: 50px; 
-      height: 50px; 
-      background: rgba(0,0,0,0.5); 
-      border-radius: var(--radius-sm); 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      font-size: 1.5rem; 
-      border: 1px solid var(--glass-border); 
-    }
-    
-    .game-card__info { 
-      flex: 1; 
-    }
-    
-    .game-card__info h3 { 
-      font-weight: 700; 
-      font-size: var(--fs-base); 
-      color: #fff;
-    }
-    
-    .game-card__info p { 
-      font-size: var(--fs-xs); 
-      color: var(--color-text-muted); 
-    }
-    
-    .pokemon-select-grid { 
-      display: flex; 
-      justify-content: center; 
-      gap: 15px; 
-      flex-wrap: wrap; 
-    }
-    
-    .poke-choice { 
-      padding: 15px; 
-      border: 2px solid var(--glass-border); 
-      border-radius: var(--radius-md); 
-      background: rgba(0,0,0,0.6); 
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      cursor: pointer; 
-      transition: transform 0.2s; 
-    }
-    
-    .poke-choice:hover { 
-      transform: scale(1.05); 
-      border-color: #fff; 
-    }
-    
-    .poke-choice img { 
-      width: 80px; 
-      image-rendering: pixelated; 
-      margin-bottom: 10px; 
-      filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); 
-    }
-    
-    .poke-name-tag { 
-      font-family: var(--font-display); 
-      letter-spacing: 1px; 
-    }
-
-    /* =====================================================================
-       ARENA POKÉMON (ESTILO MODERNO ANIMADO)
-       ===================================================================== */
-    .arena-pokemon { 
-      position: relative; 
-      height: calc(100vh - 160px); 
-      border-radius: var(--radius-lg); 
-      overflow: hidden; 
-      border: 1px solid var(--glass-border); 
-      box-shadow: inset 0 0 40px rgba(0,0,0,0.9); 
-    }
-    
-    .arena-bg { 
-      position: absolute; 
-      inset: 0; 
-      background: linear-gradient(180deg, #1a2a40 0%, #0a0f1a 100%); 
-      background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 1px, transparent 1px); 
-      background-size: 20px 20px; 
-      z-index: 0; 
-    }
-    
-    .arena-header { 
-      position: absolute; 
-      top: 15px; 
-      left: 15px; 
-      z-index: 10; 
-    }
-    
-    .btn-huir { 
-      background: rgba(0,0,0,0.6); 
-      color: #fff; 
-      border: 1px solid var(--glass-border); 
-      padding: 8px 15px; 
-      border-radius: 20px; 
-      font-family: var(--font-body); 
-      font-weight: bold; 
-      font-size: var(--fs-xs); 
-      backdrop-filter: blur(5px); 
-    }
-    
-    .arena-top { 
-      position: absolute; 
-      top: 40px; 
-      right: 15px; 
-      width: 100%; 
-      display: flex; 
-      flex-direction: column; 
-      align-items: flex-end; 
-      z-index: 5; 
-    }
-    
-    .arena-bottom { 
-      position: absolute; 
-      bottom: 140px; 
-      left: 15px; 
-      width: 100%; 
-      display: flex; 
-      flex-direction: column; 
-      align-items: flex-start; 
-      z-index: 5; 
-    }
-    
-    .poke-info { 
-      padding: 10px 15px; 
-      border-radius: var(--radius-sm); 
-      width: 190px; 
-      border-left: 4px solid var(--color-accent-red); 
-      margin-bottom: 10px; 
-      background: rgba(10, 10, 15, 0.95); 
-      backdrop-filter: blur(15px); 
-    }
-    
-    .player-info { 
-      border-left: 4px solid #4cd97b; 
-    }
-    
-    .poke-name { 
-      display: flex; 
-      justify-content: space-between; 
-      font-family: var(--font-display); 
-      letter-spacing: 1px; 
-      font-size: var(--fs-base); 
-      margin-bottom: 5px; 
-      color: #fff; 
-    }
-    
-    .hp-bar-bg { 
-      width: 100%; 
-      height: 12px; 
-      background: #222; 
-      border-radius: 6px; 
-      border: 2px solid #000; 
-      overflow: hidden; 
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); 
-    }
-    
-    .hp-bar-fill { 
-      width: 100%; 
-      height: 100%; 
-      background: linear-gradient(90deg, #4cd97b, #28a745); 
-      transition: width 0.3s, background 0.3s; 
-    }
-    
-    .hp-text { 
-      text-align: right; 
-      font-family: var(--font-mono); 
-      font-size: var(--fs-xs); 
-      margin-top: 4px; 
-      color: var(--color-text-muted); 
-    }
-    
-    .sprite-container { 
-      position: relative; 
-      width: 140px; 
-      height: 140px; 
-      display: flex; 
-      justify-content: center; 
-      align-items: flex-end; 
-    }
-    
-    .poke-sprite { 
-      width: 100%; 
-      image-rendering: pixelated; 
-      filter: drop-shadow(0 15px 10px rgba(0,0,0,0.5)); 
-      transition: filter 0.2s; 
-    }
-    
-    .enemy-sprite-container { 
-      margin-right: 20px; 
-    }
-    
-    .player-sprite-container { 
-      margin-left: 20px; 
-    }
-    
-    .arena-controls { 
-      position: absolute; 
-      bottom: 0; 
-      left: 0; 
-      width: 100%; 
-      height: 130px; 
-      background: rgba(5,5,10,0.95); 
-      border-top: 2px solid var(--glass-border); 
-      display: flex; 
-      flex-direction: column; 
-      z-index: 20; 
-    }
-    
-    .battle-message { 
-      padding: 12px 15px; 
-      font-family: var(--font-body); 
-      font-weight: 700; 
-      font-size: var(--fs-sm); 
-      color: #fff; 
-      border-bottom: 1px solid rgba(255,255,255,0.05); 
-      min-height: 45px; 
-      display: flex; 
-      align-items: center; 
-    }
-    
-    .battle-actions { 
-      flex: 1; 
-      display: grid; 
-      grid-template-columns: 1fr 1fr; 
-      gap: 8px; 
-      padding: 10px 15px; 
-    }
-    
-    .btn-action { 
-      background: rgba(255,255,255,0.05); 
-      border: 1px solid var(--glass-border); 
-      color: #fff; 
-      font-family: var(--font-body); 
-      font-weight: 700; 
-      font-size: var(--fs-xs); 
-      text-transform: uppercase; 
-      border-radius: var(--radius-sm); 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      gap: 8px; 
-      transition: all 0.2s;
-    }
-    
-    .btn-action:active { 
-      transform: scale(0.95); 
-    }
-    
-    @keyframes shake { 
-      0% { transform: translate(2px, 1px) rotate(0deg); } 
-      10% { transform: translate(-1px, -2px) rotate(-1deg); } 
-      20% { transform: translate(-3px, 0px) rotate(1deg); } 
-      30% { transform: translate(0px, 2px) rotate(0deg); } 
-      40% { transform: translate(1px, -1px) rotate(1deg); } 
-      50% { transform: translate(-1px, 2px) rotate(-1deg); } 
-      60% { transform: translate(-3px, 1px) rotate(0deg); } 
-      70% { transform: translate(2px, 1px) rotate(-1deg); } 
-      80% { transform: translate(-1px, -1px) rotate(1deg); } 
-      90% { transform: translate(2px, 2px) rotate(0deg); } 
-      100% { transform: translate(1px, -2px) rotate(-1deg); } 
-    }
-    
-    .anim-shake { 
-      animation: shake 0.4s; 
-      filter: drop-shadow(0 0 15px red) brightness(2) !important; 
-    }
-
-    /* =====================================================================
-       QUIZ ORIGINAL (Manteniendo tus variables y estructura de diseño)
-       ===================================================================== */
-    .quiz-card { 
-      padding: var(--space-md); 
-      background: var(--glass-bg); 
-      border: 1px solid var(--glass-border); 
-      border-radius: var(--radius-md); 
-    }
-    
-    .quiz-header { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      margin-bottom: var(--space-md); 
-      font-family: var(--font-mono); 
-      font-size: var(--fs-sm); 
-      color: var(--color-text-muted); 
-    }
-    
-    .quiz-timer { 
-      width: 100%; 
-      height: 8px; 
-      border-radius: 4px; 
-      background: rgba(255, 255, 255, 0.08); 
-      overflow: hidden; 
-      margin-bottom: var(--space-md); 
-    }
-    
-    .quiz-timer__barra { 
-      height: 100%; 
-      width: 100%; 
-      background: linear-gradient(90deg, var(--color-accent-yellow), var(--color-accent-red)); 
-      transform-origin: left; 
-      transition: width 0.1s linear, background var(--transition-mid); 
-    }
-    
-    .quiz-timer__barra.urgente { 
-      background: var(--color-accent-red); 
-      box-shadow: 0 0 14px var(--color-red-glow); 
-    }
-    
-    .quiz-pregunta { 
-      font-family: var(--font-display); 
-      font-size: var(--fs-lg); 
-      letter-spacing: 0.02em; 
-      margin-bottom: var(--space-md); 
-      min-height: 3.2em; 
-      color: #fff; 
-    }
-    
-    .quiz-opciones { 
-      display: flex; 
-      flex-direction: column; 
-      gap: var(--space-sm); 
-    }
-    
-    .quiz-opcion { 
-      text-align: left; 
-      padding: var(--space-sm) var(--space-md); 
-      border: 1px solid var(--glass-border); 
-      border-radius: var(--radius-sm); 
-      background: rgba(255, 255, 255, 0.03); 
-      color: var(--color-text); 
-      font-family: var(--font-body); 
-      font-size: var(--fs-sm); 
-      font-weight: 600; 
-      display: flex; 
-      gap: var(--space-sm); 
-      align-items: center; 
-    }
-    
-    .quiz-opcion .letra { 
-      font-family: var(--font-mono); 
-      color: var(--color-accent-yellow); 
-      font-size: 1.2rem; 
-    }
-    
-    .quiz-opcion.correcta { 
-      border-color: #4cd97b; 
-      background: rgba(76, 217, 123, 0.12); 
-    }
-    
-    .quiz-opcion.incorrecta { 
-      border-color: var(--color-accent-red); 
-      background: var(--color-red-soft); 
-    }
-    
-    .quiz-feedback { 
-      margin-top: var(--space-md); 
-      text-align: center; 
-      font-weight: 700; 
-      font-family: var(--font-body); 
-    }
-    
-    .quiz-feedback.ok { 
-      color: #4cd97b; 
-    }
-    
-    .quiz-feedback.fail { 
-      color: var(--color-accent-red); 
-    }
-    
-    .quiz-final { 
-      text-align: center; 
-    }
-    
-    .quiz-final__puntaje { 
-      font-family: var(--font-mono); 
-      font-size: var(--fs-3xl); 
-      color: var(--color-accent-yellow); 
-      text-shadow: 0 0 20px var(--color-yellow-glow); 
-    }
-    
-    .oculto { 
-      display: none !important; 
-    }
-    
-    .mt-4 { 
-      margin-top: 1.5rem; 
-    } 
-    
-    .mb-4 { 
-      margin-bottom: 1.5rem; 
-    }
+    .mt-4 { margin-top: 1.5rem; } 
   </style>
 </head>
 <body>
@@ -914,9 +161,7 @@
   <div class="app-shell">
     <!-- NAVBAR SUPERIOR -->
     <header class="navbar">
-      <div class="navbar__logo" style="font-family: 'Permanent Marker', cursive; font-size: 1.5rem; color: #f5d142; text-transform: uppercase;">
-        ME GUSTA<br>EL ANIME
-      </div>
+      <div class="navbar__logo">ME GUSTA<br>EL ANIME</div>
       <div class="navbar__usuario">
         <div class="navbar__puntos">
           <span id="navbar-puntos">0</span>
@@ -929,7 +174,7 @@
     <!-- ÁREA DE CONTENIDO (Pestañas) -->
     <main class="main-content">
       
-      <!-- PESTAÑA 1: INICIO (FEED INFINITO Y PREMIOS) -->
+      <!-- PESTAÑA 1: INICIO (FEED Y PREMIOS) -->
       <div id="tab-home" class="tab-pane activa">
         <section class="mt-4">
           <h2 class="seccion-titulo">Premios del Torneo</h2>
@@ -957,111 +202,44 @@
         </section>
       </div>
 
-      <!-- PESTAÑA 3: ZONA ARCADE (ESPADAS) -->
+      <!-- PESTAÑA 3: ZONA ARCADE (AHORA ES UN MENÚ QUE REDIRIGE) -->
       <div id="tab-games" class="tab-pane">
         <section class="mt-4">
           <h2 class="seccion-titulo" style="color: var(--color-accent-red);"><i class="fa-solid fa-khanda"></i> Zona Arcade</h2>
-          <div class="game-card" onclick="app.abrirSeleccionPokemon()">
+          
+          <!-- Fíjate cómo ahora esto redirige a otro archivo HTML -->
+          <div class="game-card" onclick="window.location.href='juego-pokemon.html'">
             <div class="game-card__icon" style="border-color: #f5d142;"><i class="fa-solid fa-gamepad" style="color: var(--color-accent-yellow);"></i></div>
             <div class="game-card__info">
               <h3>Pokémon Battle</h3>
               <p>Arena de combate por turnos</p>
             </div>
-            <i class="fa-solid fa-chevron-right" style="color: var(--color-accent-red);"></i>
+            <i class="fa-solid fa-arrow-up-right-from-square" style="color: var(--color-accent-red);"></i>
           </div>
+
+          <!-- Y aquí podrás ir agregando tus 10 juegos fácilmente -->
           <div class="game-card" style="opacity: 0.5; cursor: default;">
             <div class="game-card__icon" style="border-color: #555;"><i class="fa-solid fa-lock text-muted"></i></div>
             <div class="game-card__info">
-              <h3 class="text-muted" style="color: var(--color-text-muted);">Próximamente</h3>
-              <p>Nuevos minijuegos en desarrollo</p>
+              <h3 class="text-muted" style="color: var(--color-text-muted);">Próximamente... Juego 2</h3>
+              <p>En desarrollo</p>
             </div>
           </div>
         </section>
       </div>
 
-      <!-- PESTAÑA 3.1: SELECCIÓN POKÉMON -->
-      <div id="tab-pokemon-select" class="tab-pane">
-        <section class="mt-4" style="text-align: center;">
-          <button style="background:transparent; border:1px solid var(--glass-border); color:#fff; padding:5px 15px; border-radius:20px; margin-bottom:20px; cursor: pointer;" onclick="app.cambiarTab('games')"><i class="fa-solid fa-arrow-left"></i> Volver</button>
-          <h1 class="titulo-poster" style="font-size: 1.5rem; margin-bottom: 20px;">Elige tu Inicial</h1>
-          <div class="pokemon-select-grid">
-            <div class="poke-choice" onclick="app.iniciarBatalla('charmander')">
-              <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png" alt="Charmander">
-              <span class="poke-name-tag" style="color: #ff5959;">Charmander</span>
-            </div>
-            <div class="poke-choice" onclick="app.iniciarBatalla('squirtle')">
-              <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png" alt="Squirtle">
-              <span class="poke-name-tag" style="color: #59a6ff;">Squirtle</span>
-            </div>
-            <div class="poke-choice" onclick="app.iniciarBatalla('bulbasaur')">
-              <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="Bulbasaur">
-              <span class="poke-name-tag" style="color: #59ff85;">Bulbasaur</span>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <!-- PESTAÑA 3.2: ARENA POKÉMON -->
-      <div id="tab-pokemon-battle" class="tab-pane">
-        <div class="arena-pokemon">
-          <div class="arena-bg"></div>
-          <div class="arena-header">
-            <button class="btn-huir" onclick="app.cambiarTab('games')"><i class="fa-solid fa-flag"></i> Rendirse</button>
-          </div>
-          <!-- Enemigo -->
-          <div class="arena-top">
-            <div class="poke-info">
-              <div class="poke-name">Gengar <span style="color: var(--color-accent-yellow);">Lv.50</span></div>
-              <div class="hp-bar-bg"><div id="enemy-hp" class="hp-bar-fill"></div></div>
-            </div>
-            <div class="sprite-container enemy-sprite-container">
-              <img id="enemy-sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="poke-sprite">
-            </div>
-          </div>
-          <!-- Jugador -->
-          <div class="arena-bottom">
-            <div class="sprite-container player-sprite-container">
-              <img id="player-sprite" src="" class="poke-sprite">
-            </div>
-            <div class="poke-info player-info">
-              <div class="poke-name" id="player-name">Player <span style="color: var(--color-accent-yellow);">Lv.50</span></div>
-              <div class="hp-bar-bg"><div id="player-hp" class="hp-bar-fill"></div></div>
-              <div class="hp-text" id="player-hp-text">100 / 100</div>
-            </div>
-          </div>
-          <!-- Controles -->
-          <div class="arena-controls">
-            <div id="battle-text" class="battle-message">¡Un Gengar salvaje apareció!</div>
-            <div class="battle-actions">
-              <button class="btn-action" onclick="app.atacar(25, 'Ataque Rápido')" style="border-color: #fff;"><i class="fa-solid fa-hand-fist"></i> Luchar</button>
-              <button class="btn-action" onclick="app.atacar(45, 'Ataque Especial')" style="border-color: #4da6ff; color:#4da6ff;"><i class="fa-solid fa-bolt"></i> Especial</button>
-              <button class="btn-action" onclick="app.curar()" style="border-color: #4cd97b; color:#4cd97b;"><i class="fa-solid fa-briefcase-medical"></i> Curar</button>
-              <button class="btn-action" onclick="app.cambiarTab('games')" style="border-color: var(--color-accent-red); color:var(--color-accent-red);"><i class="fa-solid fa-person-running"></i> Huir</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- PESTAÑA 4: QUIZ -->
+      <!-- PESTAÑA 4: QUIZ (También modularizado para redirigir) -->
       <div id="tab-quiz" class="tab-pane">
         <section class="mt-4">
-          <h2 class="seccion-titulo"><i class="fa-solid fa-brain" style="color: var(--color-accent-red);"></i> Quiz Hardcore</h2>
-          <div id="quiz-card" class="quiz-card">
-            <div id="quiz-en-curso">
-              <div class="quiz-header">
-                <span id="quiz-progreso" style="color: var(--color-accent-yellow);">Pregunta 1/10</span>
-                <span><i class="fa-solid fa-clock"></i> 10s</span>
-              </div>
-              <div class="quiz-timer"><div id="quiz-timer-barra" class="quiz-timer__barra"></div></div>
-              <p id="quiz-pregunta-texto" class="quiz-pregunta">Cargando pregunta...</p>
-              <div id="quiz-opciones" class="quiz-opciones"></div>
-              <div id="quiz-feedback" class="quiz-feedback"></div>
+          <h2 class="seccion-titulo"><i class="fa-solid fa-brain" style="color: var(--color-accent-red);"></i> Zona Quiz</h2>
+          
+          <div class="game-card" onclick="window.location.href='juego-quiz.html'">
+            <div class="game-card__icon" style="border-color: var(--color-accent-red);"><i class="fa-solid fa-brain" style="color: var(--color-accent-red);"></i></div>
+            <div class="game-card__info">
+              <h3>Quiz Hardcore Diario</h3>
+              <p>Responde y gana puntos para el torneo</p>
             </div>
-            <div id="quiz-final" class="quiz-final oculto">
-              <h3 class="titulo-poster" style="font-size: 1.5rem; color:#fff;">¡Quiz Completado!</h3>
-              <p id="quiz-final-puntaje" class="quiz-final__puntaje mt-4">+0 pts</p>
-              <p id="quiz-final-detalle" class="mt-4" style="color: var(--color-text-muted);"></p>
-            </div>
+            <i class="fa-solid fa-arrow-up-right-from-square" style="color: var(--color-accent-yellow);"></i>
           </div>
         </section>
       </div>
@@ -1076,231 +254,53 @@
       <div class="nav-item" onclick="app.abrirAjustes()"><i class="fa-solid fa-gear"></i></div>
     </nav>
 
-    <!-- MODAL DE AJUSTES -->
+    <!-- MODAL DE AJUSTES (AHORA REDIRIGE A OTRAS PÁGINAS) -->
     <div id="settings-overlay" class="modal-overlay" onclick="app.cerrarAjustes()"></div>
     <div id="settings-modal" class="modal-bottom-sheet">
       <div class="modal-handle"></div>
       <h3 class="seccion-titulo" style="font-size: 1.2rem; margin-bottom: 1rem;">Ajustes de Cuenta</h3>
       <div class="settings-list">
-        <button class="settings-btn"><i class="fa-solid fa-user"></i> <span>Perfil</span></button>
-        <button class="settings-btn"><i class="fa-solid fa-lock"></i> <span>Cambiar contraseña</span></button>
-        <button class="settings-btn" style="color: var(--color-accent-red);"><i class="fa-solid fa-share-nodes" style="color: var(--color-accent-red);"></i> <span>Compartir Otaku Nexus</span></button>
-        <button class="settings-btn"><i class="fa-solid fa-scale-balanced"></i> <span>Información legal</span></button>
+        <button class="settings-btn" onclick="window.location.href='perfil.html'"><i class="fa-solid fa-user"></i> <span>Mi Perfil</span></button>
+        <button class="settings-btn" onclick="window.location.href='legal.html'"><i class="fa-solid fa-scale-balanced"></i> <span>Información Legal</span></button>
         <button class="settings-btn" id="btn-logout-app" style="color: var(--color-accent-red); border: 1px solid var(--color-accent-red); border-radius: var(--radius-sm); justify-content: center; margin-top: 1rem;"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
       </div>
     </div>
   </div>
 
-  <!-- =====================================================================
-       SCRIPT MAESTRO: CONTIENE TODO PARA EVITAR ERRORES DE RUTAS
-       Y LÓGICA DE JUEGOS Y TABS EXPANDIDA Y FORMATEADA
-       ===================================================================== -->
   <script type="module">
-    // 1. IMPORTAR SUPABASE DIRECTAMENTE DESDE CDN PARA EVITAR ERRORES LOCALES
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
     
-    // Tus credenciales exactas
     const SUPABASE_URL = 'https://zccbphmebkpuzwbkgtse.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpjY2JwaG1lYmtwdXp3YmtndHNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0Nzk4OTEsImV4cCI6MjA5NzA1NTg5MX0.Pc3VBCZJDsVrn6cx5eelDF6vwrgs3X7uTI5Q1kNgvDY';
-    
-    // Crear el cliente de Supabase
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // =================================================================
-    // LÓGICA DE UI Y MINIJUEGOS (Pestañas, Modal, Pokémon)
-    // =================================================================
     window.app = {
-      
-      // Manejador de navegación de pestañas
       cambiarTab(idTab, elementoNav = null) {
         this.cerrarAjustes();
-        
-        // Quitar la clase activa de todos los tabs
-        document.querySelectorAll('.tab-pane').forEach(tab => {
-          tab.classList.remove('activa');
-        });
-        
-        // Agregar clase activa al tab seleccionado
+        document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('activa'));
         document.getElementById(`tab-${idTab}`).classList.add('activa');
-        
-        // Actualizar el estado visual en la barra de navegación
         if (elementoNav) {
-          document.querySelectorAll('.bottom-nav .nav-item').forEach(btn => {
-            btn.classList.remove('activo');
-          });
+          document.querySelectorAll('.bottom-nav .nav-item').forEach(b => b.classList.remove('activo'));
           elementoNav.classList.add('activo');
         }
       },
-      
-      // Control del Modal de Ajustes
       abrirAjustes() {
         document.getElementById('settings-modal').classList.add('abierto');
         document.getElementById('settings-overlay').classList.add('activo');
       },
-      
       cerrarAjustes() {
         document.getElementById('settings-modal').classList.remove('abierto');
         document.getElementById('settings-overlay').classList.remove('activo');
-      },
-      
-      // Estado interno de la batalla Pokémon
-      batalla: {
-        pHP: 100, 
-        eHP: 100, 
-        enBatalla: false,
-        nombres: { 
-          charmander: 'Charmander', 
-          squirtle: 'Squirtle', 
-          bulbasaur: 'Bulbasaur' 
-        },
-        sprites: {
-          charmander: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/4.png',
-          squirtle: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/7.png',
-          bulbasaur: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/1.png'
-        }
-      },
-      
-      abrirSeleccionPokemon() { 
-        this.cambiarTab('pokemon-select'); 
-      },
-      
-      iniciarBatalla(pokemonKey) {
-        // Reset de vida y estado
-        this.batalla.pHP = 100; 
-        this.batalla.eHP = 100; 
-        this.batalla.enBatalla = true;
-        
-        // Obtener los elementos del DOM de los sprites
-        const pSprite = document.getElementById('player-sprite');
-        const eSprite = document.getElementById('enemy-sprite');
-        
-        // Limpiar clases de animación previas
-        pSprite.className = 'poke-sprite'; 
-        eSprite.className = 'poke-sprite';
-        
-        // Asignar sprite seleccionado
-        pSprite.src = this.batalla.sprites[pokemonKey];
-        
-        // Actualizar UI de Nombres
-        document.getElementById('player-name').innerHTML = `${this.batalla.nombres[pokemonKey]} <span style="color:var(--color-accent-yellow);">Lv.50</span>`;
-        this.escribirMensaje(`¡Adelante, ${this.batalla.nombres[pokemonKey]}!`);
-        
-        // Iniciar barras y cambiar pestaña
-        this.actualizarBarras();
-        this.cambiarTab('pokemon-battle');
-      },
-      
-      actualizarBarras() {
-        const b = this.batalla;
-        const pBar = document.getElementById('player-hp');
-        const eBar = document.getElementById('enemy-hp');
-        
-        pBar.style.width = `${b.pHP}%`; 
-        eBar.style.width = `${b.eHP}%`;
-        
-        document.getElementById('player-hp-text').innerText = `${b.pHP} / 100`;
-        
-        // Gradientes de vida (Verde -> Amarillo -> Rojo)
-        pBar.style.background = b.pHP > 50 ? 'linear-gradient(90deg, #4cd97b, #28a745)' : 
-                                b.pHP > 20 ? 'linear-gradient(90deg, #f5d142, #d4a017)' : 
-                                'linear-gradient(90deg, #ff3131, #b31b1b)';
-                                
-        eBar.style.background = b.eHP > 50 ? 'linear-gradient(90deg, #4cd97b, #28a745)' : 
-                                b.eHP > 20 ? 'linear-gradient(90deg, #f5d142, #d4a017)' : 
-                                'linear-gradient(90deg, #ff3131, #b31b1b)';
-      },
-      
-      escribirMensaje(msg) { 
-        document.getElementById('battle-text').innerText = msg; 
-      },
-      
-      animarDanio(spriteId) {
-        const sprite = document.getElementById(spriteId);
-        sprite.classList.remove('anim-shake');
-        // Hack para reiniciar la animación en el DOM
-        void sprite.offsetWidth;
-        sprite.classList.add('anim-shake');
-      },
-      
-      atacar(dmg, nombreAtaque) {
-        if (!this.batalla.enBatalla) return;
-        
-        this.escribirMensaje(`¡Usaste ${nombreAtaque}!`);
-        
-        setTimeout(() => {
-          this.animarDanio('enemy-sprite');
-          this.batalla.eHP -= dmg;
-          
-          if (this.batalla.eHP < 0) this.batalla.eHP = 0;
-          this.actualizarBarras();
-          
-          if (this.batalla.eHP === 0) {
-            this.escribirMensaje('¡Gengar enemigo se debilitó! ¡Has ganado!');
-            this.batalla.enBatalla = false;
-            setTimeout(() => this.cambiarTab('games'), 3500);
-          } else { 
-            this.turnoEnemigo(); 
-          }
-        }, 600);
-      },
-      
-      curar() {
-        if (!this.batalla.enBatalla) return;
-        
-        this.escribirMensaje(`¡Usaste una Poción Máxima!`);
-        
-        setTimeout(() => {
-          this.batalla.pHP += 50;
-          if (this.batalla.pHP > 100) this.batalla.pHP = 100;
-          
-          this.actualizarBarras();
-          this.turnoEnemigo();
-        }, 1000);
-      },
-      
-      turnoEnemigo() {
-        setTimeout(() => {
-          this.escribirMensaje('¡Gengar usó Bola Sombra!');
-          
-          setTimeout(() => {
-            this.animarDanio('player-sprite');
-            
-            // Daño aleatorio enemigo
-            this.batalla.pHP -= Math.floor(Math.random() * 20) + 15; 
-            if (this.batalla.pHP < 0) this.batalla.pHP = 0;
-            
-            this.actualizarBarras();
-            
-            if (this.batalla.pHP === 0) {
-              this.escribirMensaje('¡Tu Pokémon se debilitó! Perdiste la batalla.');
-              this.batalla.enBatalla = false;
-              setTimeout(() => this.cambiarTab('games'), 3500);
-            } else {
-              setTimeout(() => this.escribirMensaje('¿Qué debería hacer tu Pokémon?'), 1000);
-            }
-          }, 600);
-        }, 1800);
       }
     };
 
-    // =================================================================
-    // VERIFICACIÓN DE SESIÓN (LOGIN)
-    // =================================================================
     async function initSession() {
       const { data: { session }, error } = await supabase.auth.getSession();
-      
       if (error || !session) {
-        // Redirección si no hay cuenta logueada
         window.location.href = 'index.html'; 
         return null;
       }
-      
-      const { data: perfil } = await supabase
-        .from('usuarios')
-        .select('*')
-        .eq('id', session.user.id)
-        .single();
-        
+      const { data: perfil } = await supabase.from('usuarios').select('*').eq('id', session.user.id).single();
       document.getElementById('navbar-username').textContent = perfil?.username || session.user.email;
       document.getElementById('navbar-puntos').textContent = perfil?.puntos_totales ?? 0;
       return session.user.id;
@@ -1311,46 +311,19 @@
       window.location.href = 'index.html';
     });
 
-    // =================================================================
-    // CARGAR FEED Y PREMIOS
-    // =================================================================
-    const ETIQUETAS_POSICION = {
-      1: { medalla: '🥇 1er Lugar', clase: 'premio-card--oro' },
-      2: { medalla: '🥈 2do Lugar', clase: 'premio-card--plata' },
-      3: { medalla: '🥉 3er Lugar', clase: 'premio-card--bronce' },
-    };
+    const ETIQUETAS_POSICION = { 1: { medalla: '🥇', clase: 'premio-card--oro' }, 2: { medalla: '🥈', clase: 'premio-card--plata' }, 3: { medalla: '🥉', clase: 'premio-card--bronce' }};
 
-    function escapeHTML(texto = '') {
-      const div = document.createElement('div'); 
-      div.textContent = texto; 
-      return div.innerHTML;
-    }
+    function escapeHTML(texto = '') { const div = document.createElement('div'); div.textContent = texto; return div.innerHTML; }
 
     async function cargarPremios() {
       const contenedor = document.getElementById('premios-grid');
       const { data } = await supabase.from('premios').select('*').order('posicion', { ascending: true });
-      
       if (!data) return;
       contenedor.innerHTML = '';
-      
       data.forEach((premio) => {
-        const etiqueta = ETIQUETAS_POSICION[premio.posicion] || { medalla: `Lugar ${premio.posicion}`, clase: '' };
-        let mediaHTML = '<div class="premio-card__media"></div>';
-        
-        if (premio.video_url) {
-          mediaHTML = `<div class="premio-card__media"><video src="${escapeHTML(premio.video_url)}" muted loop autoplay playsinline></video></div>`;
-        } else if (premio.imagen_url) {
-          mediaHTML = `<div class="premio-card__media"><img src="${escapeHTML(premio.imagen_url)}" alt="${escapeHTML(premio.titulo)}"></div>`;
-        }
-        
-        contenedor.innerHTML += `
-          <article class="premio-card ${etiqueta.clase}">
-            <div class="premio-card__medalla">${etiqueta.medalla}</div>
-            ${mediaHTML}
-            <div class="premio-card__titulo">${escapeHTML(premio.titulo)}</div>
-            <div class="premio-card__descripcion">${escapeHTML(premio.descripcion || '')}</div>
-          </article>
-        `;
+        const etiqueta = ETIQUETAS_POSICION[premio.posicion] || { medalla: `#${premio.posicion}`, clase: '' };
+        let mediaHTML = premio.video_url ? `<video src="${escapeHTML(premio.video_url)}" muted loop autoplay playsinline></video>` : `<img src="${escapeHTML(premio.imagen_url)}" alt="${escapeHTML(premio.titulo)}">`;
+        contenedor.innerHTML += `<article class="premio-card ${etiqueta.clase}"><div class="premio-card__medalla">${etiqueta.medalla}</div><div class="premio-card__media">${mediaHTML}</div><div class="premio-card__titulo">${escapeHTML(premio.titulo)}</div></article>`;
       });
     }
 
@@ -1358,11 +331,8 @@
     let categoriaActiva = 'todas';
 
     async function cargarFeed() {
-      const contenedor = document.getElementById('feed-grid');
       const { data } = await supabase.from('contenido').select('*').order('created_at', { ascending: false });
-      
       if (!data) return;
-      
       videosCache = data || [];
       construirFiltros();
       renderizarFeed();
@@ -1370,21 +340,18 @@
 
     function construirFiltros() {
       const contenedor = document.getElementById('feed-filtros');
-      const categorias = ['todas', ...new Set(videosCache.map((v) => v.categoria))];
+      const categorias = ['todas', ...new Set(videosCache.map(v => v.categoria))];
       contenedor.innerHTML = '';
-      
-      categorias.forEach((cat) => {
+      categorias.forEach(cat => {
         const btn = document.createElement('button');
         btn.textContent = cat === 'todas' ? 'Todas' : cat;
         if (cat === categoriaActiva) btn.classList.add('activo');
-        
         btn.onclick = () => {
           categoriaActiva = cat;
           contenedor.querySelectorAll('button').forEach(b => b.classList.remove('activo'));
           btn.classList.add('activo');
           renderizarFeed();
         };
-        
         contenedor.appendChild(btn);
       });
     }
@@ -1392,210 +359,14 @@
     function renderizarFeed() {
       const contenedor = document.getElementById('feed-grid');
       const filtrados = categoriaActiva === 'todas' ? videosCache : videosCache.filter(v => v.categoria === categoriaActiva);
-      
       contenedor.innerHTML = '';
       filtrados.forEach(v => {
-        contenedor.innerHTML += `
-          <article class="feed-card">
-            <div class="feed-card__video">
-              <iframe src="https://www.youtube.com/embed/${encodeURIComponent(v.youtube_id)}" title="${escapeHTML(v.titulo)}" loading="lazy" allowfullscreen></iframe>
-            </div>
-            <div class="feed-card__info">
-              <div class="feed-card__categoria">${escapeHTML(v.categoria)}</div>
-              <div class="feed-card__titulo">${escapeHTML(v.titulo)}</div>
-            </div>
-          </article>
-        `;
+        contenedor.innerHTML += `<article class="feed-card"><div class="feed-card__video"><iframe src="https://www.youtube.com/embed/${encodeURIComponent(v.youtube_id)}" title="${escapeHTML(v.titulo)}" loading="lazy" allowfullscreen></iframe></div><div class="feed-card__info"><div class="feed-card__categoria">${escapeHTML(v.categoria)}</div><div class="feed-card__titulo">${escapeHTML(v.titulo)}</div></div></article>`;
       });
     }
 
-    // =================================================================
-    // LÓGICA DEL QUIZ (Mismo sistema antitrampas)
-    // =================================================================
-    let quiz_preguntasDeHoy = [];
-    let quiz_intentosDeHoy = [];
-    let quiz_indiceActual = 0;
-    let quiz_intentoActualId = null;
-    let quiz_mostradoEnTimestamp = null;
-    let quiz_respondida = false;
-    let quiz_intervaloTimer = null;
-    let quiz_fechaHoy = null;
-    let quiz_userId = null;
-
-    async function iniciarQuiz(userId) {
-      quiz_userId = userId;
-      quiz_fechaHoy = new Date().toISOString().slice(0, 10);
-      
-      const { data: preguntas } = await supabase
-        .from('quizzes')
-        .select('*')
-        .eq('fecha_activa', quiz_fechaHoy)
-        .order('id', { ascending: true });
-        
-      if (!preguntas || preguntas.length === 0) return mostrarSinQuiz('Vuelve más tarde.');
-      
-      quiz_preguntasDeHoy = preguntas;
-      const { data: intentos } = await supabase
-        .from('intentos_quiz')
-        .select('*')
-        .eq('usuario_id', userId)
-        .eq('fecha', quiz_fechaHoy);
-        
-      quiz_intentosDeHoy = intentos || [];
-      const respondidas = quiz_intentosDeHoy.filter(i => i.respondido_en !== null);
-      
-      if (respondidas.length >= quiz_preguntasDeHoy.length) return mostrarPantallaFinal();
-      
-      quiz_indiceActual = respondidas.length;
-      mostrarPreguntaActual();
-    }
-
-    async function mostrarPreguntaActual() {
-      quiz_respondida = false;
-      document.getElementById('quiz-feedback').textContent = '';
-      const p = quiz_preguntasDeHoy[quiz_indiceActual];
-      
-      if (!p) return mostrarPantallaFinal();
-      
-      document.getElementById('quiz-progreso').textContent = `Pregunta ${quiz_indiceActual + 1}/${quiz_preguntasDeHoy.length}`;
-      
-      let intento = quiz_intentosDeHoy.find(i => i.quiz_id === p.id && i.respondido_en === null);
-      
-      if (!intento) {
-        const { data } = await supabase.from('intentos_quiz').insert({ usuario_id: quiz_userId, quiz_id: p.id }).select().single();
-        if(data) { 
-          intento = data; 
-          quiz_intentosDeHoy.push(intento); 
-        }
-      }
-      
-      if(!intento) return;
-      
-      quiz_intentoActualId = intento.id;
-      quiz_mostradoEnTimestamp = new Date(intento.mostrado_en);
-      document.getElementById('quiz-pregunta-texto').textContent = p.pregunta;
-      const opcionesDiv = document.getElementById('quiz-opciones');
-      opcionesDiv.innerHTML = '';
-      
-      const opciones = [
-        {l:'a',t:p.opcion_a}, 
-        {l:'b',t:p.opcion_b}, 
-        {l:'c',t:p.opcion_c}, 
-        {l:'d',t:p.opcion_d}
-      ];
-      
-      opciones.forEach(o => {
-        const btn = document.createElement('button'); 
-        btn.className = 'quiz-opcion'; 
-        btn.innerHTML = `<span class="letra">${o.l.toUpperCase()}</span> <span>${escapeHTML(o.t)}</span>`;
-        btn.onclick = () => responderPregunta(o.l, false);
-        opcionesDiv.appendChild(btn);
-      });
-      
-      if ((Date.now() - quiz_mostradoEnTimestamp.getTime()) / 1000 >= 10) {
-        return responderPregunta(null, false);
-      }
-      
-      iniciarBarraDeTiempo();
-    }
-
-    function iniciarBarraDeTiempo() {
-      clearInterval(quiz_intervaloTimer);
-      const barra = document.getElementById('quiz-timer-barra');
-      barra.style.width = '100%'; 
-      barra.classList.remove('urgente');
-      
-      quiz_intervaloTimer = setInterval(() => {
-        const restante = Math.max(0, 10 - ((Date.now() - quiz_mostradoEnTimestamp.getTime()) / 1000));
-        barra.style.width = `${(restante / 10) * 100}%`;
-        
-        if (restante <= 3) barra.classList.add('urgente');
-        if (restante <= 0 && !quiz_respondida) responderPregunta(null, false);
-      }, 100);
-    }
-
-    document.addEventListener('visibilitychange', () => { 
-      if (document.visibilityState === 'hidden' && quiz_intentoActualId && !quiz_respondida) {
-        responderPregunta(null, true); 
-      }
-    });
-
-    async function responderPregunta(letra, trampa) {
-      if (quiz_respondida) return; 
-      
-      quiz_respondida = true; 
-      clearInterval(quiz_intervaloTimer);
-      
-      document.querySelectorAll('.quiz-opcion').forEach(b => b.disabled = true);
-      
-      const { data } = await supabase.rpc('responder_pregunta', { 
-        p_intento_id: quiz_intentoActualId, 
-        p_respuesta: letra, 
-        p_trampa_detectada: trampa 
-      });
-      
-      if (data) {
-        const res = Array.isArray(data) ? data[0] : data;
-        
-        document.querySelectorAll('.quiz-opcion').forEach(b => {
-          if (b.querySelector('.letra').textContent.toLowerCase() === res.respuesta_correcta) {
-            b.classList.add('correcta');
-          } else if (b.querySelector('.letra').textContent.toLowerCase() === letra) {
-            b.classList.add('incorrecta');
-          }
-        });
-        
-        const fb = document.getElementById('quiz-feedback');
-        fb.textContent = trampa ? '¡Cambiaste de pestaña! Fallida.' : res.es_correcta ? `¡Correcto! +${res.puntos_obtenidos} pts` : 'Incorrecto o tiempo agotado.';
-        fb.className = `quiz-feedback ${res.es_correcta ? 'ok' : 'fail'}`;
-        
-        const intento = quiz_intentosDeHoy.find(i => i.id === quiz_intentoActualId);
-        
-        if (intento) { 
-          intento.respondido_en = new Date().toISOString(); 
-          intento.es_correcta = res.es_correcta; 
-          intento.puntos_obtenidos = res.puntos_obtenidos; 
-        }
-      }
-      
-      setTimeout(() => { 
-        quiz_indiceActual++; 
-        if (quiz_indiceActual >= quiz_preguntasDeHoy.length) {
-          mostrarPantallaFinal(); 
-        } else {
-          mostrarPreguntaActual(); 
-        }
-      }, 1600);
-    }
-
-    function mostrarPantallaFinal() {
-      clearInterval(quiz_intervaloTimer);
-      document.getElementById('quiz-en-curso')?.classList.add('oculto');
-      document.getElementById('quiz-final').classList.remove('oculto');
-      
-      const totalPuntos = quiz_intentosDeHoy.reduce((s, i) => s + (i.puntos_obtenidos || 0), 0);
-      document.getElementById('quiz-final-puntaje').textContent = `+${totalPuntos} pts`;
-      
-      const acertadas = quiz_intentosDeHoy.filter(i => i.es_correcta).length;
-      document.getElementById('quiz-final-detalle').textContent = `Acertaste ${acertadas} de ${quiz_preguntasDeHoy.length || 10} preguntas hoy.`;
-    }
-
-    function mostrarSinQuiz(msg) {
-      document.getElementById('quiz-en-curso')?.classList.add('oculto');
-      document.getElementById('quiz-final').classList.remove('oculto');
-      document.getElementById('quiz-final-puntaje').textContent = '—';
-      document.getElementById('quiz-final-detalle').textContent = msg;
-    }
-
-    // =================================================================
-    // ARRANQUE FINAL DE LA APLICACIÓN
-    // =================================================================
     initSession().then(userId => {
-      if(userId) { 
-        cargarPremios(); 
-        cargarFeed(); 
-        iniciarQuiz(userId); 
-      }
+      if(userId) { cargarPremios(); cargarFeed(); }
     });
   </script>
 </body>
