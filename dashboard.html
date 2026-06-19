@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Me Gusta el Anime · Dashboard</title>
+  <title>Me Gusta el Anime Â· Dashboard</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap\" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   
+  <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
@@ -20,996 +22,1551 @@
       --color-accent-yellow: #f5d142;
       --color-text: #f5f5f5; 
       --color-text-muted: #a3a3ad;
-      --glass-border: rgba(255, 255, 255, 0.05);
-      --glass-bg: rgba(12, 12, 15, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.12); 
+      --glass-bg: rgba(255, 255, 255, 0.04);
+      --color-red-glow: rgba(255, 49, 49, 0.45); 
+      --color-yellow-glow: rgba(245, 209, 66, 0.35);
+      --color-red-soft: rgba(255, 49, 49, 0.12);
+      
+      --font-logo: 'Permanent Marker', cursive;
+      --font-display: 'Bebas Neue', 'Oswald', sans-serif;
+      --font-body: 'Rajdhani', 'Segoe UI', sans-serif;
+      --font-mono: 'Share Tech Mono', monospace;
+      
+      --fs-xs: 0.75rem; 
+      --fs-sm: 0.875rem; 
+      --fs-base: 1rem; 
+      --fs-lg: 1.25rem; 
+      --fs-xl: 1.75rem; 
+      --fs-2xl: 2.5rem; 
+      --fs-3xl: 4rem;
+      
+      --space-xs: 0.4rem; 
+      --space-sm: 0.8rem; 
+      --space-md: 1.4rem; 
+      --space-lg: 2.2rem;
+      
+      --radius-sm: 8px; 
+      --radius-md: 14px; 
+      --radius-lg: 24px;
+      
+      --transition-fast: 0.18s ease; 
+      --transition-mid: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
     }
-
-    body {
-      background-color: var(--color-bg);
-      color: var(--color-text);
-      font-family: 'Rajdhani', sans-serif;
-      font-weight: 500;
-      min-height: 100vh;
-      overflow-x: hidden;
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(255, 49, 49, 0.05) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(245, 209, 66, 0.03) 0px, transparent 50%);
+    
+    html, body { 
+      height: 100%; 
+    }
+    
+    body { 
+      background-color: var(--color-bg); 
+      color: var(--color-text); 
+      font-family: var(--font-body); 
+      font-size: var(--fs-base); 
+      line-height: 1.5; 
+      -webkit-font-smoothing: antialiased; 
+    }
+    
+    a { 
+      color: inherit; 
+      text-decoration: none; 
+    }
+    
+    img, iframe, video { 
+      max-width: 100%; 
+      display: block; 
+    }
+    
+    button { 
+      cursor: pointer; 
+      border: none; 
+      outline: none; 
     }
 
     /* =====================================================================
-       LAYOUT PRINCIPAL
+       DISEÃ‘O DE APP NATIVA (DASHBOARD)
        ===================================================================== */
-    .dashboard-container {
-      display: flex;
-      min-height: 100vh;
-      position: relative;
+    .app-shell { 
+      max-width: 600px; 
+      margin: 0 auto; 
+      height: 100vh; 
+      display: flex; 
+      flex-direction: column; 
+      position: relative; 
+      background-color: var(--color-bg); 
+      box-shadow: 0 0 30px rgba(0,0,0,0.8); 
+      overflow: hidden; 
+    }
+    
+    .navbar { 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      padding: var(--space-sm) var(--space-md); 
+      z-index: 50; 
+      border-bottom: 1px solid var(--glass-border); 
+      background: rgba(10, 10, 15, 0.95); 
+      backdrop-filter: blur(10px); 
+    }
+    
+    /* Marca con nueva fuente Graffiti */
+    .navbar__logo { 
+      font-family: var(--font-logo); 
+      font-size: var(--fs-xl); 
+      color: var(--color-accent-yellow); 
+      text-transform: uppercase; 
+      text-shadow: 2px 2px 0px #000;
+      line-height: 1.1;
+    }
+    
+    .navbar__usuario { 
+      display: flex; 
+      align-items: center; 
+      gap: var(--space-sm); 
+    }
+    
+    .navbar__puntos { 
+      font-family: var(--font-mono); 
+      font-size: var(--fs-lg); 
+      color: var(--color-accent-yellow); 
+      display: flex; 
+      align-items: center; 
+      gap: 0.4rem; 
+    }
+    
+    .navbar__puntos .etiqueta { 
+      font-family: var(--font-body); 
+      font-size: var(--fs-xs); 
+      text-transform: uppercase; 
+      color: var(--color-text-muted); 
     }
 
-    /* Sidebar */
-    .sidebar {
-      width: 260px;
-      background: var(--color-bg-soft);
-      border-right: 1px solid var(--glass-border);
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 100;
-      transition: transform 0.3s ease;
+    .main-content { 
+      flex: 1; 
+      overflow-y: auto; 
+      padding: 0 var(--space-md) 90px var(--space-md); 
+      scroll-behavior: smooth; 
+    }
+    
+    .main-content::-webkit-scrollbar { 
+      display: none; 
     }
 
-    .sidebar-brand {
-      padding: 30px 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid var(--glass-border);
+    .seccion-titulo { 
+      font-family: var(--font-display); 
+      font-size: var(--fs-xl); 
+      letter-spacing: 0.08em; 
+      text-transform: uppercase; 
+      margin-bottom: var(--space-sm); 
+      position: relative; 
+      padding-left: var(--space-sm); 
+      color: #fff; 
     }
-
-    .sidebar-brand img {
-      height: 32px;
-      width: auto;
+    
+    .seccion-titulo::before { 
+      content: ''; 
+      position: absolute; 
+      left: 0; 
+      top: 6px; 
+      bottom: 6px; 
+      width: 4px; 
+      background: var(--color-accent-red); 
+      border-radius: 2px; 
     }
-
-    .sidebar-brand h1 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem;
-      letter-spacing: 1px;
-      background: linear-gradient(135deg, #fff 30%, var(--color-text-muted));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .sidebar-menu {
-      list-style: none;
-      padding: 24px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      flex: 1;
-    }
-
-    .menu-item a {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 16px;
-      color: var(--color-text-muted);
-      text-decoration: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      transition: all 0.2s ease;
-    }
-
-    .menu-item a:hover, .menu-item.active a {
-      color: var(--color-text);
-      background: rgba(255, 49, 49, 0.08);
-      border-left: 3px solid var(--color-accent-red);
-      padding-left: 13px;
-    }
-
-    .menu-item a i {
-      font-size: 1.1rem;
-      width: 20px;
-      text-align: center;
-    }
-
-    .sidebar-footer {
-      padding: 20px 24px;
-      border-top: 1px solid var(--glass-border);
-    }
-
-    .btn-logout {
-      width: 100%;
-      background: transparent;
-      border: 1px solid rgba(255,49,49,0.3);
-      color: var(--color-accent-red);
-      padding: 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-family: 'Rajdhani', sans-serif;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-    }
-
-    .btn-logout:hover {
-      background: var(--color-accent-red);
-      color: #fff;
-    }
-
-    /* Contenido Principal */
-    .main-content {
-      flex: 1;
-      margin-left: 260px;
-      padding: 40px;
-      min-width: 0;
-    }
-
-    /* Header superior */
-    .main-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 35px;
-    }
-
-    .welcome-box h2 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .welcome-box p {
-      color: var(--color-text-muted);
-      font-size: 0.95rem;
-    }
-
-    .user-pill {
-      background: var(--color-bg-soft);
-      border: 1px solid var(--glass-border);
-      padding: 6px 16px;
-      border-radius: 30px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .user-avatar {
-      width: 28px;
-      height: 28px;
-      background: var(--color-accent-red);
-      color: #fff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.9rem;
-    }
-
-    .user-info-text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .user-name {
-      font-size: 0.95rem;
-      font-weight: 600;
-    }
-
-    .user-pts {
-      font-family: 'Share Tech Mono', monospace;
-      color: var(--color-accent-yellow);
-      font-size: 0.85rem;
-    }
-
-    /* Grid del Dashboard */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 30px;
-    }
-
-    @media (min-width: 1024px) {
-      .dashboard-grid {
-        grid-template-columns: 2fr 1fr;
-      }
-    }
-
-    /* Componente de Tarjeta */
-    .card {
-      background: var(--color-bg-soft);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.03);
-    }
-
-    .card-header h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.5rem;
-      letter-spacing: 0.5px;
-    }
-
-    /* Feed Global */
-    .feed-container {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .feed-item {
-      display: flex;
-      gap: 20px;
-      padding: 16px;
-      background: rgba(255,255,255,0.01);
-      border: 1px solid rgba(255,255,255,0.03);
-      border-radius: 8px;
-      transition: transform 0.2s ease;
-    }
-
-    .feed-item:hover {
-      transform: translateX(4px);
-      background: rgba(255,255,255,0.02);
-    }
-
-    .feed-thumb {
-      width: 140px;
-      height: 80px;
-      background: #111;
-      border-radius: 6px;
-      overflow: hidden;
-      flex-shrink: 0;
-      position: relative;
-    }
-
-    .feed-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .feed-badge {
-      position: absolute;
-      bottom: 4px;
-      right: 4px;
-      background: rgba(0,0,0,0.8);
-      color: #fff;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.75rem;
-      padding: 2px 4px;
-      border-radius: 3px;
-    }
-
-    .feed-info {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .feed-title {
-      font-size: 1.05rem;
-      font-weight: 600;
-      line-height: 1.3;
-      margin-bottom: 6px;
-      color: var(--color-text);
-    }
-
-    .feed-meta {
-      font-size: 0.85rem;
-      color: var(--color-text-muted);
-    }
-
-    /* Tienda / Premios Cortos */
-    .premios-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .premio-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.04);
-      border-radius: 6px;
-    }
-
-    .premio-detalles h4 {
-      font-size: 0.95rem;
-      font-weight: 600;
-    }
-
-    .premio-detalles p {
-      font-size: 0.8rem;
-      color: var(--color-text-muted);
-    }
-
-    .premio-status {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.85rem;
-      color: var(--color-accent-yellow);
-      background: rgba(245, 209, 66, 0.1);
-      padding: 4px 8px;
-      border-radius: 4px;
+    
+    .titulo-poster { 
+      font-family: var(--font-display); 
+      letter-spacing: 0.08em; 
+      text-transform: uppercase; 
+      color: #fff; 
     }
 
     /* =====================================================================
-       NUEVOS AJUSTES ESPECÍFICOS: MOTOR DE QUIZ DE 3 PANTALLAS
+       PREMIOS (DiseÃ±o Original Restaurado y Formateado)
        ===================================================================== */
-    .quiz-card {
-      position: relative;
-      overflow: hidden;
+    .premios-grid { 
+      display: grid; 
+      grid-template-columns: repeat(3, 1fr); 
+      gap: var(--space-sm); 
     }
     
-    .quiz-loading {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--color-text-muted);
+    .premio-card { 
+      padding: var(--space-sm); 
+      text-align: center; 
+      position: relative; 
+      overflow: hidden; 
+      border-radius: var(--radius-md); 
+      background: var(--glass-bg); 
+      border: 1px solid var(--glass-border); 
     }
     
-    .quiz-loading i {
-      font-size: 2rem;
-      color: var(--color-accent-red);
-      margin-bottom: 10px;
+    .premio-card__medalla { 
+      font-family: var(--font-display); 
+      font-size: var(--fs-xl); 
+      letter-spacing: 0.05em; 
     }
     
-    .quiz-timer-bar {
-      width: 100%;
-      height: 6px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 3px;
-      overflow: hidden;
-      margin-bottom: 15px;
+    .premio-card--oro .premio-card__medalla { 
+      color: #ffd700; 
+      text-shadow: 0 0 10px rgba(255,215,0,0.5); 
     }
     
-    .quiz-timer-progress {
-      width: 100%;
-      height: 100%;
-      background: var(--color-accent-yellow);
-      transition: width 1s linear; /* Sincronizado dinámicamente */
+    .premio-card--plata .premio-card__medalla { 
+      color: #d8d8e0; 
     }
     
-    .quiz-meta {
-      display: flex;
-      justify-content: space-between;
-      font-family: 'Share Tech Mono', monospace;
-      color: var(--color-text-muted);
-      font-size: 0.9rem;
-      margin-bottom: 15px;
+    .premio-card--bronce .premio-card__medalla{ 
+      color: #d18a4a; 
     }
     
-    .quiz-pregunta {
-      font-size: 1.3rem;
-      margin-bottom: 25px;
-      line-height: 1.4;
-      font-weight: 600;
+    .premio-card__media { 
+      width: 100%; 
+      aspect-ratio: 1 / 1; 
+      border-radius: var(--radius-sm); 
+      overflow: hidden; 
+      margin: var(--space-xs) 0; 
+      background: rgba(0, 0, 0, 0.4); 
     }
     
-    .quiz-opciones {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      animation: fadeInOpciones 0.3s ease forwards;
+    .premio-card__media img, .premio-card__media video { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
     }
     
-    @media (min-width: 768px) {
-      .quiz-opciones {
-        grid-template-columns: 1fr 1fr;
-      }
+    .premio-card__titulo { 
+      font-weight: 700; 
+      font-size: var(--fs-xs); 
+      color: #fff; 
     }
     
-    .btn-opcion {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      padding: 14px 20px;
-      border-radius: 8px;
-      color: var(--color-text);
-      text-align: left;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .btn-opcion:hover:not(:disabled) {
-      background: rgba(255, 49, 49, 0.1);
-      border-color: var(--color-accent-red);
-      transform: translateY(-2px);
-    }
-    
-    .btn-opcion:disabled {
-      cursor: not-allowed;
-      opacity: 0.8;
-    }
-    
-    .btn-opcion.correcta {
-      background: rgba(46, 204, 113, 0.2) !important;
-      border-color: #2ecc71 !important;
-      color: #2ecc71;
-      font-weight: bold;
-    }
-    
-    .btn-opcion.incorrecta {
-      background: rgba(231, 76, 60, 0.2) !important;
-      border-color: #e74c3c !important;
-      color: #e74c3c;
-    }
-    
-    .quiz-explicacion-box {
-      animation: fadeInUp 0.4s ease forwards;
-    }
-    
-    .quiz-final {
-      text-align: center;
-      padding: 30px 10px;
-    }
-    
-    .quiz-final-icon {
-      font-size: 3rem;
-      color: var(--color-accent-yellow);
-      margin-bottom: 15px;
-    }
-    
-    .quiz-final h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.3rem;
-      letter-spacing: 1px;
-      color: var(--color-accent-yellow);
-      margin-bottom: 8px;
-    }
-    
-    .quiz-final p {
-      color: var(--color-text-muted);
-      font-size: 1rem;
-      line-height: 1.4;
+    .premio-card__descripcion { 
+      font-size: 0.65rem; 
+      color: var(--color-text-muted); 
+      margin-top: 0.2rem; 
     }
 
-    /* Utilitarios */
-    .oculto { display: none !important; }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 12px 24px;
-      border-radius: 6px;
-      font-family: 'Rajdhani', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s ease;
-      text-decoration: none;
+    /* =====================================================================
+       FEED ESTILO NEÃ“N (SOLO LEVELING)
+       ===================================================================== */
+    .feed-filtros { 
+      display: flex; 
+      gap: var(--space-xs); 
+      margin-bottom: var(--space-md); 
+      overflow-x: auto; 
+      padding-bottom: 5px; 
     }
-    .btn-primary {
-      background: var(--color-accent-red);
+    
+    .feed-filtros::-webkit-scrollbar { 
+      display: none; 
+    }
+    
+    .feed-filtros button { 
+      font-family: var(--font-body); 
+      font-size: var(--fs-xs); 
+      text-transform: uppercase; 
+      padding: 0.4rem 0.8rem; 
+      border-radius: 20px; 
+      border: 1px solid var(--glass-border); 
+      background: var(--glass-bg); 
+      color: var(--color-text-muted); 
+      white-space: nowrap; 
+    }
+    
+    .feed-filtros button.activo { 
+      border-color: var(--color-accent-red); 
+      color: var(--color-accent-red); 
+      background: rgba(255,49,49,0.1); 
+    }
+    
+    .feed-grid { 
+      display: flex; 
+      flex-direction: column; 
+      gap: var(--space-lg); 
+    }
+    
+    .feed-card { 
+      overflow: hidden; 
+      padding: 0; 
+      border-radius: var(--radius-md); 
+      border: 1px solid var(--color-accent-red); 
+      box-shadow: 0 0 15px var(--color-red-glow), inset 0 0 10px var(--color-red-glow); 
+      background: #050505; 
+    }
+    
+    .feed-card__video { 
+      position: relative; 
+      width: 100%; 
+      aspect-ratio: 16 / 9; 
+      background: #000; 
+    }
+    
+    .feed-card__video iframe { 
+      position: absolute; 
+      inset: 0; 
+      width: 100%; 
+      height: 100%; 
+      border: 0; 
+    }
+    
+    .feed-card__info { 
+      padding: var(--space-sm) var(--space-md); 
+      display: flex; 
+      flex-direction: column; 
+      gap: 5px; 
+    }
+    
+    .feed-card__categoria { 
+      font-size: var(--fs-xs); 
+      color: var(--color-accent-red); 
+      text-transform: uppercase; 
+      letter-spacing: 0.08em; 
+      font-weight: 700; 
+    }
+    
+    .feed-card__titulo { 
+      font-weight: 700; 
+      font-size: var(--fs-sm); 
+      color: #fff; 
+    }
+
+    /* =====================================================================
+       TABS Y NAVEGACIÃ“N
+       ===================================================================== */
+    .tab-pane { 
+      display: none; 
+      animation: fadeIn 0.3s ease; 
+    }
+    
+    .tab-pane.activa { 
+      display: block; 
+    }
+    
+    @keyframes fadeIn { 
+      from { opacity: 0; transform: translateY(15px); } 
+      to { opacity: 1; transform: translateY(0); } 
+    }
+    
+    .bottom-nav { 
+      position: absolute; 
+      bottom: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 70px; 
+      display: flex; 
+      justify-content: space-around; 
+      align-items: center; 
+      z-index: 100; 
+      border-top: 1px solid var(--glass-border); 
+      background: rgba(10, 10, 15, 0.95); 
+      backdrop-filter: blur(15px); 
+    }
+    
+    .bottom-nav .nav-item { 
+      color: var(--color-text-muted); 
+      font-size: 1.5rem; 
+      cursor: pointer; 
+      transition: all 0.3s; 
+      position: relative; 
+      width: 50px; 
+      text-align: center; 
+    }
+    
+    .bottom-nav .nav-item.activo { 
+      color: #fff; 
+      transform: translateY(-5px); 
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); 
+    }
+    
+    .bottom-nav .nav-item.activo::after { 
+      content: ''; 
+      position: absolute; 
+      bottom: -8px; 
+      left: 50%; 
+      transform: translateX(-50%); 
+      width: 5px; 
+      height: 5px; 
+      background: var(--color-accent-red); 
+      border-radius: 50%; 
+      box-shadow: 0 0 8px var(--color-accent-red); 
+    }
+
+    /* =====================================================================
+       MODAL AJUSTES (TUERCA)
+       ===================================================================== */
+    .modal-overlay { 
+      position: absolute; 
+      inset: 0; 
+      background: rgba(0,0,0,0.8); 
+      z-index: 101; 
+      opacity: 0; 
+      pointer-events: none; 
+      transition: opacity 0.3s; 
+    }
+    
+    .modal-overlay.activo { 
+      opacity: 1; 
+      pointer-events: auto; 
+    }
+    
+    .modal-bottom-sheet { 
+      position: absolute; 
+      bottom: 0; 
+      left: 0; 
+      width: 100%; 
+      border-top-left-radius: var(--radius-lg); 
+      border-top-right-radius: var(--radius-lg); 
+      z-index: 102; 
+      padding: var(--space-lg); 
+      transform: translateY(100%); 
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+      background: rgba(10, 10, 15, 0.95); 
+      backdrop-filter: blur(15px); 
+      border-top: 1px solid var(--glass-border); 
+    }
+    
+    .modal-bottom-sheet.abierto { 
+      transform: translateY(0); 
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.8); 
+    }
+    
+    .modal-handle { 
+      width: 40px; 
+      height: 5px; 
+      background: var(--glass-border); 
+      border-radius: 10px; 
+      margin: 0 auto 20px auto; 
+    }
+    
+    .settings-btn { 
+      width: 100%; 
+      display: flex; 
+      align-items: center; 
+      gap: 15px; 
+      padding: 15px 10px; 
+      background: transparent; 
+      border-bottom: 1px solid var(--glass-border); 
+      color: var(--color-text); 
+      font-family: var(--font-body); 
+      font-size: var(--fs-base); 
+      text-align: left; 
+      transition: background 0.2s; 
+    }
+    
+    .settings-btn i { 
+      width: 20px; 
+      text-align: center; 
+      color: var(--color-text-muted); 
+    }
+    
+    .settings-btn .text-accent, .settings-btn.text-accent i { 
+      color: var(--color-accent-red); 
+    }
+
+    /* =====================================================================
+       BÃšSQUEDA Y ARCADE
+       ===================================================================== */
+    .search-container { 
+      position: relative; 
+      border-radius: var(--radius-md); 
+      overflow: hidden; 
+      background: var(--glass-bg); 
+      border: 1px solid var(--glass-border); 
+      margin-bottom: 1rem; 
+    }
+    
+    .search-input { 
+      width: 100%; 
+      background: transparent; 
+      border: none; 
+      padding: 15px 15px 15px 45px; 
+      color: #fff; 
+      font-family: var(--font-body); 
+      outline: none; 
+      font-size: var(--fs-base); 
+    }
+    
+    .search-icon { 
+      position: absolute; 
+      left: 15px; 
+      top: 50%; 
+      transform: translateY(-50%); 
+      color: var(--color-text-muted); 
+    }
+    
+    .game-card { 
+      display: flex; 
+      align-items: center; 
+      gap: 15px; 
+      padding: 15px; 
+      border-radius: var(--radius-md); 
+      border: 1px solid var(--glass-border); 
+      background: var(--glass-bg); 
+      margin-bottom: 15px; 
+      cursor: pointer;
+    }
+    
+    .game-card__icon { 
+      width: 50px; 
+      height: 50px; 
+      background: rgba(0,0,0,0.5); 
+      border-radius: var(--radius-sm); 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      font-size: 1.5rem; 
+      border: 1px solid var(--glass-border); 
+    }
+    
+    .game-card__info { 
+      flex: 1; 
+    }
+    
+    .game-card__info h3 { 
+      font-weight: 700; 
+      font-size: var(--fs-base); 
       color: #fff;
     }
-    .btn-primary:hover {
-      background: #e02828;
-      transform: translateY(-1px);
-    }
-
-    /* Animaciones */
-    @keyframes fadeInOpciones {
-      from { opacity: 0; transform: scale(0.98); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
+    
+    .game-card__info p { 
+      font-size: var(--fs-xs); 
+      color: var(--color-text-muted); 
     }
     
-    /* Responsive móvil */
-    @media (max-width: 1023px) {
-      .sidebar { transform: translateX(-100%); }
-      .main-content { margin-left: 0; padding: 20px; }
+    .pokemon-select-grid { 
+      display: flex; 
+      justify-content: center; 
+      gap: 15px; 
+      flex-wrap: wrap; 
+    }
+    
+    .poke-choice { 
+      padding: 15px; 
+      border: 2px solid var(--glass-border); 
+      border-radius: var(--radius-md); 
+      background: rgba(0,0,0,0.6); 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      cursor: pointer; 
+      transition: transform 0.2s; 
+    }
+    
+    .poke-choice:hover { 
+      transform: scale(1.05); 
+      border-color: #fff; 
+    }
+    
+    .poke-choice img { 
+      width: 80px; 
+      image-rendering: pixelated; 
+      margin-bottom: 10px; 
+      filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); 
+    }
+    
+    .poke-name-tag { 
+      font-family: var(--font-display); 
+      letter-spacing: 1px; 
+    }
+
+    /* =====================================================================
+       ARENA POKÃ‰MON (ESTILO MODERNO ANIMADO)
+       ===================================================================== */
+    .arena-pokemon { 
+      position: relative; 
+      height: calc(100vh - 160px); 
+      border-radius: var(--radius-lg); 
+      overflow: hidden; 
+      border: 1px solid var(--glass-border); 
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.9); 
+    }
+    
+    .arena-bg { 
+      position: absolute; 
+      inset: 0; 
+      background: linear-gradient(180deg, #1a2a40 0%, #0a0f1a 100%); 
+      background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 1px, transparent 1px); 
+      background-size: 20px 20px; 
+      z-index: 0; 
+    }
+    
+    .arena-header { 
+      position: absolute; 
+      top: 15px; 
+      left: 15px; 
+      z-index: 10; 
+    }
+    
+    .btn-huir { 
+      background: rgba(0,0,0,0.6); 
+      color: #fff; 
+      border: 1px solid var(--glass-border); 
+      padding: 8px 15px; 
+      border-radius: 20px; 
+      font-family: var(--font-body); 
+      font-weight: bold; 
+      font-size: var(--fs-xs); 
+      backdrop-filter: blur(5px); 
+    }
+    
+    .arena-top { 
+      position: absolute; 
+      top: 40px; 
+      right: 15px; 
+      width: 100%; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: flex-end; 
+      z-index: 5; 
+    }
+    
+    .arena-bottom { 
+      position: absolute; 
+      bottom: 140px; 
+      left: 15px; 
+      width: 100%; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: flex-start; 
+      z-index: 5; 
+    }
+    
+    .poke-info { 
+      padding: 10px 15px; 
+      border-radius: var(--radius-sm); 
+      width: 190px; 
+      border-left: 4px solid var(--color-accent-red); 
+      margin-bottom: 10px; 
+      background: rgba(10, 10, 15, 0.95); 
+      backdrop-filter: blur(15px); 
+    }
+    
+    .player-info { 
+      border-left: 4px solid #4cd97b; 
+    }
+    
+    .poke-name { 
+      display: flex; 
+      justify-content: space-between; 
+      font-family: var(--font-display); 
+      letter-spacing: 1px; 
+      font-size: var(--fs-base); 
+      margin-bottom: 5px; 
+      color: #fff; 
+    }
+    
+    .hp-bar-bg { 
+      width: 100%; 
+      height: 12px; 
+      background: #222; 
+      border-radius: 6px; 
+      border: 2px solid #000; 
+      overflow: hidden; 
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); 
+    }
+    
+    .hp-bar-fill { 
+      width: 100%; 
+      height: 100%; 
+      background: linear-gradient(90deg, #4cd97b, #28a745); 
+      transition: width 0.3s, background 0.3s; 
+    }
+    
+    .hp-text { 
+      text-align: right; 
+      font-family: var(--font-mono); 
+      font-size: var(--fs-xs); 
+      margin-top: 4px; 
+      color: var(--color-text-muted); 
+    }
+    
+    .sprite-container { 
+      position: relative; 
+      width: 140px; 
+      height: 140px; 
+      display: flex; 
+      justify-content: center; 
+      align-items: flex-end; 
+    }
+    
+    .poke-sprite { 
+      width: 100%; 
+      image-rendering: pixelated; 
+      filter: drop-shadow(0 15px 10px rgba(0,0,0,0.5)); 
+      transition: filter 0.2s; 
+    }
+    
+    .enemy-sprite-container { 
+      margin-right: 20px; 
+    }
+    
+    .player-sprite-container { 
+      margin-left: 20px; 
+    }
+    
+    .arena-controls { 
+      position: absolute; 
+      bottom: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 130px; 
+      background: rgba(5,5,10,0.95); 
+      border-top: 2px solid var(--glass-border); 
+      display: flex; 
+      flex-direction: column; 
+      z-index: 20; 
+    }
+    
+    .battle-message { 
+      padding: 12px 15px; 
+      font-family: var(--font-body); 
+      font-weight: 700; 
+      font-size: var(--fs-sm); 
+      color: #fff; 
+      border-bottom: 1px solid rgba(255,255,255,0.05); 
+      min-height: 45px; 
+      display: flex; 
+      align-items: center; 
+    }
+    
+    .battle-actions { 
+      flex: 1; 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 8px; 
+      padding: 10px 15px; 
+    }
+    
+    .btn-action { 
+      background: rgba(255,255,255,0.05); 
+      border: 1px solid var(--glass-border); 
+      color: #fff; 
+      font-family: var(--font-body); 
+      font-weight: 700; 
+      font-size: var(--fs-xs); 
+      text-transform: uppercase; 
+      border-radius: var(--radius-sm); 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 8px; 
+      transition: all 0.2s;
+    }
+    
+    .btn-action:active { 
+      transform: scale(0.95); 
+    }
+    
+    @keyframes shake { 
+      0% { transform: translate(2px, 1px) rotate(0deg); } 
+      10% { transform: translate(-1px, -2px) rotate(-1deg); } 
+      20% { transform: translate(-3px, 0px) rotate(1deg); } 
+      30% { transform: translate(0px, 2px) rotate(0deg); } 
+      40% { transform: translate(1px, -1px) rotate(1deg); } 
+      50% { transform: translate(-1px, 2px) rotate(-1deg); } 
+      60% { transform: translate(-3px, 1px) rotate(0deg); } 
+      70% { transform: translate(2px, 1px) rotate(-1deg); } 
+      80% { transform: translate(-1px, -1px) rotate(1deg); } 
+      90% { transform: translate(2px, 2px) rotate(0deg); } 
+      100% { transform: translate(1px, -2px) rotate(-1deg); } 
+    }
+    
+    .anim-shake { 
+      animation: shake 0.4s; 
+      filter: drop-shadow(0 0 15px red) brightness(2) !important; 
+    }
+
+    /* =====================================================================
+       QUIZ ORIGINAL (Manteniendo tus variables y estructura de diseÃ±o)
+       ===================================================================== */
+    .quiz-card { 
+      padding: var(--space-md); 
+      background: var(--glass-bg); 
+      border: 1px solid var(--glass-border); 
+      border-radius: var(--radius-md); 
+    }
+    
+    .quiz-header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: var(--space-md); 
+      font-family: var(--font-mono); 
+      font-size: var(--fs-sm); 
+      color: var(--color-text-muted); 
+    }
+    
+    .quiz-timer { 
+      width: 100%; 
+      height: 8px; 
+      border-radius: 4px; 
+      background: rgba(255, 255, 255, 0.08); 
+      overflow: hidden; 
+      margin-bottom: var(--space-md); 
+    }
+    
+    .quiz-timer__barra { 
+      height: 100%; 
+      width: 100%; 
+      background: linear-gradient(90deg, var(--color-accent-yellow), var(--color-accent-red)); 
+      transform-origin: left; 
+      transition: width 0.1s linear, background var(--transition-mid); 
+    }
+    
+    .quiz-timer__barra.urgente { 
+      background: var(--color-accent-red); 
+      box-shadow: 0 0 14px var(--color-red-glow); 
+    }
+    
+    .quiz-pregunta { 
+      font-family: var(--font-display); 
+      font-size: var(--fs-lg); 
+      letter-spacing: 0.02em; 
+      margin-bottom: var(--space-md); 
+      min-height: 3.2em; 
+      color: #fff; 
+    }
+    
+    .quiz-opciones { 
+      display: flex; 
+      flex-direction: column; 
+      gap: var(--space-sm); 
+    }
+    
+    .quiz-opcion { 
+      text-align: left; 
+      padding: var(--space-sm) var(--space-md); 
+      border: 1px solid var(--glass-border); 
+      border-radius: var(--radius-sm); 
+      background: rgba(255, 255, 255, 0.03); 
+      color: var(--color-text); 
+      font-family: var(--font-body); 
+      font-size: var(--fs-sm); 
+      font-weight: 600; 
+      display: flex; 
+      gap: var(--space-sm); 
+      align-items: center; 
+    }
+    
+    .quiz-opcion .letra { 
+      font-family: var(--font-mono); 
+      color: var(--color-accent-yellow); 
+      font-size: 1.2rem; 
+    }
+    
+    .quiz-opcion.correcta { 
+      border-color: #4cd97b; 
+      background: rgba(76, 217, 123, 0.12); 
+    }
+    
+    .quiz-opcion.incorrecta { 
+      border-color: var(--color-accent-red); 
+      background: var(--color-red-soft); 
+    }
+    
+    .quiz-feedback { 
+      margin-top: var(--space-md); 
+      text-align: center; 
+      font-weight: 700; 
+      font-family: var(--font-body); 
+    }
+    
+    .quiz-feedback.ok { 
+      color: #4cd97b; 
+    }
+    
+    .quiz-feedback.fail { 
+      color: var(--color-accent-red); 
+    }
+    
+    .quiz-final { 
+      text-align: center; 
+    }
+    
+    .quiz-final__puntaje { 
+      font-family: var(--font-mono); 
+      font-size: var(--fs-3xl); 
+      color: var(--color-accent-yellow); 
+      text-shadow: 0 0 20px var(--color-yellow-glow); 
+    }
+    
+    .oculto { 
+      display: none !important; 
+    }
+    
+    .mt-4 { 
+      margin-top: 1.5rem; 
+    } 
+    
+    .mb-4 { 
+      margin-bottom: 1.5rem; 
     }
   </style>
 </head>
 <body>
 
-  <div class="dashboard-container">
-    
-    <aside class="sidebar" id="app-sidebar">
-      <div class="sidebar-brand">
-        <i class="fa-solid fa-gamepad text-accent-red" style="font-size: 1.5rem; color: var(--color-accent-red);"></i>
-        <h1>Me Gusta el Anime</h1>
+  <div class="app-shell">
+    <!-- NAVBAR SUPERIOR -->
+    <header class="navbar">
+      <div class="navbar__logo" style="font-family: 'Permanent Marker', cursive; font-size: 1.5rem; color: #f5d142; text-transform: uppercase;">
+        ME GUSTA<br>EL ANIME
       </div>
-      
-      <ul class="sidebar-menu">
-        <li class="menu-item active">
-          <a href="#"><i class="fa-solid fa-house"></i> Panel General</a>
-        </li>
-        <li class="menu-item">
-          <a href="#"><i class="fa-solid fa-ghost"></i> Zona Arcade</a>
-        </li>
-        <li class="menu-item">
-          <a href="#"><i class="fa-solid fa-ranking-star"></i> Clasificación</a>
-        </li>
-        <li class="menu-item">
-          <a href="#"><i class="fa-solid fa-store"></i> Tienda Otaku</a>
-        </li>
-      </ul>
-      
-      <div class="sidebar-footer">
-        <button class="btn-logout" id="btn-cerrar-sesion">
-          <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
-        </button>
+      <div class="navbar__usuario">
+        <div class="navbar__puntos">
+          <span id="navbar-puntos">0</span>
+          <span class="etiqueta">pts <i class="fa-solid fa-fire text-accent" style="color: var(--color-accent-red);"></i></span>
+        </div>
+        <span id="navbar-username" class="navbar__username" style="color:#fff;"></span>
       </div>
-    </aside>
+    </header>
 
+    <!-- ÃREA DE CONTENIDO (PestaÃ±as) -->
     <main class="main-content">
       
-      <header class="main-header">
-        <div class="welcome-box">
-          <h2>Hola, <span id="user-display-name">Cazador</span></h2>
-          <p>Bienvenido de vuelta a tu centro de comando Otaku.</p>
-        </div>
-        
-        <div class="user-pill">
-          <div class="user-avatar" id="user-avatar-letra">U</div>
-          <div class="user-info-text">
-            <span class="user-name" id="user-display-email">usuario@correo.com</span>
-            <span class="user-pts" id="user-puntos-header">0 pts</span>
+      <!-- PESTAÃ‘A 1: INICIO (FEED INFINITO Y PREMIOS) -->
+      <div id="tab-home" class="tab-pane activa">
+        <section class="mt-4">
+          <h2 class="seccion-titulo">Premios del Torneo</h2>
+          <div id="premios-grid" class="premios-grid"></div>
+        </section>
+        <section class="mt-4">
+          <h2 class="seccion-titulo">Feed de la Comunidad</h2>
+          <div id="feed-filtros" class="feed-filtros"></div>
+          <div id="feed-grid" class="feed-grid"></div>
+        </section>
+      </div>
+
+      <!-- PESTAÃ‘A 2: BÃšSQUEDA -->
+      <div id="tab-search" class="tab-pane">
+        <section class="mt-4">
+          <h2 class="seccion-titulo" style="color: var(--color-accent-red);"><i class="fa-solid fa-magnifying-glass"></i> Explorar</h2>
+          <div class="search-container">
+            <i class="fa-solid fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Buscar animes, usuarios, videos...">
+          </div>
+          <div style="text-align:center; margin-top:2rem; color:var(--color-text-muted);">
+            <i class="fa-solid fa-ghost" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+            <p>Comienza a escribir para ver resultados</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- PESTAÃ‘A 3: ZONA ARCADE (ESPADAS) -->
+      <div id="tab-games" class="tab-pane">
+        <section class="mt-4">
+          <h2 class="seccion-titulo" style="color: var(--color-accent-red);"><i class="fa-solid fa-khanda"></i> Zona Arcade</h2>
+          <div class="game-card" onclick="app.abrirSeleccionPokemon()">
+            <div class="game-card__icon" style="border-color: #f5d142;"><i class="fa-solid fa-gamepad" style="color: var(--color-accent-yellow);"></i></div>
+            <div class="game-card__info">
+              <h3>PokÃ©mon Battle</h3>
+              <p>Arena de combate por turnos</p>
+            </div>
+            <i class="fa-solid fa-chevron-right" style="color: var(--color-accent-red);"></i>
+          </div>
+          <div class="game-card" style="opacity: 0.5; cursor: default;">
+            <div class="game-card__icon" style="border-color: #555;"><i class="fa-solid fa-lock text-muted"></i></div>
+            <div class="game-card__info">
+              <h3 class="text-muted" style="color: var(--color-text-muted);">PrÃ³ximamente</h3>
+              <p>Nuevos minijuegos en desarrollo</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- PESTAÃ‘A 3.1: SELECCIÃ“N POKÃ‰MON -->
+      <div id="tab-pokemon-select" class="tab-pane">
+        <section class="mt-4" style="text-align: center;">
+          <button style="background:transparent; border:1px solid var(--glass-border); color:#fff; padding:5px 15px; border-radius:20px; margin-bottom:20px; cursor: pointer;" onclick="app.cambiarTab('games')"><i class="fa-solid fa-arrow-left"></i> Volver</button>
+          <h1 class="titulo-poster" style="font-size: 1.5rem; margin-bottom: 20px;">Elige tu Inicial</h1>
+          <div class="pokemon-select-grid">
+            <div class="poke-choice" onclick="app.iniciarBatalla('charmander')">
+              <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png" alt="Charmander">
+              <span class="poke-name-tag" style="color: #ff5959;">Charmander</span>
+            </div>
+            <div class="poke-choice" onclick="app.iniciarBatalla('squirtle')">
+              <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png" alt="Squirtle">
+              <span class="poke-name-tag" style="color: #59a6ff;">Squirtle</span>
+            </div>
+            <div class="poke-choice" onclick="app.iniciarBatalla('bulbasaur')">
+              <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="Bulbasaur">
+              <span class="poke-name-tag" style="color: #59ff85;">Bulbasaur</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- PESTAÃ‘A 3.2: ARENA POKÃ‰MON -->
+      <div id="tab-pokemon-battle" class="tab-pane">
+        <div class="arena-pokemon">
+          <div class="arena-bg"></div>
+          <div class="arena-header">
+            <button class="btn-huir" onclick="app.cambiarTab('games')"><i class="fa-solid fa-flag"></i> Rendirse</button>
+          </div>
+          <!-- Enemigo -->
+          <div class="arena-top">
+            <div class="poke-info">
+              <div class="poke-name">Gengar <span style="color: var(--color-accent-yellow);">Lv.50</span></div>
+              <div class="hp-bar-bg"><div id="enemy-hp" class="hp-bar-fill"></div></div>
+            </div>
+            <div class="sprite-container enemy-sprite-container">
+              <img id="enemy-sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png" class="poke-sprite">
+            </div>
+          </div>
+          <!-- Jugador -->
+          <div class="arena-bottom">
+            <div class="sprite-container player-sprite-container">
+              <img id="player-sprite" src="" class="poke-sprite">
+            </div>
+            <div class="poke-info player-info">
+              <div class="poke-name" id="player-name">Player <span style="color: var(--color-accent-yellow);">Lv.50</span></div>
+              <div class="hp-bar-bg"><div id="player-hp" class="hp-bar-fill"></div></div>
+              <div class="hp-text" id="player-hp-text">100 / 100</div>
+            </div>
+          </div>
+          <!-- Controles -->
+          <div class="arena-controls">
+            <div id="battle-text" class="battle-message">Â¡Un Gengar salvaje apareciÃ³!</div>
+            <div class="battle-actions">
+              <button class="btn-action" onclick="app.atacar(25, 'Ataque RÃ¡pido')" style="border-color: #fff;"><i class="fa-solid fa-hand-fist"></i> Luchar</button>
+              <button class="btn-action" onclick="app.atacar(45, 'Ataque Especial')" style="border-color: #4da6ff; color:#4da6ff;"><i class="fa-solid fa-bolt"></i> Especial</button>
+              <button class="btn-action" onclick="app.curar()" style="border-color: #4cd97b; color:#4cd97b;"><i class="fa-solid fa-briefcase-medical"></i> Curar</button>
+              <button class="btn-action" onclick="app.cambiarTab('games')" style="border-color: var(--color-accent-red); color:var(--color-accent-red);"><i class="fa-solid fa-person-running"></i> Huir</button>
+            </div>
           </div>
         </div>
-      </header>
+      </div>
 
-      <div class="dashboard-grid">
-        
-        <div class="col-left" style="display: flex; flex-direction: column; gap: 30px;">
-          
-          <div class="card quiz-card">
-            <div class="card-header">
-              <i class="fa-solid fa-fire text-accent-red"></i>
-              <h2>Zona Quiz Hardcore</h2>
-            </div>
-            
-            <div id="quiz-loading" class="quiz-loading">
-              <i class="fa-solid fa-spinner fa-spin"></i>
-              <p>Cargando preguntas de la tanda...</p>
-            </div>
-
-            <div id="quiz-en-curso" class="oculto">
-              <div class="quiz-timer-bar">
-                <div id="quiz-timer-progress" class="quiz-timer-progress"></div>
+      <!-- PESTAÃ‘A 4: QUIZ -->
+      <div id="tab-quiz" class="tab-pane">
+        <section class="mt-4">
+          <h2 class="seccion-titulo"><i class="fa-solid fa-brain" style="color: var(--color-accent-red);"></i> Quiz Hardcore</h2>
+          <div id="quiz-card" class="quiz-card">
+            <div id="quiz-en-curso">
+              <div class="quiz-header">
+                <span id="quiz-progreso" style="color: var(--color-accent-yellow);">Pregunta 1/10</span>
+                <span><i class="fa-solid fa-clock"></i> 10s</span>
               </div>
-              <div class="quiz-meta">
-                <span id="quiz-pregunta-numero">Pregunta 1/20</span>
-                <span id="quiz-fase-etiqueta" style="font-family: 'Share Tech Mono', monospace; font-weight: bold; letter-spacing: 1px;">LECTURA</span>
-                <span id="quiz-timer-texto"><i class="fa-regular fa-clock"></i> 5s</span>
-              </div>
-              
-              <h3 id="quiz-pregunta-texto" class="quiz-pregunta">¿Cuál es el verdadero nombre de...?</h3>
-              
-              <div id="quiz-opciones" class="quiz-opciones oculto">
-                </div>
-
-              <div id="quiz-explicacion-container" class="quiz-explicacion-box oculto" style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.02); border-left: 4px solid var(--color-accent-yellow); border-radius: 6px;">
-                <h4 id="quiz-veredicto-texto" style="font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; margin-bottom: 8px; letter-spacing: 0.5px;"></h4>
-                <p id="quiz-explicacion-texto" style="color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px;"></p>
-                <button id="btn-siguiente-pregunta" class="btn btn-primary" style="width: 100%; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1.1rem; text-transform: uppercase;">Siguiente Pregunta <i class="fa-solid fa-arrow-right" style="margin-left: 5px;"></i></button>
-              </div>
+              <div class="quiz-timer"><div id="quiz-timer-barra" class="quiz-timer__barra"></div></div>
+              <p id="quiz-pregunta-texto" class="quiz-pregunta">Cargando pregunta...</p>
+              <div id="quiz-opciones" class="quiz-opciones"></div>
+              <div id="quiz-feedback" class="quiz-feedback"></div>
             </div>
-
             <div id="quiz-final" class="quiz-final oculto">
-              <div class="quiz-final-icon">
-                <i class="fa-solid fa-trophy"></i>
-              </div>
-              <h3 id="quiz-final-puntaje">0% de Efectividad</h3>
-              <p id="quiz-final-detalle">Completaste el desafío.</p>
-              <button id="btn-reiniciar-quiz" class="btn btn-primary" style="margin-top: 15px; display: none;">Intentar de Nuevo</button>
+              <h3 class="titulo-poster" style="font-size: 1.5rem; color:#fff;">Â¡Quiz Completado!</h3>
+              <p id="quiz-final-puntaje" class="quiz-final__puntaje mt-4">+0 pts</p>
+              <p id="quiz-final-detalle" class="mt-4" style="color: var(--color-text-muted);"></p>
             </div>
           </div>
-
-          <div class="card">
-            <div class="card-header">
-              <i class="fa-solid fa-clapperboard text-accent-red"></i>
-              <h2>Últimos Vídeos y Noticias</h2>
-            </div>
-            <div class="feed-container" id="youtube-feed-container">
-              <p style="color: var(--color-text-muted); padding: 10px 0;">Cargando novedades...</p>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="col-right">
-          <div class="card">
-            <div class="card-header">
-              <i class="fa-solid fa-box-open text-accent-yellow"></i>
-              <h2>Mis Premios Adquiridos</h2>
-            </div>
-            <div class="premios-list" id="premios-comprados-container">
-              <p style="color: var(--color-text-muted); font-size: 0.9rem;">No has reclamado ningún premio físico o digital todavía.</p>
-            </div>
-          </div>
-        </div>
-
+        </section>
       </div>
     </main>
+
+    <!-- BARRA DE NAVEGACIÃ“N INFERIOR -->
+    <nav class="bottom-nav">
+      <div class="nav-item activo" onclick="app.cambiarTab('home', this)"><i class="fa-solid fa-house"></i></div>
+      <div class="nav-item" onclick="app.cambiarTab('search', this)"><i class="fa-solid fa-magnifying-glass"></i></div>
+      <div class="nav-item" onclick="app.cambiarTab('games', this)"><i class="fa-solid fa-khanda"></i></div>
+      <div class="nav-item" onclick="app.cambiarTab('quiz', this)"><i class="fa-solid fa-brain"></i></div>
+      <div class="nav-item" onclick="app.abrirAjustes()"><i class="fa-solid fa-gear"></i></div>
+    </nav>
+
+    <!-- MODAL DE AJUSTES -->
+    <div id="settings-overlay" class="modal-overlay" onclick="app.cerrarAjustes()"></div>
+    <div id="settings-modal" class="modal-bottom-sheet">
+      <div class="modal-handle"></div>
+      <h3 class="seccion-titulo" style="font-size: 1.2rem; margin-bottom: 1rem;">Ajustes de Cuenta</h3>
+      <div class="settings-list">
+        <button class="settings-btn"><i class="fa-solid fa-user"></i> <span>Perfil</span></button>
+        <button class="settings-btn"><i class="fa-solid fa-lock"></i> <span>Cambiar contraseÃ±a</span></button>
+        <button class="settings-btn" style="color: var(--color-accent-red);"><i class="fa-solid fa-share-nodes" style="color: var(--color-accent-red);"></i> <span>Compartir Otaku Nexus</span></button>
+        <button class="settings-btn"><i class="fa-solid fa-scale-balanced"></i> <span>InformaciÃ³n legal</span></button>
+        <button class="settings-btn" id="btn-logout-app" style="color: var(--color-accent-red); border: 1px solid var(--color-accent-red); border-radius: var(--radius-sm); justify-content: center; margin-top: 1rem;"><i class="fa-solid fa-right-from-bracket"></i> Cerrar SesiÃ³n</button>
+      </div>
+    </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase.js"></script>
-  
-  <script>
-    // =================================================================
-    // VARIABLES DE CONTROL DE SESIÓN Y FLUJOS GENERALES
-    // =================================================================
-    let currentUserSession = null;
+  <!-- =====================================================================
+       SCRIPT MAESTRO: CONTIENE TODO PARA EVITAR ERRORES DE RUTAS
+       Y LÃ“GICA DE JUEGOS Y TABS EXPANDIDA Y FORMATEADA
+       ===================================================================== -->
+  <script type="module">
+    // 1. IMPORTAR SUPABASE DIRECTAMENTE DESDE CDN PARA EVITAR ERRORES LOCALES
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+    
+    // Tus credenciales exactas
+    const SUPABASE_URL = 'https://zccbphmebkpuzwbkgtse.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpjY2JwaG1lYmtwdXp3YmtndHNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0Nzk4OTEsImV4cCI6MjA5NzA1NTg5MX0.Pc3VBCZJDsVrn6cx5eelDF6vwrgs3X7uTI5Q1kNgvDY';
+    
+    // Crear el cliente de Supabase
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    async function initSession() {
-      try {
-        if (typeof _supabase === 'undefined') {
-          console.error("Supabase no está instanciado. Revisa js/supabase.js");
-          return;
-        }
-        const { data: { session } } = await _supabase.auth.getSession();
-        if (!session) {
-          window.location.href = 'index.html';
-          return;
-        }
-        currentUserSession = session.user;
+    // =================================================================
+    // LÃ“GICA DE UI Y MINIJUEGOS (PestaÃ±as, Modal, PokÃ©mon)
+    // =================================================================
+    window.app = {
+      
+      // Manejador de navegaciÃ³n de pestaÃ±as
+      cambiarTab(idTab, elementoNav = null) {
+        this.cerrarAjustes();
         
-        // Cargar perfiles visuales
-        document.getElementById('user-display-email').textContent = currentUserSession.email;
-        const inicial = currentUserSession.email.charAt(0).toUpperCase();
-        document.getElementById('user-avatar-letra').textContent = inicial;
-
-        // Intentar rescatar nombre y puntos reales
-        const { data: perfil } = await _supabase
-          .from('perfiles')
-          .select('*')
-          .eq('id', currentUserSession.id)
-          .single();
-
-        if (perfil) {
-          document.getElementById('user-display-name').textContent = perfil.nombre || 'Cazador';
-          document.getElementById('user-puntos-header').textContent = `${perfil.puntos || 0} pts`;
+        // Quitar la clase activa de todos los tabs
+        document.querySelectorAll('.tab-pane').forEach(tab => {
+          tab.classList.remove('activa');
+        });
+        
+        // Agregar clase activa al tab seleccionado
+        document.getElementById(`tab-${idTab}`).classList.add('activa');
+        
+        // Actualizar el estado visual en la barra de navegaciÃ³n
+        if (elementoNav) {
+          document.querySelectorAll('.bottom-nav .nav-item').forEach(btn => {
+            btn.classList.remove('activo');
+          });
+          elementoNav.classList.add('activo');
         }
-      } catch (e) {
-        console.error("Error verificando sesión activa:", e);
+      },
+      
+      // Control del Modal de Ajustes
+      abrirAjustes() {
+        document.getElementById('settings-modal').classList.add('abierto');
+        document.getElementById('settings-overlay').classList.add('activo');
+      },
+      
+      cerrarAjustes() {
+        document.getElementById('settings-modal').classList.remove('abierto');
+        document.getElementById('settings-overlay').classList.remove('activo');
+      },
+      
+      // Estado interno de la batalla PokÃ©mon
+      batalla: {
+        pHP: 100, 
+        eHP: 100, 
+        enBatalla: false,
+        nombres: { 
+          charmander: 'Charmander', 
+          squirtle: 'Squirtle', 
+          bulbasaur: 'Bulbasaur' 
+        },
+        sprites: {
+          charmander: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/4.png',
+          squirtle: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/7.png',
+          bulbasaur: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/1.png'
+        }
+      },
+      
+      abrirSeleccionPokemon() { 
+        this.cambiarTab('pokemon-select'); 
+      },
+      
+      iniciarBatalla(pokemonKey) {
+        // Reset de vida y estado
+        this.batalla.pHP = 100; 
+        this.batalla.eHP = 100; 
+        this.batalla.enBatalla = true;
+        
+        // Obtener los elementos del DOM de los sprites
+        const pSprite = document.getElementById('player-sprite');
+        const eSprite = document.getElementById('enemy-sprite');
+        
+        // Limpiar clases de animaciÃ³n previas
+        pSprite.className = 'poke-sprite'; 
+        eSprite.className = 'poke-sprite';
+        
+        // Asignar sprite seleccionado
+        pSprite.src = this.batalla.sprites[pokemonKey];
+        
+        // Actualizar UI de Nombres
+        document.getElementById('player-name').innerHTML = `${this.batalla.nombres[pokemonKey]} <span style="color:var(--color-accent-yellow);">Lv.50</span>`;
+        this.escribirMensaje(`Â¡Adelante, ${this.batalla.nombres[pokemonKey]}!`);
+        
+        // Iniciar barras y cambiar pestaÃ±a
+        this.actualizarBarras();
+        this.cambiarTab('pokemon-battle');
+      },
+      
+      actualizarBarras() {
+        const b = this.batalla;
+        const pBar = document.getElementById('player-hp');
+        const eBar = document.getElementById('enemy-hp');
+        
+        pBar.style.width = `${b.pHP}%`; 
+        eBar.style.width = `${b.eHP}%`;
+        
+        document.getElementById('player-hp-text').innerText = `${b.pHP} / 100`;
+        
+        // Gradientes de vida (Verde -> Amarillo -> Rojo)
+        pBar.style.background = b.pHP > 50 ? 'linear-gradient(90deg, #4cd97b, #28a745)' : 
+                                b.pHP > 20 ? 'linear-gradient(90deg, #f5d142, #d4a017)' : 
+                                'linear-gradient(90deg, #ff3131, #b31b1b)';
+                                
+        eBar.style.background = b.eHP > 50 ? 'linear-gradient(90deg, #4cd97b, #28a745)' : 
+                                b.eHP > 20 ? 'linear-gradient(90deg, #f5d142, #d4a017)' : 
+                                'linear-gradient(90deg, #ff3131, #b31b1b)';
+      },
+      
+      escribirMensaje(msg) { 
+        document.getElementById('battle-text').innerText = msg; 
+      },
+      
+      animarDanio(spriteId) {
+        const sprite = document.getElementById(spriteId);
+        sprite.classList.remove('anim-shake');
+        // Hack para reiniciar la animaciÃ³n en el DOM
+        void sprite.offsetWidth;
+        sprite.classList.add('anim-shake');
+      },
+      
+      atacar(dmg, nombreAtaque) {
+        if (!this.batalla.enBatalla) return;
+        
+        this.escribirMensaje(`Â¡Usaste ${nombreAtaque}!`);
+        
+        setTimeout(() => {
+          this.animarDanio('enemy-sprite');
+          this.batalla.eHP -= dmg;
+          
+          if (this.batalla.eHP < 0) this.batalla.eHP = 0;
+          this.actualizarBarras();
+          
+          if (this.batalla.eHP === 0) {
+            this.escribirMensaje('Â¡Gengar enemigo se debilitÃ³! Â¡Has ganado!');
+            this.batalla.enBatalla = false;
+            setTimeout(() => this.cambiarTab('games'), 3500);
+          } else { 
+            this.turnoEnemigo(); 
+          }
+        }, 600);
+      },
+      
+      curar() {
+        if (!this.batalla.enBatalla) return;
+        
+        this.escribirMensaje(`Â¡Usaste una PociÃ³n MÃ¡xima!`);
+        
+        setTimeout(() => {
+          this.batalla.pHP += 50;
+          if (this.batalla.pHP > 100) this.batalla.pHP = 100;
+          
+          this.actualizarBarras();
+          this.turnoEnemigo();
+        }, 1000);
+      },
+      
+      turnoEnemigo() {
+        setTimeout(() => {
+          this.escribirMensaje('Â¡Gengar usÃ³ Bola Sombra!');
+          
+          setTimeout(() => {
+            this.animarDanio('player-sprite');
+            
+            // DaÃ±o aleatorio enemigo
+            this.batalla.pHP -= Math.floor(Math.random() * 20) + 15; 
+            if (this.batalla.pHP < 0) this.batalla.pHP = 0;
+            
+            this.actualizarBarras();
+            
+            if (this.batalla.pHP === 0) {
+              this.escribirMensaje('Â¡Tu PokÃ©mon se debilitÃ³! Perdiste la batalla.');
+              this.batalla.enBatalla = false;
+              setTimeout(() => this.cambiarTab('games'), 3500);
+            } else {
+              setTimeout(() => this.escribirMensaje('Â¿QuÃ© deberÃ­a hacer tu PokÃ©mon?'), 1000);
+            }
+          }, 600);
+        }, 1800);
       }
+    };
+
+    // =================================================================
+    // VERIFICACIÃ“N DE SESIÃ“N (LOGIN)
+    // =================================================================
+    async function initSession() {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (error || !session) {
+        // RedirecciÃ³n si no hay cuenta logueada
+        window.location.href = 'index.html'; 
+        return null;
+      }
+      
+      const { data: perfil } = await supabase
+        .from('usuarios')
+        .select('*')
+        .eq('id', session.user.id)
+        .single();
+        
+      document.getElementById('navbar-username').textContent = perfil?.username || session.user.email;
+      document.getElementById('navbar-puntos').textContent = perfil?.puntos_totales ?? 0;
+      return session.user.id;
     }
 
-    document.getElementById('btn-cerrar-sesion')?.addEventListener('click', async () => {
-      if (typeof _supabase !== 'undefined') {
-        await _supabase.auth.signOut();
-        window.location.href = 'index.html';
-      }
+    document.getElementById('btn-logout-app').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = 'index.html';
     });
 
     // =================================================================
-    // CARGA DE COMPONENTES ADICIONALES (FEED Y PREMIOS)
+    // CARGAR FEED Y PREMIOS
     // =================================================================
-    async function cargarFeedYoutube() {
-      const container = document.getElementById('youtube-feed-container');
-      if (!container) return;
-      try {
-        const { data: videos } = await _supabase.from('feed_videos').select('*').limit(3);
-        if (videos && videos.length > 0) {
-          container.innerHTML = '';
-          videos.forEach(v => {
-            container.innerHTML += `
-              <div class="feed-item">
-                <div class="feed-thumb">
-                  <img src="${v.thumbnail_url || 'https://via.placeholder.com/140x80'}" alt="Thumb" />
-                  <span class="feed-badge">VÍDEO</span>
-                </div>
-                <div class="feed-info">
-                  <h4 class="feed-title">${v.titulo}</h4>
-                  <span class="feed-meta">Ver en la plataforma de streaming oficial</span>
-                </div>
-              </div>`;
-          });
-        } else {
-          container.innerHTML = '<p style="color: var(--color-text-muted);">No hay transmisiones indexadas en este momento.</p>';
-        }
-      } catch (e) {
-        container.innerHTML = '<p style="color: var(--color-text-muted);">No se pudieron cargar las noticias.</p>';
-      }
+    const ETIQUETAS_POSICION = {
+      1: { medalla: 'ðŸ¥‡ 1er Lugar', clase: 'premio-card--oro' },
+      2: { medalla: 'ðŸ¥ˆ 2do Lugar', clase: 'premio-card--plata' },
+      3: { medalla: 'ðŸ¥‰ 3er Lugar', clase: 'premio-card--bronce' },
+    };
+
+    function escapeHTML(texto = '') {
+      const div = document.createElement('div'); 
+      div.textContent = texto; 
+      return div.innerHTML;
     }
 
-    async function cargarPremiosComprados() {
-      const container = document.getElementById('premios-comprados-container');
-      if (!container) return;
-      try {
-        const { data: compras } = await _supabase.from('compras_premios').select('*, premios(*)').eq('user_id', currentUserSession?.id);
-        if (compras && compras.length > 0) {
-          container.innerHTML = '';
-          compras.forEach(c => {
-            container.innerHTML += `
-              <div class="premio-item">
-                <div class="premio-detalles">
-                  <h4>${c.premios?.titulo || 'Premio Especial'}</h4>
-                  <p>Estado del despacho físico</p>
-                </div>
-                <span class="premio-status">${c.estado?.toUpperCase() || 'PROCESANDO'}</span>
-              </div>`;
-          });
+    async function cargarPremios() {
+      const contenedor = document.getElementById('premios-grid');
+      const { data } = await supabase.from('premios').select('*').order('posicion', { ascending: true });
+      
+      if (!data) return;
+      contenedor.innerHTML = '';
+      
+      data.forEach((premio) => {
+        const etiqueta = ETIQUETAS_POSICION[premio.posicion] || { medalla: `Lugar ${premio.posicion}`, clase: '' };
+        let mediaHTML = '<div class="premio-card__media"></div>';
+        
+        if (premio.video_url) {
+          mediaHTML = `<div class="premio-card__media"><video src="${escapeHTML(premio.video_url)}" muted loop autoplay playsinline></video></div>`;
+        } else if (premio.imagen_url) {
+          mediaHTML = `<div class="premio-card__media"><img src="${escapeHTML(premio.imagen_url)}" alt="${escapeHTML(premio.titulo)}"></div>`;
         }
-      } catch (e) {
-        console.log("Error de premios adquiridos pasivo:", e);
-      }
+        
+        contenedor.innerHTML += `
+          <article class="premio-card ${etiqueta.clase}">
+            <div class="premio-card__medalla">${etiqueta.medalla}</div>
+            ${mediaHTML}
+            <div class="premio-card__titulo">${escapeHTML(premio.titulo)}</div>
+            <div class="premio-card__descripcion">${escapeHTML(premio.descripcion || '')}</div>
+          </article>
+        `;
+      });
+    }
+
+    let videosCache = [];
+    let categoriaActiva = 'todas';
+
+    async function cargarFeed() {
+      const contenedor = document.getElementById('feed-grid');
+      const { data } = await supabase.from('contenido').select('*').order('created_at', { ascending: false });
+      
+      if (!data) return;
+      
+      videosCache = data || [];
+      construirFiltros();
+      renderizarFeed();
+    }
+
+    function construirFiltros() {
+      const contenedor = document.getElementById('feed-filtros');
+      const categorias = ['todas', ...new Set(videosCache.map((v) => v.categoria))];
+      contenedor.innerHTML = '';
+      
+      categorias.forEach((cat) => {
+        const btn = document.createElement('button');
+        btn.textContent = cat === 'todas' ? 'Todas' : cat;
+        if (cat === categoriaActiva) btn.classList.add('activo');
+        
+        btn.onclick = () => {
+          categoriaActiva = cat;
+          contenedor.querySelectorAll('button').forEach(b => b.classList.remove('activo'));
+          btn.classList.add('activo');
+          renderizarFeed();
+        };
+        
+        contenedor.appendChild(btn);
+      });
+    }
+
+    function renderizarFeed() {
+      const contenedor = document.getElementById('feed-grid');
+      const filtrados = categoriaActiva === 'todas' ? videosCache : videosCache.filter(v => v.categoria === categoriaActiva);
+      
+      contenedor.innerHTML = '';
+      filtrados.forEach(v => {
+        contenedor.innerHTML += `
+          <article class="feed-card">
+            <div class="feed-card__video">
+              <iframe src="https://www.youtube.com/embed/${encodeURIComponent(v.youtube_id)}" title="${escapeHTML(v.titulo)}" loading="lazy" allowfullscreen></iframe>
+            </div>
+            <div class="feed-card__info">
+              <div class="feed-card__categoria">${escapeHTML(v.categoria)}</div>
+              <div class="feed-card__titulo">${escapeHTML(v.titulo)}</div>
+            </div>
+          </article>
+        `;
+      });
     }
 
     // =================================================================
-    // NUEVO MOTOR AVANZADO DEL QUIZ: SISTEMA DE 3 PANTALLAS
+    // LÃ“GICA DEL QUIZ (Mismo sistema antitrampas)
     // =================================================================
     let quiz_preguntasDeHoy = [];
-    let quiz_indiceActual = 0;
     let quiz_intentosDeHoy = [];
-    let quiz_timeLeft = 5;
+    let quiz_indiceActual = 0;
+    let quiz_intentoActualId = null;
+    let quiz_mostradoEnTimestamp = null;
+    let quiz_respondida = false;
     let quiz_intervaloTimer = null;
-    let quiz_faseActual = 'inicial'; // 'lectura' | 'respuesta' | 'explicacion'
+    let quiz_fechaHoy = null;
+    let quiz_userId = null;
 
-    async function cargarQuizDelDia() {
-      try {
-        document.getElementById('quiz-loading').classList.remove('oculto');
-        document.getElementById('quiz-en-curso').classList.add('oculto');
-        document.getElementById('quiz-final').classList.add('oculto');
-
-        // Descargar el set de preguntas desde Supabase
-        const { data: preguntas, error } = await _supabase
-          .from('quizzes')
-          .select('*')
-          .order('id', { ascending: true });
-
-        if (error) throw error;
-
-        if (!preguntas || preguntas.length === 0) {
-          // Datos de prueba estables si la tabla de la base de datos está vacía
-          quiz_preguntasDeHoy = [
-            { id: 1, pregunta: "¿Cómo se llama la técnica letal que Kaio-sama le enseñó a Goku, la cual reúne la energía de todos los seres vivos, plantas y astros para formar una gran esfera de luz?", opciones: ["El Kaio-ken", "La Genki-dama", "El Kamehameha", "El Golpe del Dragón"], respuesta_correcta: "La Genki-dama", explicacion: "La Genki-dama requiere energía pura prestada voluntariamente por la naturaleza y los seres vivos del universo." },
-            { id: 2, pregunta: "¿Quién es el primer personaje que logra alcanzar la transformación del Super Saiyajin Fase 2 definitivo durante la batalla crítica de los Juegos de Cell?", opciones: ["Son Goku", "Vegeta", "Trunks del Futuro", "Son Gohan"], respuesta_correcta: "Son Gohan", explicacion: "Tras ver la destrucción despiadada del Androide 16 a manos de Cell, Gohan desata su furia interna rompiendo los límites." },
-            { id: 3, pregunta: "¿En qué persona real de su pasado basó el Dr. Gero el diseño físico y la personalidad pacífica del Androide 16?", opciones: ["En sí mismo cuando era joven", "En su hijo fallecido, que fue soldado de la Patrulla Roja", "En el Androide 8 (Octavio)", "En un guerrero legendario alienígena"], respuesta_correcta: "En su hijo fallecido, que fue soldado de la Patrulla Roja", explicacion: "El Dr. Gero lo modeló a imagen de su hijo caído en combate. Lo programó pacífico para evitar perderlo otra vez en batalla." }
-          ];
-        } else {
-          quiz_preguntasDeHoy = preguntas;
-        }
-
-        // Validación pasiva de seguridad de intentos diarios
-        const user = (await _supabase.auth.getUser()).data.user;
-        if (user) {
-          const { data: intentos } = await _supabase.from('intentos_quiz').select('*').eq('user_id', user.id);
-          const hoyStr = new Date().toISOString().split('T')[0];
-          const completadosHoy = intentos?.filter(i => i.creado_en && i.creado_en.startsWith(hoyStr)) || [];
-          
-          if (completadosHoy.length >= quiz_preguntasDeHoy.length && quiz_preguntasDeHoy.length > 0) {
-            quiz_intentosDeHoy = completadosHoy;
-            mostrarPantallaFinal();
-            return;
-          }
-        }
-
-        quiz_indiceActual = 0;
-        quiz_intentosDeHoy = [];
+    async function iniciarQuiz(userId) {
+      quiz_userId = userId;
+      quiz_fechaHoy = new Date().toISOString().slice(0, 10);
+      
+      const { data: preguntas } = await supabase
+        .from('quizzes')
+        .select('*')
+        .eq('fecha_activa', quiz_fechaHoy)
+        .order('id', { ascending: true });
         
-        if (quiz_preguntasDeHoy.length > 0) {
-          document.getElementById('quiz-loading').classList.add('oculto');
-          document.getElementById('quiz-en-curso').classList.remove('oculto');
-          mostrarPreguntaActual();
-        } else {
-          mostrarSinQuiz("No hay cuestionarios activos cargados para este bloque.");
-        }
+      if (!preguntas || preguntas.length === 0) return mostrarSinQuiz('Vuelve mÃ¡s tarde.');
+      
+      quiz_preguntasDeHoy = preguntas;
+      const { data: intentos } = await supabase
+        .from('intentos_quiz')
+        .select('*')
+        .eq('usuario_id', userId)
+        .eq('fecha', quiz_fechaHoy);
+        
+      quiz_intentosDeHoy = intentos || [];
+      const respondidas = quiz_intentosDeHoy.filter(i => i.respondido_en !== null);
+      
+      if (respondidas.length >= quiz_preguntasDeHoy.length) return mostrarPantallaFinal();
+      
+      quiz_indiceActual = respondidas.length;
+      mostrarPreguntaActual();
+    }
 
-      } catch (err) {
-        console.error("Error cargando quiz:", err);
-        mostrarSinQuiz("Error al sincronizar con la base de datos de preguntas.");
+    async function mostrarPreguntaActual() {
+      quiz_respondida = false;
+      document.getElementById('quiz-feedback').textContent = '';
+      const p = quiz_preguntasDeHoy[quiz_indiceActual];
+      
+      if (!p) return mostrarPantallaFinal();
+      
+      document.getElementById('quiz-progreso').textContent = `Pregunta ${quiz_indiceActual + 1}/${quiz_preguntasDeHoy.length}`;
+      
+      let intento = quiz_intentosDeHoy.find(i => i.quiz_id === p.id && i.respondido_en === null);
+      
+      if (!intento) {
+        const { data } = await supabase.from('intentos_quiz').insert({ usuario_id: quiz_userId, quiz_id: p.id }).select().single();
+        if(data) { 
+          intento = data; 
+          quiz_intentosDeHoy.push(intento); 
+        }
       }
-    }
-
-    // PANTALLA 1: Fase de Lectura Pura (5 segundos)
-    function mostrarPreguntaActual() {
-      clearInterval(quiz_intervaloTimer);
       
-      const q = quiz_preguntasDeHoy[quiz_indiceActual];
-      const totalPreguntas = quiz_preguntasDeHoy.length;
+      if(!intento) return;
       
-      // Limpiar y resetear vistas para la nueva pregunta
-      document.getElementById('quiz-pregunta-numero').textContent = `Pregunta ${quiz_indiceActual + 1}/${totalPreguntas}`;
-      document.getElementById('quiz-pregunta-texto').textContent = q.pregunta;
+      quiz_intentoActualId = intento.id;
+      quiz_mostradoEnTimestamp = new Date(intento.mostrado_en);
+      document.getElementById('quiz-pregunta-texto').textContent = p.pregunta;
+      const opcionesDiv = document.getElementById('quiz-opciones');
+      opcionesDiv.innerHTML = '';
       
-      document.getElementById('quiz-opciones').classList.add('oculto');
-      document.getElementById('quiz-explicacion-container').classList.add('oculto');
+      const opciones = [
+        {l:'a',t:p.opcion_a}, 
+        {l:'b',t:p.opcion_b}, 
+        {l:'c',t:p.opcion_c}, 
+        {l:'d',t:p.opcion_d}
+      ];
       
-      quiz_faseActual = 'lectura';
-      document.getElementById('quiz-fase-etiqueta').textContent = 'LECTURA';
-      document.getElementById('quiz-fase-etiqueta').style.color = 'var(--color-accent-yellow)';
-      
-      quiz_timeLeft = 5; 
-      document.getElementById('quiz-timer-texto').innerHTML = `<i class="fa-regular fa-clock"></i> ${quiz_timeLeft}s`;
-      document.getElementById('quiz-timer-progress').style.transition = 'none';
-      document.getElementById('quiz-timer-progress').style.width = '100%';
-      document.getElementById('quiz-timer-progress').style.background = 'var(--color-accent-yellow)';
-
-      // Forzar render del navegador antes de activar transición
-      setTimeout(() => {
-        document.getElementById('quiz-timer-progress').style.transition = 'width 5s linear';
-        document.getElementById('quiz-timer-progress').style.width = '0%';
-      }, 50);
-
-      quiz_intervaloTimer = setInterval(() => {
-        quiz_timeLeft--;
-        if (quiz_timeLeft <= 0) {
-          clearInterval(quiz_intervaloTimer);
-          iniciarFaseRespuesta();
-        } else {
-          document.getElementById('quiz-timer-texto').innerHTML = `<i class="fa-regular fa-clock"></i> ${quiz_timeLeft}s`;
-        }
-      }, 1000);
-    }
-
-    // PANTALLA 2: Fase de Selección Rápida (6 segundos)
-    function iniciarFaseRespuesta() {
-      clearInterval(quiz_intervaloTimer);
-      
-      const q = quiz_preguntasDeHoy[quiz_indiceActual];
-      quiz_faseActual = 'respuesta';
-      
-      document.getElementById('quiz-fase-etiqueta').textContent = 'RESPUESTA';
-      document.getElementById('quiz-fase-etiqueta').style.color = 'var(--color-accent-red)';
-      
-      // Generar y desplegar opciones en pantalla
-      const containerOpciones = document.getElementById('quiz-opciones');
-      containerOpciones.innerHTML = '';
-      containerOpciones.classList.remove('oculto');
-      
-      const letras = ['A', 'B', 'C', 'D'];
-      q.opciones.forEach((opc, index) => {
-        const btn = document.createElement('button');
-        btn.className = 'btn-opcion';
-        const letra = letras[index] || (index + 1);
-        btn.innerHTML = `<span class="opcion-letra" style="background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px; margin-right: 8px; font-weight: bold;">${letra}</span> <span>${opc}</span>`;
-        btn.onclick = () => evaluarRespuesta(opc, btn);
-        containerOpciones.appendChild(btn);
+      opciones.forEach(o => {
+        const btn = document.createElement('button'); 
+        btn.className = 'quiz-opcion'; 
+        btn.innerHTML = `<span class="letra">${o.l.toUpperCase()}</span> <span>${escapeHTML(o.t)}</span>`;
+        btn.onclick = () => responderPregunta(o.l, false);
+        opcionesDiv.appendChild(btn);
       });
       
-      quiz_timeLeft = 6;
-      document.getElementById('quiz-timer-texto').innerHTML = `<i class="fa-regular fa-clock"></i> ${quiz_timeLeft}s`;
-      document.getElementById('quiz-timer-progress').style.transition = 'none';
-      document.getElementById('quiz-timer-progress').style.width = '100%';
-      document.getElementById('quiz-timer-progress').style.background = 'var(--color-accent-red)';
+      if ((Date.now() - quiz_mostradoEnTimestamp.getTime()) / 1000 >= 10) {
+        return responderPregunta(null, false);
+      }
       
-      setTimeout(() => {
-        document.getElementById('quiz-timer-progress').style.transition = 'width 6s linear';
-        document.getElementById('quiz-timer-progress').style.width = '0%';
-      }, 50);
+      iniciarBarraDeTiempo();
+    }
+
+    function iniciarBarraDeTiempo() {
+      clearInterval(quiz_intervaloTimer);
+      const barra = document.getElementById('quiz-timer-barra');
+      barra.style.width = '100%'; 
+      barra.classList.remove('urgente');
       
       quiz_intervaloTimer = setInterval(() => {
-        quiz_timeLeft--;
-        if (quiz_timeLeft <= 0) {
-          clearInterval(quiz_intervaloTimer);
-          evaluarRespuesta(null, null); // Tiempo agotado de respuesta
-        } else {
-          document.getElementById('quiz-timer-texto').innerHTML = `<i class="fa-regular fa-clock"></i> ${quiz_timeLeft}s`;
-        }
-      }, 1000);
+        const restante = Math.max(0, 10 - ((Date.now() - quiz_mostradoEnTimestamp.getTime()) / 1000));
+        barra.style.width = `${(restante / 10) * 100}%`;
+        
+        if (restante <= 3) barra.classList.add('urgente');
+        if (restante <= 0 && !quiz_respondida) responderPregunta(null, false);
+      }, 100);
     }
 
-    // PANTALLA 3: Despliegue del Veredicto y la Explicación
-    async function evaluarRespuesta(opcionSeleccionada, botonElemento) {
-      clearInterval(quiz_intervaloTimer);
-      quiz_faseActual = 'explicacion';
-      
-      document.getElementById('quiz-fase-etiqueta').textContent = 'VEREDICTO';
-      document.getElementById('quiz-fase-etiqueta').style.color = '#2ecc71';
-      
-      const q = quiz_preguntasDeHoy[quiz_indiceActual];
-      const esCorrecta = (opcionSeleccionada === q.respuesta_correcta);
-      
-      // Regla de Tres: Todas las preguntas del bloque suman un total de 10 puntos máximos
-      const totalPreguntas = quiz_preguntasDeHoy.length || 20;
-      const puntosPorPregunta = 10 / totalPreguntas;
-      const puntosObtenidos = esCorrecta ? puntosPorPregunta : 0;
-      
-      // Congelar e iluminar botones de opciones
-      const botones = document.querySelectorAll('.btn-opcion');
-      botones.forEach(b => {
-        b.disabled = true;
-        const txt = b.querySelector('span:last-child').textContent;
-        if (txt === q.respuesta_correcta) {
-          b.classList.add('correcta');
-        }
-        if (b === botonElemento && !esCorrecta) {
-          b.classList.add('incorrecta');
-        }
-      });
-      
-      // Guardar el intento del bloque en memoria local
-      quiz_intentosDeHoy.push({
-        pregunta_id: q.id,
-        es_correcta: esCorrecta,
-        puntos_obtenidos: puntosObtenidos
-      });
-      
-      // Inserción síncrona en servidor de Supabase
-      try {
-        const user = (await _supabase.auth.getUser()).data.user;
-        if (user) {
-          await _supabase.from('intentos_quiz').insert({
-            user_id: user.id,
-            pregunta_id: q.id,
-            es_correcta: esCorrecta,
-            puntos_obtenidos: puntosObtenidos
-          });
-          
-          if (esCorrecta) {
-            const { data: perfil } = await _supabase.from('perfiles').select('puntos').eq('id', user.id).single();
-            const nuevosPuntos = Number(((perfil?.puntos || 0) + puntosObtenidos).toFixed(2));
-            await _supabase.from('perfiles').update({ puntos: nuevosPuntos }).eq('id', user.id);
-            
-            const ptsHeader = document.getElementById('user-puntos-header');
-            if (ptsHeader) ptsHeader.textContent = `${nuevosPuntos} pts`;
-          }
-        }
-      } catch (e) {
-        console.error("Error salvando intento remoto:", e);
-      }
-      
-      // Configurar y abrir modal de explicación bloqueante
-      const boxExplicacion = document.getElementById('quiz-explicacion-container');
-      const veredictoTxt = document.getElementById('quiz-veredicto-texto');
-      const explicacionTxt = document.getElementById('quiz-explicacion-texto');
-      
-      if (esCorrecta) {
-        veredictoTxt.innerHTML = `<span style="color: #2ecc71;"><i class="fa-solid fa-circle-check"></i> ¡RESPUESTA CORRECTA! (+${puntosPorPregunta.toFixed(2)} pts)</span>`;
-        boxExplicacion.style.borderLeftColor = '#2ecc71';
-      } else {
-        veredictoTxt.innerHTML = `<span style="color: var(--color-accent-red);"><i class="fa-solid fa-circle-xmark"></i> INCORRECTO</span> <br><small style="color: var(--color-text-muted); font-size: 0.85rem; font-weight: 500;">La respuesta real era: <strong>${q.respuesta_correcta}</strong></small>`;
-        boxExplicacion.style.borderLeftColor = 'var(--color-accent-red)';
-      }
-      
-      explicacionTxt.textContent = q.explicacion || "No hay notas adicionales del anime para esta pregunta.";
-      boxExplicacion.classList.remove('oculto');
-      
-      // Desbloquear navegación mediante el botón físico inyectado
-      const btnSiguiente = document.getElementById('btn-siguiente-pregunta');
-      btnSiguiente.onclick = () => {
-        quiz_indiceActual++;
-        if (quiz_indiceActual >= totalPreguntas) {
-          mostrarPantallaFinal();
-        } else {
-          mostrarPreguntaActual();
-        }
-      };
-    }
-
-    // SENSOR ANTI-TRAMPAS ACTIVO (Monitoreo de visibilidad de pestaña)
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden' && (quiz_faseActual === 'lectura' || quiz_faseActual === 'respuesta')) {
-        console.warn("Módulo Anti-Trampas: Cambio de ventana detectado en fase activa.");
-        evaluarRespuesta("__TRAMPA_DETECTADA_POR_SISTEMA__", null);
+    document.addEventListener('visibilitychange', () => { 
+      if (document.visibilityState === 'hidden' && quiz_intentoActualId && !quiz_respondida) {
+        responderPregunta(null, true); 
       }
     });
+
+    async function responderPregunta(letra, trampa) {
+      if (quiz_respondida) return; 
+      
+      quiz_respondida = true; 
+      clearInterval(quiz_intervaloTimer);
+      
+      document.querySelectorAll('.quiz-opcion').forEach(b => b.disabled = true);
+      
+      const { data } = await supabase.rpc('responder_pregunta', { 
+        p_intento_id: quiz_intentoActualId, 
+        p_respuesta: letra, 
+        p_trampa_detectada: trampa 
+      });
+      
+      if (data) {
+        const res = Array.isArray(data) ? data[0] : data;
+        
+        document.querySelectorAll('.quiz-opcion').forEach(b => {
+          if (b.querySelector('.letra').textContent.toLowerCase() === res.respuesta_correcta) {
+            b.classList.add('correcta');
+          } else if (b.querySelector('.letra').textContent.toLowerCase() === letra) {
+            b.classList.add('incorrecta');
+          }
+        });
+        
+        const fb = document.getElementById('quiz-feedback');
+        fb.textContent = trampa ? 'Â¡Cambiaste de pestaÃ±a! Fallida.' : res.es_correcta ? `Â¡Correcto! +${res.puntos_obtenidos} pts` : 'Incorrecto o tiempo agotado.';
+        fb.className = `quiz-feedback ${res.es_correcta ? 'ok' : 'fail'}`;
+        
+        const intento = quiz_intentosDeHoy.find(i => i.id === quiz_intentoActualId);
+        
+        if (intento) { 
+          intento.respondido_en = new Date().toISOString(); 
+          intento.es_correcta = res.es_correcta; 
+          intento.puntos_obtenidos = res.puntos_obtenidos; 
+        }
+      }
+      
+      setTimeout(() => { 
+        quiz_indiceActual++; 
+        if (quiz_indiceActual >= quiz_preguntasDeHoy.length) {
+          mostrarPantallaFinal(); 
+        } else {
+          mostrarPreguntaActual(); 
+        }
+      }, 1600);
+    }
 
     function mostrarPantallaFinal() {
       clearInterval(quiz_intervaloTimer);
@@ -1017,28 +1574,28 @@
       document.getElementById('quiz-final').classList.remove('oculto');
       
       const totalPuntos = quiz_intentosDeHoy.reduce((s, i) => s + (i.puntos_obtenidos || 0), 0);
-      const acertadas = quiz_intentosDeHoy.filter(i => i.es_correcta).length;
-      const totalPreguntas = quiz_preguntasDeHoy.length || 20;
-      const porcentaje = ((acertadas / totalPreguntas) * 100).toFixed(0);
+      document.getElementById('quiz-final-puntaje').textContent = `+${totalPuntos} pts`;
       
-      document.getElementById('quiz-final-puntaje').textContent = `${porcentaje}% de Efectividad`;
-      document.getElementById('quiz-final-detalle').innerHTML = `Has sumado un total de <strong>${totalPuntos.toFixed(2)} / 10.0 puntos</strong> en este bloque.<br>Acertaste un total de ${acertadas} de ${totalPreguntas} preguntas analizadas.`;
+      const acertadas = quiz_intentosDeHoy.filter(i => i.es_correcta).length;
+      document.getElementById('quiz-final-detalle').textContent = `Acertaste ${acertadas} de ${quiz_preguntasDeHoy.length || 10} preguntas hoy.`;
     }
 
     function mostrarSinQuiz(msg) {
       document.getElementById('quiz-en-curso')?.classList.add('oculto');
       document.getElementById('quiz-final').classList.remove('oculto');
-      document.getElementById('quiz-final-puntaje').textContent = '—';
+      document.getElementById('quiz-final-puntaje').textContent = 'â€”';
       document.getElementById('quiz-final-detalle').textContent = msg;
     }
 
     // =================================================================
-    // ARRANQUE FINAL DE LA APLICACIÓN
+    // ARRANQUE FINAL DE LA APLICACIÃ“N
     // =================================================================
-    initSession().then(() => {
-      cargarQuizDelDia();
-      cargarFeedYoutube();
-      cargarPremiosComprados();
+    initSession().then(userId => {
+      if(userId) { 
+        cargarPremios(); 
+        cargarFeed(); 
+        iniciarQuiz(userId); 
+      }
     });
   </script>
 </body>
