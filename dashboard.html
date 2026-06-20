@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Me Gusta el Anime · Dashboard Pro</title>
 
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   
-  <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
@@ -147,7 +145,7 @@
 
     /* Indicador de carga inferior (Scroll Infinito) */
     .feed-loading { text-align: center; padding: var(--space-md); font-family: var(--font-mono); color: var(--color-accent-yellow); font-size: var(--fs-sm); }
-
+    
     /* =====================================================================
        TABS PANE (Contenido)
        ===================================================================== */
@@ -181,7 +179,6 @@
 <body>
 
   <div class="app-shell">
-    <!-- NAVBAR SUPERIOR (Logo y Puntos) -->
     <header class="navbar">
       <div class="navbar__logo">ME GUSTA<br>EL ANIME</div>
       <div class="navbar__usuario">
@@ -193,7 +190,6 @@
       </div>
     </header>
 
-    <!-- TOP NAV (AHORA ESTÁ ARRIBA COMO FACEBOOK) -->
     <nav class="top-nav">
       <div class="nav-item activo" onclick="app.cambiarTab('home', this)"><i class="fa-solid fa-house"></i></div>
       <div class="nav-item" onclick="app.cambiarTab('search', this)"><i class="fa-solid fa-magnifying-glass"></i></div>
@@ -202,10 +198,8 @@
       <div class="nav-item" onclick="app.abrirAjustes()"><i class="fa-solid fa-gear"></i></div>
     </nav>
 
-    <!-- ÁREA DE CONTENIDO (Pestañas con Scroll Independiente) -->
     <main class="main-content" id="main-scroll-container">
       
-      <!-- PESTAÑA 1: INICIO (FEED Y PREMIOS PERMANENTES) -->
       <div id="tab-home" class="tab-pane activa">
         <section>
           <h2 class="seccion-titulo">Premios del Torneo</h2>
@@ -221,7 +215,6 @@
         </section>
       </div>
 
-      <!-- PESTAÑA 2: BÚSQUEDA -->
       <div id="tab-search" class="tab-pane">
         <section>
           <h2 class="seccion-titulo" style="color: var(--color-accent-red);"><i class="fa-solid fa-magnifying-glass"></i> Explorar</h2>
@@ -236,28 +229,24 @@
         </section>
       </div>
 
-      <!-- PESTAÑA 3: ZONA ARCADE (DINÁMICA DESDE SUPABASE) -->
       <div id="tab-games" class="tab-pane">
         <section>
           <h2 class="seccion-titulo" style="color: var(--color-accent-red);"><i class="fa-solid fa-khanda"></i> Zona Arcade</h2>
           <div id="games-grid">
-            <!-- Cargando dinámicamente -->
-          </div>
+            </div>
         </section>
       </div>
 
-      <!-- PESTAÑA 4: QUIZ (DINÁMICA DESDE SUPABASE) -->
       <div id="tab-quiz" class="tab-pane">
         <section>
           <h2 class="seccion-titulo"><i class="fa-solid fa-brain" style="color: var(--color-accent-red);"></i> Zona Quiz</h2>
           <div id="quiz-grid">
-            <!-- Cargando dinámicamente -->
-          </div>
+            </div>
         </section>
       </div>
-    </main>
+          </main>
+          
 
-    <!-- MODAL DE AJUSTES (REDIRIGE EXTERNAMENTE) -->
     <div id="settings-overlay" class="modal-overlay" onclick="app.cerrarAjustes()"></div>
     <div id="settings-modal" class="modal-bottom-sheet">
       <div class="modal-handle"></div>
@@ -341,8 +330,7 @@
         contenedor.innerHTML += `<article class="premio-card ${etiqueta.clase}"><div class="premio-card__medalla">${etiqueta.medalla}</div><div class="premio-card__media">${mediaHTML}</div><div class="premio-card__titulo">${escapeHTML(premio.titulo)}</div></article>`;
       });
     }
-
-    // =====================================================================
+        // =====================================================================
     // DETECCIÓN Y LÓGICA DE SCROLL INFINITO
     // =====================================================================
     async function cargarFeed(reiniciar = false) {
@@ -448,7 +436,7 @@
       const contenedor = document.getElementById('quiz-grid');
       contenedor.innerHTML = '<div class="feed-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> CARGANDO QUIZZES...</div>';
       
-      const { data, error } = await supabase.from('quizzes').select('*').order('created_at', { ascending: false });
+      const { data, error } = await supabase.from('lista_quizzes').select('*').order('created_at', { ascending: false });
       if (error || !data) {
         contenedor.innerHTML = '<p style="color:var(--color-text-muted); text-align:center;">No se pudieron cargar los quizzes.</p>';
         return;
