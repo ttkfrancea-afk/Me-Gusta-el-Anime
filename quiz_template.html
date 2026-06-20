@@ -198,14 +198,20 @@
       const p = preguntas[indicePreguntaActual];
       const contenedor = document.getElementById('quiz-box');
       
-      const esCorrecta = (opcionSeleccionada === p.correcta);
+      // CIRUGÍA: Limpieza de espacios/mayúsculas y soporte para ambas columnas (correcta o respuesta)
+      const textoSeleccionado = opcionSeleccionada === 'a' ? p.opcion_a : opcionSeleccionada === 'b' ? p.opcion_b : opcionSeleccionada === 'c' ? p.opcion_c : p.opcion_d;
+      const letraBD = String(p.correcta || '').trim().toLowerCase();
+      const textoBD = String(p.respuesta || '').trim().toLowerCase();
+      
+      const esCorrecta = (opcionSeleccionada.trim().toLowerCase() === letraBD) || (String(textoSeleccionado).trim().toLowerCase() === textoBD);
       if (esCorrecta) aciertos++;
 
       let textoCorrecto = "";
-      if(p.correcta === 'a') textoCorrecto = p.opcion_a;
-      if(p.correcta === 'b') textoCorrecto = p.opcion_b;
-      if(p.correcta === 'c') textoCorrecto = p.opcion_c;
-      if(p.correcta === 'd') textoCorrecto = p.opcion_d;
+      if(letraBD === 'a' || textoBD === String(p.opcion_a).trim().toLowerCase()) textoCorrecto = p.opcion_a;
+      else if(letraBD === 'b' || textoBD === String(p.opcion_b).trim().toLowerCase()) textoCorrecto = p.opcion_b;
+      else if(letraBD === 'c' || textoBD === String(p.opcion_c).trim().toLowerCase()) textoCorrecto = p.opcion_c;
+      else if(letraBD === 'd' || textoBD === String(p.opcion_d).trim().toLowerCase()) textoCorrecto = p.opcion_d;
+      else textoCorrecto = p.correcta || p.respuesta;
 
       contenedor.innerHTML = `
         <div class="feedback-card">
