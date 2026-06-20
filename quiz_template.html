@@ -127,7 +127,7 @@
           return;
         }
 
-        preguntas = data;
+        preguntas = data.sort(() => 0.5 - Math.random()).slice(0, 20);
         const tema = preguntas[0];
         document.documentElement.style.setProperty('--color-primary', tema.color_primario);
         document.documentElement.style.setProperty('--color-secondary', tema.color_secundario);
