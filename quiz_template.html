@@ -54,7 +54,6 @@
     
     .sticker-container { width: 110px; height: 140px; position: relative; flex-shrink: 0; }
     
-    /* INYECCIÓN: Clases CSS para el efecto Jujutsu Kaisen */
     .character-sticker { 
       width: 100%; 
       height: 100%; 
@@ -75,7 +74,6 @@
     @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     
-    /* INYECCIÓN: Animaciones Keyframes para el Sticker */
     @keyframes stickerPop { 
       0% { transform: scale(0) rotate(-12deg); opacity: 0; } 
       70% { transform: scale(1.1) rotate(3deg); } 
@@ -97,7 +95,6 @@
   </div>
 
   <script>
-    // Conexión corregida utilizando tus credenciales reales
     const SUPABASE_URL = 'https://zccbphmebkpuzwbkgtse.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpjY2JwaG1lYmtwdXp3YmtndHNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0Nzk4OTEsImV4cCI6MjA5NzA1NTg5MX0.Pc3VBCZJDsVrn6cx5eelDF6vwrgs3X7uTI5Q1kNgvDY';
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -198,20 +195,46 @@
       const p = preguntas[indicePreguntaActual];
       const contenedor = document.getElementById('quiz-box');
       
-      // CIRUGÍA: Limpieza de espacios/mayúsculas y soporte para ambas columnas (correcta o respuesta)
-      const textoSeleccionado = opcionSeleccionada === 'a' ? p.opcion_a : opcionSeleccionada === 'b' ? p.opcion_b : opcionSeleccionada === 'c' ? p.opcion_c : p.opcion_d;
-      const letraBD = String(p.correcta || '').trim().toLowerCase();
-      const textoBD = String(p.respuesta || '').trim().toLowerCase();
-      
-      const esCorrecta = (opcionSeleccionada.trim().toLowerCase() === letraBD) || (String(textoSeleccionado).trim().toLowerCase() === textoBD);
-      if (esCorrecta) aciertos++;
+      // Obtenemos el texto completo de la opción que pulsó el usuario
+      let textoSeleccionado = "";
+      if(opcionSeleccionada === 'a') textoSeleccionado = p.opcion_a;
+      else if(opcionSeleccionada === 'b') textoSeleccionado = p.opcion_b;
+      else if(opcionSeleccionada === 'c') textoSeleccionado = p.opcion_c;
+      else if(opcionSeleccionada === 'd') textoSeleccionado = p.opcion_d;
 
+      // Limpieza exhaustiva
+      const selLetra = String(opcionSeleccionada || '').trim().toLowerCase();
+      const selTexto = String(textoSeleccionado || '').trim().toLowerCase();
+      const bdRespuesta = String(p.respuesta || '').trim().toLowerCase();
+      const bdCorrecta = String(p.correcta || '').trim().toLowerCase();
+
+      // DIAGNÓSTICO EN CONSOLA (Presiona F12 para inspeccionar si algo falla)
+      console.log("--- EVALUANDO PREGUNTA ---");
+      console.log("Letra pulsada:", selLetra);
+      console.log("Texto de opción pulsada:", selTexto);
+      console.log("Valor en columna 'respuesta' de BD:", bdRespuesta);
+      console.log("Valor en columna 'correcta' de BD:", bdCorrecta);
+
+      // Evaluación hiperflexible de acierto
+      const esCorrecta = (selLetra === bdRespuesta) || 
+                         (selLetra === bdCorrecta) || 
+                         (selTexto === bdRespuesta) || 
+                         (selTexto === bdCorrecta);
+
+      if (esCorrecta) {
+        aciertos++;
+      }
+
+      // Definir dinámicamente el texto que mostraremos en la tarjeta de respuesta correcta
       let textoCorrecto = "";
-      if(letraBD === 'a' || textoBD === String(p.opcion_a).trim().toLowerCase()) textoCorrecto = p.opcion_a;
-      else if(letraBD === 'b' || textoBD === String(p.opcion_b).trim().toLowerCase()) textoCorrecto = p.opcion_b;
-      else if(letraBD === 'c' || textoBD === String(p.opcion_c).trim().toLowerCase()) textoCorrecto = p.opcion_c;
-      else if(letraBD === 'd' || textoBD === String(p.opcion_d).trim().toLowerCase()) textoCorrecto = p.opcion_d;
-      else textoCorrecto = p.correcta || p.respuesta;
+      if (bdRespuesta === 'a' || bdCorrecta === 'a') textoCorrecto = p.opcion_a;
+      else if (bdRespuesta === 'b' || bdCorrecta === 'b') textoCorrecto = p.opcion_b;
+      else if (bdRespuesta === 'c' || bdCorrecta === 'c') textoCorrecto = p.opcion_c;
+      else if (bdRespuesta === 'd' || bdCorrecta === 'd') textoCorrecto = p.opcion_d;
+      else {
+        // Si la base de datos guardó directamente el texto completo ("Rey Vegeta"), usamos ese
+        textoCorrecto = p.respuesta || p.correcta || textoSeleccionado;
+      }
 
       contenedor.innerHTML = `
         <div class="feedback-card">
