@@ -436,7 +436,7 @@
       const contenedor = document.getElementById('quiz-grid');
       contenedor.innerHTML = '<div class="feed-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> CARGANDO QUIZZES...</div>';
       
-      const { data, error } = await supabase.from('lista_quizzes').select('*').order('created_at', { ascending: false });
+      const { data, error } = await supabase.from('quizzes').select('*').order('created_at', { ascending: false });
       if (error || !data) {
         contenedor.innerHTML = '<p style="color:var(--color-text-muted); text-align:center;">No se pudieron cargar los quizzes.</p>';
         return;
