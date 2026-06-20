@@ -330,7 +330,8 @@
         contenedor.innerHTML += `<article class="premio-card ${etiqueta.clase}"><div class="premio-card__medalla">${etiqueta.medalla}</div><div class="premio-card__media">${mediaHTML}</div><div class="premio-card__titulo">${escapeHTML(premio.titulo)}</div></article>`;
       });
     }
-        // =====================================================================
+
+    // =====================================================================
     // DETECCIÓN Y LÓGICA DE SCROLL INFINITO
     // =====================================================================
     async function cargarFeed(reiniciar = false) {
@@ -436,22 +437,47 @@
       const contenedor = document.getElementById('quiz-grid');
       contenedor.innerHTML = '<div class="feed-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> CARGANDO QUIZZES...</div>';
       
-      const { data, error } = await supabase.from('quizzes').select('*').order('created_at', { ascending: false });
+      // 1. Buscamos directamente en TU tabla principal
+      const { data, error } = await supabase.from('preguntas_quiz').select('anime_id, color_primario').order('created_at', { ascending: false });
+      
       if (error || !data) {
         contenedor.innerHTML = '<p style="color:var(--color-text-muted); text-align:center;">No se pudieron cargar los quizzes.</p>';
         return;
       }
 
+      // 2. Filtramos con JavaScript para extraer animes únicos y no repetir botones
+      const animesUnicos = {};
+      data.forEach(item => {
+        if(item.anime_id && !animesUnicos[item.anime_id]) {
+          animesUnicos[item.anime_id] = {
+            id: item.anime_id,
+            color: item.color_primario || 'var(--color-accent-red)'
+          };
+        }
+      });
+
+      const listaFinal = Object.values(animesUnicos);
+
       contenedor.innerHTML = '';
-      data.forEach(quiz => {
+      
+      if(listaFinal.length === 0) {
+        contenedor.innerHTML = '<p style="color:var(--color-text-muted); text-align:center;">No hay quizzes disponibles aún.</p>';
+        return;
+      }
+
+      // 3. Generamos los botones dinámicos apuntando al archivo correcto
+      listaFinal.forEach(quiz => {
+        // Capitalizamos la primera letra (ej. "onepiece" -> "Onepiece") para que se vea más profesional
+        const titulo = quiz.id.charAt(0).toUpperCase() + quiz.id.slice(1);
+        
         contenedor.innerHTML += `
-          <div class="game-card" onclick="window.location.href='${escapeHTML(quiz.url_archivo || 'juego-quiz.html?id=' + quiz.id)}'">
-            <div class="game-card__icon" style="border-color: var(--color-accent-red);">
-              <i class="fa-solid fa-brain" style="color: var(--color-accent-red);"></i>
+          <div class="game-card" onclick="window.location.href='quiz_template.html?anime=${escapeHTML(quiz.id)}'">
+            <div class="game-card__icon" style="border-color: ${escapeHTML(quiz.color)};">
+              <i class="fa-solid fa-brain" style="color: ${escapeHTML(quiz.color)};"></i>
             </div>
             <div class="game-card__info">
-              <h3>${escapeHTML(quiz.titulo)}</h3>
-              <p>${escapeHTML(quiz.descripcion || 'Responde y gana puntos para el torneo')}</p>
+              <h3>Quiz: ${escapeHTML(titulo)}</h3>
+              <p>Demuestra tu conocimiento y gana puntos</p>
             </div>
             <i class="fa-solid fa-arrow-up-right-from-square" style="color: var(--color-accent-yellow);"></i>
           </div>`;
