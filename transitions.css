@@ -1,0 +1,114 @@
+/* =====================================================================
+   OTAKU NEXUS · transitions.css
+   ---------------------------------------------------------------------
+   La firma visual del sitio: el "PORTAL". En vez de un fade genérico
+   entre el login y el dashboard, usamos un velo que se abre en iris
+   (clip-path circular) combinado con una tarjeta que se inclina en 3D
+   y se disuelve. El dashboard "nace" con el mismo velo cerrándose
+   hacia la barra inferior, y su contenido entra en cascada (stagger),
+   como una app nativa, no como una página web recargando.
+
+   Como son 2 documentos HTML distintos (no SPA), el truco es que el
+   velo ya empieza "cerrado" en dashboard.html (sin flash de contenido)
+   y se abre con JS apenas el DOM está listo.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   EL VELO ("PORTAL")
+   --------------------------------------------------------------------- */
+.portal-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 50%, var(--color-plasma-deep) 0%, var(--color-bg) 45%, #000 100%);
+  clip-path: circle(0% at 50% 50%);
+  opacity: 0;
+}
+
+/* Estado inicial en el LOGIN: invisible, listo para abrirse hacia afuera */
+.portal-veil.veil--cerrando {
+  animation: portalCerrar 0.75s var(--ease-portal) forwards;
+}
+
+@keyframes portalCerrar {
+  0%   { clip-path: circle(0% at var(--origen-x, 50%) var(--origen-y, 50%)); opacity: 0; }
+  15%  { opacity: 1; }
+  100% { clip-path: circle(150% at var(--origen-x, 50%) var(--origen-y, 50%)); opacity: 1; }
+}
+
+/* Estado inicial en el DASHBOARD: ya cubierto por completo (evita flash) */
+.portal-veil.veil--cubierto {
+  clip-path: circle(150% at 50% 100%);
+  opacity: 1;
+}
+
+.portal-veil.veil--abriendo {
+  animation: portalAbrir 0.85s var(--ease-portal) forwards;
+}
+
+@keyframes portalAbrir {
+  0%   { clip-path: circle(150% at 50% 100%); opacity: 1; }
+  85%  { opacity: 1; }
+  100% { clip-path: circle(0% at 50% 100%); opacity: 0; }
+}
+
+/* ---------------------------------------------------------------------
+   LA TARJETA DE LOGIN "CAYENDO" HACIA EL PORTAL (3D)
+   --------------------------------------------------------------------- */
+.portal-saliendo {
+  animation: cardHaciaElPortal 0.6s var(--ease-portal) forwards;
+  transform-style: preserve-3d;
+}
+
+@keyframes cardHaciaElPortal {
+  0% {
+    transform: perspective(1400px) rotateX(0deg) scale(1);
+    opacity: 1;
+    filter: blur(0px);
+  }
+  100% {
+    transform: perspective(1400px) rotateX(14deg) translateY(-30px) scale(0.88);
+    opacity: 0;
+    filter: blur(10px);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   ENTRADA EN CASCADA DEL DASHBOARD (STAGGER 3D)
+   --------------------------------------------------------------------- */
+.stagger-in {
+  opacity: 0;
+  transform: perspective(900px) rotateX(8deg) translateY(18px);
+  animation: entradaEnCascada 0.6s var(--ease-pop) forwards;
+  animation-delay: var(--stagger-delay, 0s);
+}
+
+@keyframes entradaEnCascada {
+  to {
+    opacity: 1;
+    transform: perspective(900px) rotateX(0deg) translateY(0);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   ENTRADA SUAVE DEL LOGIN AL CARGAR LA PÁGINA POR PRIMERA VEZ
+   --------------------------------------------------------------------- */
+.entrada-login {
+  animation: entradaLogin 0.8s var(--ease-pop) both;
+}
+@keyframes entradaLogin {
+  from { opacity: 0; transform: perspective(1400px) rotateX(-6deg) translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: perspective(1400px) rotateX(0deg) translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portal-veil, .portal-saliendo, .stagger-in, .entrada-login {
+    animation: none !important;
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    clip-path: none !important;
+  }
+}
