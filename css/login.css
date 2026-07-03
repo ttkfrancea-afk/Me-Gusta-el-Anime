@@ -1,17 +1,12 @@
 /* =====================================================================
    OTAKU NEXUS · login.css
    ---------------------------------------------------------------------
-   Estilos exclusivos de index.html (pantalla de Login / Registro).
-   Estructura: un panel "split" (dividido en 2) dentro de una tarjeta
-   de cristal. El lado izquierdo muestra imágenes de fondo dinámicas
-   (cargadas desde Supabase) y el lado derecho contiene los
-   formularios de Login y Registro, que se alternan con una animación
-   de deslizamiento.
+   Pantalla de Login / Registro. Panel dividido en 2: lado visual
+   (slides abstractos tipo "cover art", listos para reemplazarse por
+   banners reales de Supabase) y lado de formularios en vidrio con
+   tinte rojo (no vidrio blanco genérico).
    ===================================================================== */
 
-/* ---------------------------------------------------------------------
-   Contenedor de toda la pantalla
-   --------------------------------------------------------------------- */
 .pantalla-login {
   min-height: 100vh;
   width: 100%;
@@ -33,25 +28,28 @@
   grid-template-columns: 1fr 1fr;
   overflow: hidden;
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card-lifted);
 }
 
-/* ---------- LADO VISUAL (imágenes dinámicas de anime) ---------- */
+/* ---------- LADO VISUAL ---------- */
 .panel-visual {
   position: relative;
   overflow: hidden;
-  /* Orden por defecto: visual a la izquierda */
   order: 1;
-  transition: order var(--transition-mid);
 }
 
+/* Slides abstractos: degradados en capas + grano sutil, simulan
+   "cover art" de anime sin usar arte con derechos de autor. Cuando
+   conectemos los banners reales de Supabase, esta clase se reemplaza
+   por background-image en el JS y el resto del efecto se mantiene. */
 .panel-visual__slide {
   position: absolute;
   inset: 0;
+  opacity: 0;
+  transform: scale(1.08);
+  transition: opacity 1.4s ease, transform 8s ease;
   background-size: cover;
   background-position: center;
-  opacity: 0;
-  transform: scale(1.05);
-  transition: opacity 1.2s ease, transform 6s ease;
 }
 
 .panel-visual__slide.activa {
@@ -59,18 +57,42 @@
   transform: scale(1);
 }
 
-/* Degradado para que el texto/branding se lea bien sobre la imagen */
+.panel-visual__slide--v1 {
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255, 49, 49, 0.55), transparent 55%),
+    radial-gradient(circle at 80% 75%, rgba(67, 230, 255, 0.25), transparent 45%),
+    linear-gradient(160deg, #0c0c0f 0%, #030303 60%);
+}
+.panel-visual__slide--v2 {
+  background:
+    radial-gradient(circle at 75% 25%, rgba(245, 209, 66, 0.35), transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(255, 49, 49, 0.45), transparent 50%),
+    linear-gradient(200deg, #0c0c0f 0%, #030303 65%);
+}
+.panel-visual__slide--v3 {
+  background:
+    radial-gradient(circle at 50% 15%, rgba(67, 230, 255, 0.3), transparent 50%),
+    radial-gradient(circle at 60% 90%, rgba(255, 49, 49, 0.4), transparent 50%),
+    linear-gradient(190deg, #0c0c0f 0%, #030303 60%);
+}
+
+/* Grano sutil sobre los slides, para que no se vean "planos" */
+.panel-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 .panel-visual::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(3, 3, 3, 0.15) 0%,
-    rgba(3, 3, 3, 0.55) 70%,
-    rgba(3, 3, 3, 0.9) 100%
-  );
-  z-index: 2;
+  background: linear-gradient(180deg, rgba(3, 3, 3, 0.1) 0%, rgba(3, 3, 3, 0.55) 70%, rgba(3, 3, 3, 0.92) 100%);
+  z-index: 3;
 }
 
 .panel-visual__branding {
@@ -78,31 +100,24 @@
   bottom: var(--space-lg);
   left: var(--space-lg);
   right: var(--space-lg);
-  z-index: 3;
+  z-index: 4;
 }
 
 .panel-visual__branding h1 {
   font-family: var(--font-display);
   font-size: var(--fs-3xl);
   line-height: 1;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--tracking-display-tight);
   color: #fff;
   text-shadow: 0 0 24px var(--color-red-glow);
 }
 
-/* INYECCIÓN DEL ESTILO LOGO GRAFFITI AMARILLO */
 .logo-graffiti {
   font-family: var(--font-logo);
   font-size: var(--fs-3xl);
   line-height: 1.1;
   color: var(--color-accent-yellow) !important;
-  text-shadow: 
-    3px 3px 0 #000, 
-    -1px -1px 0 #000,  
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-    1px 1px 0 #000,
-    0 10px 20px rgba(0,0,0,0.8) !important;
+  text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 10px 20px rgba(0,0,0,0.8) !important;
   transform: rotate(-3deg);
   margin-bottom: var(--space-sm);
 }
@@ -114,10 +129,10 @@
   max-width: 320px;
 }
 
-/* ---------- LADO DE FORMULARIOS ---------- */
+/* ---------- LADO DE FORMULARIOS (vidrio con tinte de marca) ---------- */
 .panel-formularios {
   position: relative;
-  background: var(--glass-bg-strong);
+  background: linear-gradient(160deg, var(--glass-bg-strong), var(--glass-tint-red));
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
   border-left: 1px solid var(--glass-border);
@@ -128,14 +143,6 @@
   order: 2;
 }
 
-/* ---------------------------------------------------------------------
-   ANIMACIÓN DE DESLIZAMIENTO ENTRE LOGIN / REGISTRO
-   ---------------------------------------------------------------------
-   Cada formulario ocupa el 100% del panel-formularios. Usamos
-   "translateX" para deslizar el que está activo dentro de la vista y
-   sacar el inactivo hacia un costado. El JS solo agrega/quita la
-   clase ".activo" en <body> o en cada formulario.
-   --------------------------------------------------------------------- */
 .formularios-wrapper {
   position: relative;
   width: 100%;
@@ -162,7 +169,7 @@
 .formulario__titulo {
   font-family: var(--font-display);
   font-size: var(--fs-2xl);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-display-tight);
   text-transform: uppercase;
   margin-bottom: var(--space-sm);
 }
@@ -190,11 +197,10 @@
   font-size: var(--fs-sm);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  min-height: 48px;
+  padding: 0 0.3rem;
 }
-
-.formulario__pie button:hover {
-  text-decoration: underline;
-}
+.formulario__pie button:hover { text-decoration: underline; }
 
 .olvido-password {
   display: block;
@@ -204,63 +210,26 @@
   margin-top: -0.6rem;
   margin-bottom: var(--space-md);
   cursor: pointer;
+  min-height: 24px;
 }
+.olvido-password:hover { color: var(--color-accent-yellow); }
 
-.olvido-password:hover {
-  color: var(--color-accent-yellow);
-}
-
-/* ---------------------------------------------------------------------
-   ZONA DE MENSAJES (alerta amarilla de verificación, errores, éxito)
-   --------------------------------------------------------------------- */
-.zona-mensajes {
-  margin-top: var(--space-md);
-}
-
-.zona-mensajes:empty {
-  display: none;
-}
+.zona-mensajes { margin-top: var(--space-md); }
+.zona-mensajes:empty { display: none; }
 
 /* ---------------------------------------------------------------------
-   RESPONSIVE: en pantallas angostas, el panel visual se convierte en
-   una franja superior y los formularios ocupan todo el ancho.
+   RESPONSIVE — mobile first real: en pantallas angostas el visual
+   se convierte en franja superior compacta y los formularios ganan
+   todo el protagonismo (que es lo que se usa el 90% del tiempo desde
+   un teléfono).
    --------------------------------------------------------------------- */
 @media (max-width: 760px) {
-  .split-panel {
-    grid-template-columns: 1fr;
-    min-height: auto;
-  }
-
-  .panel-visual {
-    order: 1;
-    min-height: 220px;
-  }
-
-  .panel-formularios {
-    order: 2;
-    border-left: none;
-    border-top: 1px solid var(--glass-border);
-    padding: var(--space-lg) var(--space-md);
-  }
-
-  .panel-visual__branding h1 {
-    font-size: var(--fs-2xl);
-  }
+  .split-panel { grid-template-columns: 1fr; min-height: auto; border-radius: var(--radius-md); }
+  .panel-visual { order: 1; min-height: 200px; }
+  .panel-formularios { order: 2; border-left: none; border-top: 1px solid var(--glass-border); padding: var(--space-lg) var(--space-md); }
+  .panel-visual__branding h1 { font-size: var(--fs-2xl); }
+  .pantalla-login { padding: 0; }
+  .split-panel { border-radius: 0; min-height: 100vh; }
 }
 
-/* Clase utilitaria para ocultar elementos sin quitarlos del DOM */
-.oculto {
-  display: none !important;
-}
-
-/* Scrollbar oscuro y delgado, acorde al tema */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-bg-soft);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-accent-red);
-  border-radius: 4px;
-}
+.oculto { display: none !important; }
