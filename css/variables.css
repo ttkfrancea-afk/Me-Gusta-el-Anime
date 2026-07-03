@@ -1,55 +1,58 @@
 /* =====================================================================
    OTAKU NEXUS · variables.css
    ---------------------------------------------------------------------
-   Aquí viven TODOS los "tokens" de diseño: colores, tipografías,
-   espaciados y efectos de cristal (glassmorphism).
-   Este archivo se importa PRIMERO en cada HTML, antes que los demás
-   CSS, para que :root esté disponible en todas las páginas.
+   Tokens de diseño. Se importa PRIMERO en cada HTML.
 
-   Estilo "Manga Noir": fondo casi negro, acentos rojo sangre y
-   amarillo alerta, tipografía display condensada y agresiva (al
-   estilo de las portadas de anime de acción) combinada con una
-   tipografía técnica/competitiva para la interfaz.
+   Dirección visual: "Manga Noir Premium" — la identidad negro+rojo
+   original, refinada con la disciplina de espaciado/tipografía que
+   pediste (estilo Vercel) y UN acento adicional ("plasma", cian
+   eléctrico) reservado para momentos especiales: la transición de
+   login → dashboard y detalles de foco/hover. El rojo sigue siendo
+   el protagonista; el plasma es la sorpresa, no el fondo.
    ===================================================================== */
 
-/* Tipografías de Google Fonts:
-   - "Bebas Neue"  -> títulos grandes, condensados, tipo "póster".
-   - "Rajdhani"    -> textos de interfaz, botones, labels (look "gamer").
-   - "Share Tech Mono" -> números, temporizador del quiz, puntajes. 
-   - "Permanent Marker" -> Logo estilo graffiti. */
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
 
 :root {
-  /* ---------- COLORES BASE (definidos por el brief) ---------- */
-  --color-bg: #030303;            /* Fondo principal, negro casi puro */
-  --color-bg-soft: #0c0c0f;        /* Fondo secundario para tarjetas sólidas */
-  --color-accent-red: #ff3131;     /* Rojo sangre: acciones, errores, marca */
-  --color-accent-yellow: #f5d142;  /* Amarillo alerta: avisos, verificación */
+  /* ---------- COLORES BASE (sin cambios, todo lo existente sigue igual) ---------- */
+  --color-bg: #030303;
+  --color-bg-soft: #0c0c0f;
+  --color-accent-red: #ff3131;
+  --color-accent-yellow: #f5d142;
 
-  /* ---------- COLORES DERIVADOS ---------- */
-  --color-text: #f5f5f5;           /* Texto principal sobre fondo oscuro */
-  --color-text-muted: #a3a3ad;     /* Texto secundario / descripciones */
+  --color-text: #f5f5f5;
+  --color-text-muted: #a3a3ad;
   --color-border: rgba(255, 255, 255, 0.08);
 
-  /* Glassmorphism: superficies traslúcidas con blur */
   --glass-bg: rgba(255, 255, 255, 0.04);
   --glass-bg-strong: rgba(255, 255, 255, 0.07);
   --glass-border: rgba(255, 255, 255, 0.12);
   --glass-blur: 16px;
 
-  /* Variantes del rojo y amarillo para hover / sombras / glow */
   --color-red-glow: rgba(255, 49, 49, 0.45);
   --color-yellow-glow: rgba(245, 209, 66, 0.35);
   --color-red-soft: rgba(255, 49, 49, 0.12);
   --color-yellow-soft: rgba(245, 209, 66, 0.12);
 
-  /* ---------- TIPOGRAFÍA ---------- */
-  --font-logo: 'Permanent Marker', cursive;           /* Logo Graffiti */
-  --font-display: 'Bebas Neue', 'Oswald', sans-serif; /* Títulos / logos */
-  --font-body: 'Rajdhani', 'Segoe UI', sans-serif;     /* Interfaz general */
-  --font-mono: 'Share Tech Mono', monospace;            /* Números / timer */
+  /* ---------- NUEVO: ACENTO "PLASMA" (uso deliberadamente escaso) ----------
+     Solo para: la transición portal, anillos de foco, y un brillo muy
+     puntual en tarjetas premium. Si empieza a aparecer en más de 2-3
+     lugares por pantalla, es una señal de que se está sobre-usando. */
+  --color-plasma: #43e6ff;
+  --color-plasma-deep: #0f7fa8;
+  --color-plasma-glow: rgba(67, 230, 255, 0.45);
+  --color-plasma-soft: rgba(67, 230, 255, 0.1);
 
-  /* Escala tipográfica */
+  /* Vidrio con tinte rojo, para tarjetas que quieres que se sientan
+     "de marca" en vez de vidrio neutro genérico */
+  --glass-tint-red: rgba(255, 49, 49, 0.05);
+
+  /* ---------- TIPOGRAFÍA (misma familia tipográfica, mismo ADN) ---------- */
+  --font-logo: 'Permanent Marker', cursive;
+  --font-display: 'Bebas Neue', 'Oswald', sans-serif;
+  --font-body: 'Rajdhani', 'Segoe UI', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+
   --fs-xs: 0.75rem;
   --fs-sm: 0.875rem;
   --fs-base: 1rem;
@@ -57,6 +60,11 @@
   --fs-xl: 1.75rem;
   --fs-2xl: 2.5rem;
   --fs-3xl: 4rem;
+
+  /* Tracking: negativo en display grande (como pediste, estilo Vercel),
+     los títulos condensados tipo Bebas Neue lo agradecen en tamaños XL */
+  --tracking-display-tight: -0.01em;
+  --leading-body: 1.6;
 
   /* ---------- ESPACIADOS ---------- */
   --space-xs: 0.4rem;
@@ -72,13 +80,27 @@
   --transition-fast: 0.18s ease;
   --transition-mid: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 
+  /* Curvas nuevas para las animaciones "cinemáticas" (portal, stagger) */
+  --ease-portal: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+
   /* ---------- SOMBRAS ---------- */
   --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.55);
+  --shadow-card-lifted: 0 20px 60px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+}
+
+/* Respeta a las personas que piden menos movimiento en su sistema */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* =====================================================================
-   RESET BÁSICO
-   Aplica a TODAS las páginas (index, dashboard, admin).
+   RESET BÁSICO — aplica a TODAS las páginas
    ===================================================================== */
 * {
   margin: 0;
@@ -95,30 +117,26 @@ body {
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: var(--fs-base);
-  line-height: 1.5;
+  line-height: var(--leading-body);
   -webkit-font-smoothing: antialiased;
-  /* Textura sutil de "ruido" tipo manga sobre el fondo negro */
   background-image:
     radial-gradient(circle at 15% 20%, rgba(255, 49, 49, 0.06), transparent 35%),
     radial-gradient(circle at 85% 80%, rgba(245, 209, 66, 0.05), transparent 35%);
   background-attachment: fixed;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+a { color: inherit; text-decoration: none; }
+img, iframe, video { max-width: 100%; display: block; }
 
-img, iframe, video {
-  max-width: 100%;
-  display: block;
+/* Foco visible y accesible en todo el sitio, con el acento plasma */
+:focus-visible {
+  outline: 2px solid var(--color-plasma);
+  outline-offset: 2px;
 }
 
 /* =====================================================================
-   ELEMENTOS REUTILIZABLES (botones, inputs, tarjetas de cristal)
+   ELEMENTOS REUTILIZABLES
    ===================================================================== */
-
-/* Tarjeta base con efecto "vidrio esmerilado" */
 .glass {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -128,11 +146,9 @@ img, iframe, video {
   box-shadow: var(--shadow-card);
 }
 
-/* Título "estilo poster": grande, condensado, con un trazo rojo
-   debajo a modo de "tachón de tinta" (firma visual del proyecto). */
 .titulo-poster {
   font-family: var(--font-display);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-display-tight);
   text-transform: uppercase;
   position: relative;
   display: inline-block;
@@ -149,7 +165,6 @@ img, iframe, video {
   border-radius: 2px;
 }
 
-/* Botón primario (rojo sangre) */
 .btn {
   font-family: var(--font-body);
   font-weight: 600;
@@ -157,6 +172,7 @@ img, iframe, video {
   text-transform: uppercase;
   font-size: var(--fs-sm);
   padding: var(--space-sm) var(--space-lg);
+  min-height: 48px;
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -168,113 +184,58 @@ img, iframe, video {
   color: #fff;
   box-shadow: 0 6px 20px var(--color-red-glow);
 }
-
-.btn-primario:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px var(--color-red-glow);
-}
+.btn-primario:hover { transform: translateY(-2px); box-shadow: 0 10px 28px var(--color-red-glow); }
+.btn-primario:active { transform: translateY(0) scale(0.98); }
 
 .btn-secundario {
   background: transparent;
   color: var(--color-text);
   border: 1px solid var(--glass-border);
 }
+.btn-secundario:hover { border-color: var(--color-accent-red); color: var(--color-accent-red); }
 
-.btn-secundario:hover {
-  border-color: var(--color-accent-red);
-  color: var(--color-accent-red);
-}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
 
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none !important;
-}
-
-/* Campos de formulario */
-.input-grupo {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-  margin-bottom: var(--space-md);
-}
-
-.input-grupo label {
-  font-size: var(--fs-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--color-text-muted);
-}
-
-.input-grupo input,
-.input-grupo select,
-.input-grupo textarea {
+.input-grupo { display: flex; flex-direction: column; gap: var(--space-xs); margin-bottom: var(--space-md); }
+.input-grupo label { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); }
+.input-grupo input, .input-grupo select, .input-grupo textarea {
   background: rgba(0, 0, 0, 0.35);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-sm);
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1rem;
+  min-height: 48px;
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: var(--fs-base);
   outline: none;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
-
-.input-grupo input:focus,
-.input-grupo select:focus,
-.input-grupo textarea:focus {
+.input-grupo input:focus, .input-grupo select:focus, .input-grupo textarea:focus {
   border-color: var(--color-accent-red);
   box-shadow: 0 0 0 3px var(--color-red-soft);
 }
 
-/* Fila para combinar selector de país + campo de teléfono / correo */
-.input-fila {
-  display: flex;
-  gap: var(--space-sm);
-}
+.input-fila { display: flex; gap: var(--space-sm); }
+.input-fila .input-grupo { flex: 1; }
+.input-fila .input-grupo.codigo-pais { flex: 0 0 110px; }
 
-.input-fila .input-grupo {
-  flex: 1;
-}
-
-.input-fila .input-grupo.codigo-pais {
-  flex: 0 0 110px;
-}
-
-/* Alerta amarilla de verificación (usada en index.html) */
 .alerta-amarilla {
-  background: var(--color-yellow-soft);
-  border: 1px solid var(--color-accent-yellow);
-  color: var(--color-accent-yellow);
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: var(--fs-sm);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-sm);
-  text-align: center;
+  background: var(--color-yellow-soft); border: 1px solid var(--color-accent-yellow); color: var(--color-accent-yellow);
+  font-family: var(--font-body); font-weight: 600; font-size: var(--fs-sm);
+  padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); text-align: center;
   box-shadow: 0 0 24px var(--color-yellow-glow);
 }
-
-/* Alerta roja de error genérico */
 .alerta-roja {
-  background: var(--color-red-soft);
-  border: 1px solid var(--color-accent-red);
-  color: var(--color-accent-red);
-  font-weight: 600;
-  font-size: var(--fs-sm);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-sm);
-  text-align: center;
+  background: var(--color-red-soft); border: 1px solid var(--color-accent-red); color: var(--color-accent-red);
+  font-weight: 600; font-size: var(--fs-sm); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); text-align: center;
+}
+.alerta-verde {
+  background: rgba(76, 217, 123, 0.12); border: 1px solid #4cd97b; color: #4cd97b;
+  font-weight: 600; font-size: var(--fs-sm); padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); text-align: center;
 }
 
-/* Mensaje de éxito (verde sutil, sin romper la paleta) */
-.alerta-verde {
-  background: rgba(76, 217, 123, 0.12);
-  border: 1px solid #4cd97b;
-  color: #4cd97b;
-  font-weight: 600;
-  font-size: var(--fs-sm);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-sm);
-  text-align: center;
-}
+.oculto { display: none !important; }
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--color-bg-soft); }
+::-webkit-scrollbar-thumb { background: var(--color-accent-red); border-radius: 4px; }
