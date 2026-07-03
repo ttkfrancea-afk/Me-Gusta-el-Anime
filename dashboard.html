@@ -3,180 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Me Gusta el Anime · Dashboard Pro</title>
+  <title>Me Gusta el Anime · Dashboard</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="css/transitions.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <style>
-    /* =====================================================================
-       VARIABLES GLOBALES Y RESET
-       ===================================================================== */
-    :root {
-      --color-bg: #030303; 
-      --color-bg-soft: #0c0c0f;
-      --color-accent-red: #ff3131; 
-      --color-accent-yellow: #f5d142;
-      --color-text: #f5f5f5; 
-      --color-text-muted: #a3a3ad;
-      --glass-border: rgba(255, 255, 255, 0.12); 
-      --glass-bg: rgba(255, 255, 255, 0.04);
-      --color-red-glow: rgba(255, 49, 49, 0.45); 
-      --color-yellow-glow: rgba(245, 209, 66, 0.35);
-      
-      --font-logo: 'Permanent Marker', cursive;
-      --font-display: 'Bebas Neue', 'Oswald', sans-serif;
-      --font-body: 'Rajdhani', 'Segoe UI', sans-serif;
-      --font-mono: 'Share Tech Mono', monospace;
-      
-      --fs-xs: 0.75rem; --fs-sm: 0.875rem; --fs-base: 1rem; 
-      --fs-lg: 1.25rem; --fs-xl: 1.75rem; --fs-2xl: 2.5rem; 
-      
-      --space-xs: 0.4rem; --space-sm: 0.8rem; --space-md: 1.4rem; --space-lg: 2.2rem;
-      --radius-sm: 8px; --radius-md: 14px; --radius-lg: 24px;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; overflow: hidden; } /* Evita doble scroll en móviles */
-    
-    body { 
-      background-color: var(--color-bg); color: var(--color-text); 
-      font-family: var(--font-body); font-size: var(--fs-base); 
-      line-height: 1.5; -webkit-font-smoothing: antialiased; 
-    }
-    a { color: inherit; text-decoration: none; }
-    button { cursor: pointer; border: none; outline: none; }
-
-    /* =====================================================================
-       DISEÑO BASE (DASHBOARD HUB)
-       ===================================================================== */
-    .app-shell { 
-      max-width: 600px; margin: 0 auto; height: 100vh; 
-      display: flex; flex-direction: column; position: relative; 
-      background-color: var(--color-bg); box-shadow: 0 0 30px rgba(0,0,0,0.8); 
-    }
-    
-    .navbar { 
-      display: flex; align-items: center; justify-content: space-between; 
-      padding: var(--space-sm) var(--space-md); z-index: 50; 
-      border-bottom: 1px solid var(--glass-border); 
-      background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(10px); 
-      flex-shrink: 0;
-    }
-    
-    .navbar__logo { 
-      font-family: var(--font-logo); font-size: var(--fs-xl); 
-      color: var(--color-accent-yellow); text-transform: uppercase; 
-      text-shadow: 2px 2px 0px #000; line-height: 1.1;
-    }
-    
-    .navbar__usuario { display: flex; align-items: center; gap: var(--space-sm); }
-    .navbar__puntos { font-family: var(--font-mono); font-size: var(--fs-lg); color: var(--color-accent-yellow); display: flex; align-items: center; gap: 0.4rem; }
-    .navbar__puntos .etiqueta { font-family: var(--font-body); font-size: var(--fs-xs); text-transform: uppercase; color: var(--color-text-muted); }
-
-    /* =====================================================================
-       NUEVA NAVEGACIÓN SUPERIOR (ESTILO FACEBOOK)
-       ===================================================================== */
-    .top-nav { 
-      width: 100%; height: 60px; display: flex; justify-content: space-around; 
-      align-items: center; z-index: 49; border-bottom: 1px solid var(--glass-border); 
-      background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(15px); flex-shrink: 0;
-    }
-    .top-nav .nav-item { 
-      color: var(--color-text-muted); font-size: 1.5rem; cursor: pointer; 
-      transition: all 0.3s; position: relative; width: 50px; text-align: center; 
-      padding: 10px 0;
-    }
-    .top-nav .nav-item.activo { 
-      color: #fff; text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); 
-    }
-    /* La rayita indicadora ahora sale por debajo del icono */
-    .top-nav .nav-item.activo::after { 
-      content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); 
-      width: 25px; height: 3px; background: var(--color-accent-red); 
-      border-radius: 2px; box-shadow: 0 0 8px var(--color-accent-red); 
-    }
-
-    /* CONTENEDOR PRINCIPAL AJUSTADO */
-    .main-content { 
-      flex: 1; overflow-y: auto; 
-      /* Dejamos un margen seguro solo abajo para que el último video no se pegue al marco del celular */
-      padding: var(--space-sm) var(--space-md) calc(40px + env(safe-area-inset-bottom)) var(--space-md); 
-      scroll-behavior: smooth; 
-    }
-    .main-content::-webkit-scrollbar { display: none; }
-
-    .seccion-titulo { 
-      font-family: var(--font-display); font-size: var(--fs-xl); letter-spacing: 0.08em; 
-      text-transform: uppercase; margin-bottom: var(--space-sm); position: relative; 
-      padding-left: var(--space-sm); color: #fff; margin-top: 1.5rem;
-    }
-    .seccion-titulo::before { 
-      content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; 
-      width: 4px; background: var(--color-accent-red); border-radius: 2px; 
-    }
-
-    /* =====================================================================
-       PREMIOS Y FEED
-       ===================================================================== */
-    .premios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-sm); }
-    .premio-card { padding: var(--space-sm); text-align: center; border-radius: var(--radius-md); background: var(--glass-bg); border: 1px solid var(--glass-border); }
-    .premio-card__medalla { font-family: var(--font-display); font-size: var(--fs-xl); }
-    .premio-card--oro .premio-card__medalla { color: #ffd700; text-shadow: 0 0 10px rgba(255,215,0,0.5); }
-    .premio-card--plata .premio-card__medalla { color: #d8d8e0; }
-    .premio-card--bronce .premio-card__medalla{ color: #d18a4a; }
-    .premio-card__media { width: 100%; aspect-ratio: 1/1; border-radius: var(--radius-sm); overflow: hidden; margin: var(--space-xs) 0; background: rgba(0,0,0,0.4); }
-    .premio-card__media img, .premio-card__media video { width: 100%; height: 100%; object-fit: cover; }
-    .premio-card__titulo { font-weight: 700; font-size: var(--fs-xs); color: #fff; }
-    
-    .feed-filtros { display: flex; gap: var(--space-xs); margin-bottom: var(--space-md); overflow-x: auto; padding-bottom: 5px; }
-    .feed-filtros::-webkit-scrollbar { display: none; }
-    .feed-filtros button { font-family: var(--font-body); font-size: var(--fs-xs); text-transform: uppercase; padding: 0.4rem 0.8rem; border-radius: 20px; border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--color-text-muted); white-space: nowrap; }
-    .feed-filtros button.activo { border-color: var(--color-accent-red); color: var(--color-accent-red); background: rgba(255,49,49,0.1); }
-    
-    .feed-grid { display: flex; flex-direction: column; gap: var(--space-lg); }
-    .feed-card { overflow: hidden; border-radius: var(--radius-md); border: 1px solid var(--color-accent-red); box-shadow: 0 0 15px var(--color-red-glow), inset 0 0 10px var(--color-red-glow); background: #050505; }
-    .feed-card__video { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; }
-    .feed-card__video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-    .feed-card__info { padding: var(--space-sm) var(--space-md); display: flex; flex-direction: column; gap: 5px; }
-    .feed-card__categoria { font-size: var(--fs-xs); color: var(--color-accent-red); text-transform: uppercase; font-weight: 700; }
-    .feed-card__titulo { font-weight: 700; font-size: var(--fs-sm); color: #fff; }
-
-    /* Indicador de carga inferior (Scroll Infinito) */
-    .feed-loading { text-align: center; padding: var(--space-md); font-family: var(--font-mono); color: var(--color-accent-yellow); font-size: var(--fs-sm); }
-    
-    /* =====================================================================
-       TABS PANE (Contenido)
-       ===================================================================== */
-    .tab-pane { display: none; animation: fadeIn 0.3s ease; }
-    .tab-pane.activa { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* =====================================================================
-       MODALES Y COMPONENTES
-       ===================================================================== */
-    .modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.8); z-index: 101; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-    .modal-overlay.activo { opacity: 1; pointer-events: auto; }
-    .modal-bottom-sheet { position: absolute; bottom: 0; left: 0; width: 100%; border-radius: var(--radius-lg) var(--radius-lg) 0 0; z-index: 102; padding: var(--space-lg); transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--glass-border); }
-    .modal-bottom-sheet.abierto { transform: translateY(0); box-shadow: 0 -10px 40px rgba(0,0,0,0.8); }
-    .modal-handle { width: 40px; height: 5px; background: var(--glass-border); border-radius: 10px; margin: 0 auto 20px auto; }
-    .settings-btn { width: 100%; display: flex; align-items: center; gap: 15px; padding: 15px 10px; background: transparent; border-bottom: 1px solid var(--glass-border); color: var(--color-text); font-family: var(--font-body); font-size: var(--fs-base); text-align: left; }
-    .settings-btn i { width: 20px; text-align: center; color: var(--color-text-muted); }
-    
-    .search-container { position: relative; border-radius: var(--radius-md); background: var(--glass-bg); border: 1px solid var(--glass-border); margin-bottom: 1rem; }
-    .search-input { width: 100%; background: transparent; border: none; padding: 15px 15px 15px 45px; color: #fff; outline: none; }
-    .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); }
-    
-    .game-card { display: flex; align-items: center; gap: 15px; padding: 15px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); background: var(--glass-bg); margin-bottom: 15px; cursor: pointer; transition: transform 0.2s;}
-    .game-card:active { transform: scale(0.98); }
-    .game-card__icon { width: 50px; height: 50px; background: rgba(0,0,0,0.5); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: 1px solid var(--glass-border); }
-    .game-card__info { flex: 1; }
-    .game-card__info h3 { font-weight: 700; font-size: var(--fs-base); color: #fff; }
-    .game-card__info p { font-size: var(--fs-xs); color: var(--color-text-muted); }
-  </style>
 </head>
 <body>
+
+  <!-- El velo llega YA cerrado: así no hay flash de contenido antes de la animación -->
+  <div id="portal-veil" class="portal-veil veil--cubierto"></div>
 
   <div class="app-shell">
     <header class="navbar">
@@ -184,22 +21,15 @@
       <div class="navbar__usuario">
         <div class="navbar__puntos">
           <span id="navbar-puntos">0</span>
-          <span class="etiqueta">pts <i class="fa-solid fa-fire text-accent" style="color: var(--color-accent-red);"></i></span>
+          <span class="etiqueta">pts <i class="fa-solid fa-fire" style="color: var(--color-accent-red);"></i></span>
         </div>
-        <span id="navbar-username" class="navbar__username" style="color:#fff;"></span>
+        <span id="navbar-username" class="navbar__username">Invitado</span>
       </div>
     </header>
 
-    <nav class="top-nav">
-      <div class="nav-item activo" onclick="app.cambiarTab('home', this)"><i class="fa-solid fa-house"></i></div>
-      <div class="nav-item" onclick="app.cambiarTab('search', this)"><i class="fa-solid fa-magnifying-glass"></i></div>
-      <div class="nav-item" onclick="app.cambiarTab('games', this)"><i class="fa-solid fa-khanda"></i></div>
-      <div class="nav-item" onclick="app.cambiarTab('quiz', this)"><i class="fa-solid fa-brain"></i></div>
-      <div class="nav-item" onclick="app.abrirAjustes()"><i class="fa-solid fa-gear"></i></div>
-    </nav>
-
     <main class="main-content" id="main-scroll-container">
-      
+
+      <!-- INICIO -->
       <div id="tab-home" class="tab-pane activa">
         <section>
           <h2 class="seccion-titulo">Premios del Torneo</h2>
@@ -209,288 +39,67 @@
           <h2 class="seccion-titulo">Feed de la Comunidad</h2>
           <div id="feed-filtros" class="feed-filtros"></div>
           <div id="feed-grid" class="feed-grid"></div>
-          <div id="feed-loading" class="feed-loading" style="display: none;">
-            <i class="fa-solid fa-circle-notch fa-spin"></i> CARGANDO CONTENIDO...
-          </div>
         </section>
       </div>
 
+      <!-- BUSCAR -->
       <div id="tab-search" class="tab-pane">
         <section>
-          <h2 class="seccion-titulo" style="color: var(--color-accent-red);"><i class="fa-solid fa-magnifying-glass"></i> Explorar</h2>
+          <h2 class="seccion-titulo">Explorar</h2>
           <div class="search-container">
-            <i class="fa-solid fa-search search-icon"></i>
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
             <input type="text" class="search-input" placeholder="Buscar animes, usuarios, videos...">
           </div>
-          <div style="text-align:center; margin-top:2rem; color:var(--color-text-muted);">
-            <i class="fa-solid fa-ghost" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+          <div class="estado-vacio">
+            <i class="fa-solid fa-ghost"></i>
             <p>Comienza a escribir para ver resultados</p>
           </div>
         </section>
       </div>
 
-      <div id="tab-games" class="tab-pane">
+      <!-- ARCADE -->
+      <div id="tab-arcade" class="tab-pane">
         <section>
-          <h2 class="seccion-titulo" style="color: var(--color-accent-red);"><i class="fa-solid fa-khanda"></i> Zona Arcade</h2>
-          <div id="games-grid">
-            </div>
+          <h2 class="seccion-titulo">Zona Arcade</h2>
+          <div id="games-grid"></div>
         </section>
       </div>
 
+      <!-- QUIZ -->
       <div id="tab-quiz" class="tab-pane">
         <section>
-          <h2 class="seccion-titulo"><i class="fa-solid fa-brain" style="color: var(--color-accent-red);"></i> Zona Quiz</h2>
-          <div id="quiz-grid">
-            </div>
+          <h2 class="seccion-titulo">Zona Quiz</h2>
+          <div id="quiz-grid"></div>
         </section>
       </div>
-          </main>
-          
 
-    <div id="settings-overlay" class="modal-overlay" onclick="app.cerrarAjustes()"></div>
-    <div id="settings-modal" class="modal-bottom-sheet">
-      <div class="modal-handle"></div>
-      <h3 class="seccion-titulo" style="font-size: 1.2rem; margin-bottom: 1rem; margin-top:0;">Ajustes de Cuenta</h3>
-      <div class="settings-list">
-        <button class="settings-btn" onclick="window.location.href='perfil.html'"><i class="fa-solid fa-user"></i> <span>Mi Perfil</span></button>
-        <button class="settings-btn" onclick="window.location.href='legal.html'"><i class="fa-solid fa-scale-balanced"></i> <span>Información Legal</span></button>
-        <button class="settings-btn" id="btn-logout-app" style="color: var(--color-accent-red); border: 1px solid var(--color-accent-red); border-radius: var(--radius-sm); justify-content: center; margin-top: 1rem;"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
+      <!-- AJUSTES -->
+      <div id="tab-ajustes" class="tab-pane">
+        <div class="perfil-card">
+          <div class="perfil-avatar" id="perfil-avatar">?</div>
+          <div>
+            <div class="perfil-info__nombre" id="perfil-nombre">Invitado</div>
+            <div class="perfil-info__puntos" id="perfil-puntos">0 pts</div>
+          </div>
+        </div>
+        <div class="settings-list">
+          <button class="settings-btn" onclick="window.location.href='perfil.html'"><i class="fa-solid fa-user"></i> <span>Mi Perfil</span></button>
+          <button class="settings-btn" onclick="window.location.href='legal.html'"><i class="fa-solid fa-scale-balanced"></i> <span>Información Legal</span></button>
+          <button class="settings-btn settings-btn--peligro" id="btn-logout-app"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
+        </div>
       </div>
-    </div>
+
+    </main>
+
+    <nav class="bottom-nav">
+      <div class="nav-item activo" data-tab="home" aria-label="Inicio"><i class="fa-solid fa-house"></i></div>
+      <div class="nav-item" data-tab="search" aria-label="Buscar"><i class="fa-solid fa-magnifying-glass"></i></div>
+      <div class="nav-item" data-tab="arcade" aria-label="Arcade"><i class="fa-solid fa-khanda"></i></div>
+      <div class="nav-item" data-tab="quiz" aria-label="Quiz"><i class="fa-solid fa-brain"></i></div>
+      <div class="nav-item" data-tab="ajustes" aria-label="Ajustes"><i class="fa-solid fa-gear"></i></div>
+    </nav>
   </div>
 
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-    
-    const SUPABASE_URL = 'https://zccbphmebkpuzwbkgtse.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpjY2JwaG1lYmtwdXp3YmtndHNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0Nzk4OTEsImV4cCI6MjA5NzA1NTg5MX0.Pc3VBCZJDsVrn6cx5eelDF6vwrgs3X7uTI5Q1kNgvDY';
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Estados globales de control para Scroll Infinito y Filtros
-    let videosCache = [];
-    let categoriaActiva = 'todas';
-    let paginaActual = 0;
-    const itemsPorPagina = 5;
-    let cargandoFeed = false;
-    let totalAlcanzado = false;
-
-    window.app = {
-      cambiarTab(idTab, elementoNav = null) {
-        this.cerrarAjustes();
-        document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('activa'));
-        document.getElementById(`tab-${idTab}`).classList.add('activa');
-        if (elementoNav) {
-          /* Cambiamos el selector porque ahora la clase es .top-nav */
-          document.querySelectorAll('.top-nav .nav-item').forEach(b => b.classList.remove('activo'));
-          elementoNav.classList.add('activo');
-        }
-        // Ejecutar cargas dinámicas según pestaña abierta
-        if(idTab === 'games') cargarJuegosDinamicos();
-        if(idTab === 'quiz') cargarQuizzesDinamicos();
-      },
-      abrirAjustes() {
-        document.getElementById('settings-modal').classList.add('abierto');
-        document.getElementById('settings-overlay').classList.add('activo');
-      },
-      cerrarAjustes() {
-        document.getElementById('settings-modal').classList.remove('abierto');
-        document.getElementById('settings-overlay').classList.remove('activo');
-      }
-    };
-
-    async function initSession() {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      if (error || !session) {
-        window.location.href = 'index.html'; 
-        return null;
-      }
-      const { data: perfil } = await supabase.from('usuarios').select('*').eq('id', session.user.id).single();
-      document.getElementById('navbar-username').textContent = perfil?.username || session.user.email;
-      document.getElementById('navbar-puntos').textContent = perfil?.puntos_totales ?? 0;
-      return session.user.id;
-    }
-
-    document.getElementById('btn-logout-app').addEventListener('click', async () => {
-      await supabase.auth.signOut();
-      window.location.href = 'index.html';
-    });
-
-    const ETIQUETAS_POSICION = { 1: { medalla: '🥇', clase: 'premio-card--oro' }, 2: { medalla: '🥈', clase: 'premio-card--plata' }, 3: { medalla: '🥉', clase: 'premio-card--bronce' }};
-
-    function escapeHTML(texto = '') { const div = document.createElement('div'); div.textContent = texto; return div.innerHTML; }
-
-    async function cargarPremios() {
-      const contenedor = document.getElementById('premios-grid');
-      const { data } = await supabase.from('premios').select('*').order('posicion', { ascending: true });
-      if (!data) return;
-      contenedor.innerHTML = '';
-      data.forEach((premio) => {
-        const etiqueta = ETIQUETAS_POSICION[premio.posicion] || { medalla: `#${premio.posicion}`, clase: '' };
-        let mediaHTML = premio.video_url ? `<video src="${escapeHTML(premio.video_url)}" muted loop autoplay playsinline></video>` : `<img src="${escapeHTML(premio.imagen_url)}" alt="${escapeHTML(premio.titulo)}">`;
-        contenedor.innerHTML += `<article class="premio-card ${etiqueta.clase}"><div class="premio-card__medalla">${etiqueta.medalla}</div><div class="premio-card__media">${mediaHTML}</div><div class="premio-card__titulo">${escapeHTML(premio.titulo)}</div></article>`;
-      });
-    }
-
-    // =====================================================================
-    // DETECCIÓN Y LÓGICA DE SCROLL INFINITO
-    // =====================================================================
-    async function cargarFeed(reiniciar = false) {
-      if (cargandoFeed || (totalAlcanzado && !reiniciar)) return;
-      cargandoFeed = true;
-      document.getElementById('feed-loading').style.display = 'block';
-
-      if (reiniciar) {
-        paginaActual = 0;
-        videosCache = [];
-        totalAlcanzado = false;
-        document.getElementById('feed-grid').innerHTML = '';
-      }
-
-      const desde = paginaActual * itemsPorPagina;
-      const hasta = desde + itemsPorPagina - 1;
-
-      let query = supabase.from('contenido').select('*').order('created_at', { ascending: false }).range(desde, hasta);
-      if (categoriaActiva !== 'todas') {
-        query = query.eq('categoria', categoriaActiva);
-      }
-
-      const { data, error } = await query;
-      
-      if (!error && data) {
-        if (data.length < itemsPorPagina) totalAlcanzado = true;
-        videosCache = [...videosCache, ...data];
-        
-        if (reiniciar) construirFiltrosIniciales();
-        renderizarSegmentoFeed(data);
-        paginaActual++;
-      }
-
-      cargandoFeed = false;
-      document.getElementById('feed-loading').style.display = 'none';
-    }
-
-    async function construirFiltrosIniciales() {
-      const { data } = await supabase.from('contenido').select('categoria');
-      if (!data) return;
-      const contenedor = document.getElementById('feed-filtros');
-      const categorias = ['todas', ...new Set(data.map(v => v.categoria))];
-      contenedor.innerHTML = '';
-      categorias.forEach(cat => {
-        const btn = document.createElement('button');
-        btn.textContent = cat === 'todas' ? 'Todas' : cat;
-        if (cat === categoriaActiva) btn.classList.add('activo');
-        btn.onclick = () => {
-          categoriaActiva = cat;
-          contenedor.querySelectorAll('button').forEach(b => b.classList.remove('activo'));
-          btn.classList.add('activo');
-          cargarFeed(true);
-        };
-        contenedor.appendChild(btn);
-      });
-    }
-
-    function renderizarSegmentoFeed(items) {
-      const contenedor = document.getElementById('feed-grid');
-      items.forEach(v => {
-        contenedor.innerHTML += `<article class="feed-card"><div class="feed-card__video"><iframe src="https://www.youtube.com/embed/${encodeURIComponent(v.youtube_id)}" title="${escapeHTML(v.titulo)}" loading="lazy" allowfullscreen></iframe></div><div class="feed-card__info"><div class="feed-card__categoria">${escapeHTML(v.categoria)}</div><div class="feed-card__titulo">${escapeHTML(v.titulo)}</div></div></article>`;
-      });
-    }
-
-    // Escuchador de scroll en el contenedor principal
-    document.getElementById('main-scroll-container').addEventListener('scroll', (e) => {
-      const { scrollTop, scrollHeight, clientHeight } = e.target;
-      if (scrollHeight - scrollTop - clientHeight < 100) {
-        cargarFeed(false);
-      }
-    });
-
-    // =====================================================================
-    // CARGA DINÁMICA DE MODULOS: ARCADE Y QUIZ
-    // =====================================================================
-    async function cargarJuegosDinamicos() {
-      const contenedor = document.getElementById('games-grid');
-      contenedor.innerHTML = '<div class="feed-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> CARGANDO JUEGOS...</div>';
-      
-      const { data, error } = await supabase.from('juegos').select('*').order('id', { ascending: true });
-      if (error || !data) {
-        contenedor.innerHTML = '<p style="color:var(--color-text-muted); text-align:center;">No se pudieron cargar los juegos.</p>';
-        return;
-      }
-
-      contenedor.innerHTML = '';
-      data.forEach(juego => {
-        contenedor.innerHTML += `
-          <div class="game-card" onclick="window.location.href='${escapeHTML(juego.url_archivo)}'">
-            <div class="game-card__icon" style="border-color: var(--color-accent-yellow);">
-              <i class="${escapeHTML(juego.icono || 'fa-solid fa-gamepad')}" style="color: var(--color-accent-yellow);"></i>
-            </div>
-            <div class="game-card__info">
-              <h3>${escapeHTML(juego.titulo)}</h3>
-              <p>${escapeHTML(juego.descripcion)}</p>
-            </div>
-            <i class="fa-solid fa-arrow-up-right-from-square" style="color: var(--color-accent-red);"></i>
-          </div>`;
-      });
-    }
-
-    async function cargarQuizzesDinamicos() {
-      const contenedor = document.getElementById('quiz-grid');
-      contenedor.innerHTML = '<div class="feed-loading"><i class="fa-solid fa-circle-notch fa-spin"></i> CARGANDO QUIZZES...</div>';
-      
-      // 1. Buscamos directamente en TU tabla principal
-      const { data, error } = await supabase.from('preguntas_quiz').select('anime_id, color_primario').order('created_at', { ascending: false });
-      
-      if (error || !data) {
-        contenedor.innerHTML = '<p style="color:var(--color-text-muted); text-align:center;">No se pudieron cargar los quizzes.</p>';
-        return;
-      }
-
-      // 2. Filtramos con JavaScript para extraer animes únicos y no repetir botones
-      const animesUnicos = {};
-      data.forEach(item => {
-        if(item.anime_id && !animesUnicos[item.anime_id]) {
-          animesUnicos[item.anime_id] = {
-            id: item.anime_id,
-            color: item.color_primario || 'var(--color-accent-red)'
-          };
-        }
-      });
-
-      const listaFinal = Object.values(animesUnicos);
-
-      contenedor.innerHTML = '';
-      
-      if(listaFinal.length === 0) {
-        contenedor.innerHTML = '<p style="color:var(--color-text-muted); text-align:center;">No hay quizzes disponibles aún.</p>';
-        return;
-      }
-
-      // 3. Generamos los botones dinámicos apuntando al archivo correcto
-      listaFinal.forEach(quiz => {
-        // Capitalizamos la primera letra (ej. "onepiece" -> "Onepiece") para que se vea más profesional
-        const titulo = quiz.id.charAt(0).toUpperCase() + quiz.id.slice(1);
-        
-        contenedor.innerHTML += `
-          <div class="game-card" onclick="window.location.href='quiz_template.html?anime=${escapeHTML(quiz.id)}'">
-            <div class="game-card__icon" style="border-color: ${escapeHTML(quiz.color)};">
-              <i class="fa-solid fa-brain" style="color: ${escapeHTML(quiz.color)};"></i>
-            </div>
-            <div class="game-card__info">
-              <h3>Quiz: ${escapeHTML(titulo)}</h3>
-              <p>Demuestra tu conocimiento y gana puntos</p>
-            </div>
-            <i class="fa-solid fa-arrow-up-right-from-square" style="color: var(--color-accent-yellow);"></i>
-          </div>`;
-      });
-    }
-
-    // Inicialización del ecosistema
-    initSession().then(userId => {
-      if(userId) { 
-        cargarPremios(); 
-        cargarFeed(true); // Carga inicial con Filtros dinámicos
-      }
-    });
-  </script>
+  <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
