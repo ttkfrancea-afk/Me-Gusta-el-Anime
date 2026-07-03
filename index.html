@@ -2,182 +2,104 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <!-- Bloqueo de zoom para sensación de App Nativa -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Me Gusta el Anime · Acceso</title>
+  <title>Me Gusta el Anime · Entrar</title>
 
-  <!-- Google Fonts para tipografías condensadas y el logo estilo graffiti -->
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
-
-  <!-- IMPORTANTE: variables.css SIEMPRE primero, define :root para todo lo demás -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="css/variables.css" />
   <link rel="stylesheet" href="css/login.css" />
-
-  <style>
-    /* Estilos inyectados quirúrgicamente para el logo Graffiti de tu imagen */
-    .logo-graffiti-amarillo {
-      font-family: 'Permanent Marker', cursive;
-      font-size: 3.5rem;
-      line-height: 1.1;
-      color: #f5d142;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      transform: rotate(-3deg);
-      display: inline-block;
-      margin-bottom: var(--space-md);
-      text-shadow: 
-        3px 3px 0px #000, 
-        -3px -3px 0px #000,  
-        3px -3px 0px #000,
-        -3px 3px 0px #000,
-        0px 10px 20px rgba(0, 0, 0, 0.8);
-      filter: drop-shadow(0 0 15px rgba(245, 209, 66, 0.4));
-    }
-
-    @media (max-width: 760px) {
-      .logo-graffiti-amarillo {
-        font-size: 2.5rem;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="css/transitions.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-  <main class="pantalla-login">
-    <div class="split-panel glass">
+  <!-- Velo del portal: arranca invisible, JS lo activa al confirmar entrada -->
+  <div id="portal-veil" class="portal-veil"></div>
 
-      <!-- =================================================================
-           LADO VISUAL: aquí JS (auth.js) inyecta los <div class="panel-visual__slide">
-           con las imágenes de fondo que vienen de la tabla "configuracion".
-           ================================================================= -->
-      <section class="panel-visual" id="panel-visual" aria-hidden="true">
+  <div class="pantalla-login">
+    <div class="split-panel entrada-login" id="split-panel">
+
+      <!-- LADO VISUAL -->
+      <div class="panel-visual">
+        <div class="panel-visual__slide panel-visual__slide--v1 activa"></div>
+        <div class="panel-visual__slide panel-visual__slide--v2"></div>
+        <div class="panel-visual__slide panel-visual__slide--v3"></div>
         <div class="panel-visual__branding">
-          <h1 class="logo-graffiti-amarillo">Me Gusta<br>el Anime</h1>
-          <p>La comunidad donde tu conocimiento de anime se convierte en puntos, ranking y premios reales.</p>
+          <div class="logo-graffiti">Me Gusta<br>el Anime</div>
+          <p>Quizzes, torneos con premios reales y el feed de la comunidad. Todo en un solo lugar.</p>
         </div>
-      </section>
+      </div>
 
-      <!-- =================================================================
-           LADO DE FORMULARIOS
-           ================================================================= -->
-      <section class="panel-formularios">
+      <!-- LADO DE FORMULARIOS -->
+      <div class="panel-formularios">
         <div class="formularios-wrapper">
 
-          <!-- ----------------------------------------------------------
-               FORMULARIO: LOGIN (visible por defecto -> clase "activo")
-               ---------------------------------------------------------- -->
-          <form id="form-login" class="formulario activo" autocomplete="on">
-            <h2 class="formulario__titulo">Iniciar Sesión</h2>
-            <p class="formulario__subtitulo">Vuelve a entrar y sigue acumulando puntos.</p>
+          <!-- LOGIN -->
+          <form id="form-login" class="formulario activo" novalidate>
+            <h2 class="formulario__titulo">Entrar</h2>
+            <p class="formulario__subtitulo">Bienvenido de vuelta, otaku.</p>
 
             <div class="input-grupo">
-              <label for="login-email">Correo electrónico</label>
-              <input type="email" id="login-email" name="email" required placeholder="tucorreo@ejemplo.com" />
+              <label for="login-email">Correo</label>
+              <input type="email" id="login-email" placeholder="tucorreo@ejemplo.com" required autocomplete="email" />
             </div>
 
             <div class="input-grupo">
               <label for="login-password">Contraseña</label>
-              <input type="password" id="login-password" name="password" required placeholder="••••••••" />
+              <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password" />
             </div>
 
-            <span class="olvido-password" id="olvido-password">¿Olvidaste tu contraseña?</span>
+            <span class="olvido-password" id="btn-olvido-password">¿Olvidaste tu contraseña?</span>
 
-            <button type="submit" class="btn btn-primario">Iniciar Sesión</button>
+            <button type="submit" class="btn btn-primario" style="width:100%;" id="btn-login">
+              <i class="fa-solid fa-right-to-bracket"></i> Entrar
+            </button>
 
-            <!-- Aquí auth.js inyecta la alerta amarilla / roja / verde -->
             <div class="zona-mensajes" id="mensajes-login"></div>
 
             <p class="formulario__pie">
-              ¿No tienes cuenta?
-              <button type="button" id="btn-ir-registro">Regístrate aquí</button>
+              ¿Todavía no tienes cuenta?
+              <button type="button" id="ir-a-registro">Regístrate</button>
             </p>
           </form>
 
-          <!-- ----------------------------------------------------------
-               FORMULARIO: REGISTRO (oculto por defecto)
-               ---------------------------------------------------------- -->
-          <form id="form-registro" class="formulario" autocomplete="on">
-            <h2 class="formulario__titulo">Crear Cuenta</h2>
-            <p class="formulario__subtitulo">Únete al ranking diario y compite por premios físicos.</p>
+          <!-- REGISTRO -->
+          <form id="form-registro" class="formulario" novalidate>
+            <h2 class="formulario__titulo">Crear cuenta</h2>
+            <p class="formulario__subtitulo">Únete a la comunidad en menos de un minuto.</p>
 
             <div class="input-grupo">
-              <label for="reg-username">Nombre de usuario</label>
-              <input type="text" id="reg-username" name="username" required minlength="3" placeholder="OtakuMaster99" />
-            </div>
-
-            <!-- Fila combinada: selector de código de país + correo -->
-            <div class="input-fila">
-              <div class="input-grupo codigo-pais">
-                <label for="reg-codigo-pais">País</label>
-                <select id="reg-codigo-pais" name="pais_codigo">
-                  <option value="+58">🇻🇪 +58</option>
-                  <option value="+1">🇺🇸 +1</option>
-                  <option value="+52">🇲🇽 +52</option>
-                  <option value="+34">🇪🇸 +34</option>
-                  <option value="+57">🇨🇴 +57</option>
-                  <option value="+51">🇵🇪 +51</option>
-                  <option value="+56">🇨🇱 +56</option>
-                  <option value="+54">🇦🇷 +54</option>
-                  <option value="+593">🇪🇨 +593</option>
-                  <option value="+507">🇵🇦 +507</option>
-                  <option value="+598">🇺🇾 +598</option>
-                  <option value="+595">🇵🇾 +595</option>
-                  <option value="+591">🇧🇴 +591</option>
-                  <option value="+506">🇨🇷 +506</option>
-                </select>
-              </div>
-
-              <div class="input-grupo">
-                <label for="reg-email">Correo electrónico</label>
-                <input type="email" id="reg-email" name="email" required placeholder="tucorreo@ejemplo.com" />
-              </div>
+              <label for="registro-usuario">Usuario</label>
+              <input type="text" id="registro-usuario" placeholder="Tu nombre de otaku" required autocomplete="username" />
             </div>
 
             <div class="input-grupo">
-              <label for="reg-password1">Contraseña</label>
-              <input type="password" id="reg-password1" name="password1" required minlength="6" placeholder="Mínimo 6 caracteres" />
+              <label for="registro-email">Correo</label>
+              <input type="email" id="registro-email" placeholder="tucorreo@ejemplo.com" required autocomplete="email" />
             </div>
 
             <div class="input-grupo">
-              <label for="reg-password2">Confirmar contraseña</label>
-              <input type="password" id="reg-password2" name="password2" required minlength="6" placeholder="Repite tu contraseña" />
+              <label for="registro-password">Contraseña</label>
+              <input type="password" id="registro-password" placeholder="Mínimo 6 caracteres" required autocomplete="new-password" />
             </div>
 
-            <button type="submit" class="btn btn-primario">Crear Cuenta</button>
+            <button type="submit" class="btn btn-primario" style="width:100%;" id="btn-registro">
+              <i class="fa-solid fa-user-plus"></i> Crear cuenta
+            </button>
 
-            <!-- Aquí auth.js inyecta mensajes de error/éxito del registro -->
             <div class="zona-mensajes" id="mensajes-registro"></div>
 
             <p class="formulario__pie">
               ¿Ya tienes cuenta?
-              <button type="button" id="btn-ir-login">Inicia sesión</button>
+              <button type="button" id="ir-a-login">Inicia sesión</button>
             </p>
           </form>
 
-          <!-- ----------------------------------------------------------
-               FORMULARIO: RECUPERACIÓN (Para ingresar nueva contraseña directamente en la UI)
-               ---------------------------------------------------------- -->
-          <form id="form-restablecer" class="formulario" autocomplete="off">
-            <h2 class="formulario__titulo" style="color: var(--color-accent-yellow);">Nueva Contraseña</h2>
-            <p class="formulario__subtitulo">Escribe tu nueva contraseña de acceso.</p>
-
-            <div class="input-grupo">
-              <label for="nueva-password">Nueva Contraseña</label>
-              <input type="password" id="nueva-password" required minlength="6" placeholder="Mínimo 6 caracteres" />
-            </div>
-
-            <button type="submit" class="btn btn-primario" style="background: var(--color-accent-yellow); color: #000; box-shadow: 0 6px 20px var(--color-yellow-glow);">Guardar Contraseña</button>
-
-            <div class="zona-mensajes" id="mensajes-restablecer"></div>
-          </form>
-
         </div>
-      </section>
-
+      </div>
     </div>
-  </main>
+  </div>
 
-  <!-- type="module" es OBLIGATORIO: permite usar "import" en auth.js -->
   <script type="module" src="js/auth.js"></script>
 </body>
 </html>
