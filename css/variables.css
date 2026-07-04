@@ -1,5 +1,5 @@
 /* =====================================================================
-   OTAKU NEXUS · variables.css
+   ME GUSTA EL ANIME · variables.css
    ---------------------------------------------------------------------
    Tokens de diseño. Se importa PRIMERO en cada HTML.
 
@@ -46,6 +46,43 @@
   /* Vidrio con tinte rojo, para tarjetas que quieres que se sientan
      "de marca" en vez de vidrio neutro genérico */
   --glass-tint-red: rgba(255, 49, 49, 0.05);
+
+  /* =====================================================================
+     PALETA "PORTAL CHAKRA" — acento dinámico por sección
+     ---------------------------------------------------------------------
+     Cada pestaña del dashboard tiene su propio color de identidad, que
+     repinta en vivo el indicador de navegación, el acento de los
+     títulos de sección y los estados activos/hover de esa pantalla.
+     Mantiene la misma "temperatura" neón que el rojo/amarillo/plasma
+     que ya existían, para que no se sientan colores importados de
+     otra paleta.
+       Inicio   -> rojo    (--color-accent-red, ya existente)
+       Buscar   -> verde
+       Arcade   -> naranja
+       Quiz     -> morado
+       Ajustes  -> azul
+     ===================================================================== */
+  --color-accent-green: #2ee67d;
+  --color-green-glow: rgba(46, 230, 125, 0.45);
+  --color-green-soft: rgba(46, 230, 125, 0.12);
+
+  --color-accent-orange: #ff8c42;
+  --color-orange-glow: rgba(255, 140, 66, 0.45);
+  --color-orange-soft: rgba(255, 140, 66, 0.12);
+
+  --color-accent-purple: #b46bff;
+  --color-purple-glow: rgba(180, 107, 255, 0.45);
+  --color-purple-soft: rgba(180, 107, 255, 0.12);
+
+  --color-accent-blue: #4361ee;
+  --color-blue-glow: rgba(67, 97, 238, 0.45);
+  --color-blue-soft: rgba(67, 97, 238, 0.12);
+
+  /* Fallback global: si nada define --color-activo, todo el sistema
+     sigue viéndose exactamente igual que hoy (rojo de marca). */
+  --color-activo: var(--color-accent-red);
+  --glow-activo: var(--color-red-glow);
+  --soft-activo: var(--color-red-soft);
 
   /* ---------- TIPOGRAFÍA (misma familia tipográfica, mismo ADN) ---------- */
   --font-logo: 'Permanent Marker', cursive;
