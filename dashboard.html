@@ -15,16 +15,37 @@
   <!-- El velo llega YA cerrado: así no hay flash de contenido antes de la animación -->
   <div id="portal-veil" class="portal-veil veil--cubierto"></div>
 
-  <div class="app-shell">
+  <div class="app-shell" id="app-shell" data-seccion="home">
     <header class="navbar">
-      <div class="navbar__logo">ME GUSTA<br>EL ANIME</div>
-      <div class="navbar__usuario">
-        <div class="navbar__puntos">
-          <span id="navbar-puntos">0</span>
-          <span class="etiqueta">pts <i class="fa-solid fa-fire" style="color: var(--color-accent-red);"></i></span>
+      <div class="navbar__top">
+        <div class="navbar__logo">ME GUSTA<br>EL ANIME</div>
+        <div class="navbar__usuario">
+          <div class="navbar__puntos">
+            <span id="navbar-puntos">0</span>
+            <span class="etiqueta">pts <i class="fa-solid fa-fire" style="color: var(--color-accent-red);"></i></span>
+          </div>
+          <span id="navbar-username" class="navbar__username">Invitado</span>
         </div>
-        <span id="navbar-username" class="navbar__username">Invitado</span>
       </div>
+
+      <!-- Navegación principal: SIEMPRE arriba, nunca abajo -->
+      <nav class="top-nav">
+        <button class="nav-item activo" data-tab="home" aria-label="Inicio">
+          <i class="fa-solid fa-house"></i><span>Inicio</span>
+        </button>
+        <button class="nav-item" data-tab="search" aria-label="Buscar">
+          <i class="fa-solid fa-magnifying-glass"></i><span>Buscar</span>
+        </button>
+        <button class="nav-item" data-tab="arcade" aria-label="Arcade">
+          <i class="fa-solid fa-khanda"></i><span>Arcade</span>
+        </button>
+        <button class="nav-item" data-tab="quiz" aria-label="Quiz">
+          <i class="fa-solid fa-brain"></i><span>Quiz</span>
+        </button>
+        <button class="nav-item" data-tab="ajustes" aria-label="Ajustes">
+          <i class="fa-solid fa-gear"></i><span>Ajustes</span>
+        </button>
+      </nav>
     </header>
 
     <main class="main-content" id="main-scroll-container">
@@ -46,14 +67,12 @@
       <div id="tab-search" class="tab-pane">
         <section>
           <h2 class="seccion-titulo">Explorar</h2>
+          <p class="seccion-subtitulo">Busca por título, categoría o parte del nombre (ej. "Naruto").</p>
           <div class="search-container">
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            <input type="text" class="search-input" placeholder="Buscar animes, usuarios, videos...">
+            <input type="text" id="search-input" class="search-input" placeholder="Buscar animes, videos, publicaciones..." autocomplete="off">
           </div>
-          <div class="estado-vacio">
-            <i class="fa-solid fa-ghost"></i>
-            <p>Comienza a escribir para ver resultados</p>
-          </div>
+          <div id="search-resultados"></div>
         </section>
       </div>
 
@@ -83,21 +102,16 @@
           </div>
         </div>
         <div class="settings-list">
-          <button class="settings-btn" onclick="window.location.href='perfil.html'"><i class="fa-solid fa-user"></i> <span>Mi Perfil</span></button>
+          <button class="settings-btn" id="btn-cambiar-clave"><i class="fa-solid fa-key"></i> <span>Cambiar Contraseña</span></button>
+          <button class="settings-btn" id="btn-info-perfil"><i class="fa-solid fa-id-card"></i> <span>Información de Perfil</span></button>
+          <button class="settings-btn" id="btn-cambiar-foto"><i class="fa-solid fa-camera"></i> <span>Cambiar Foto de Perfil</span></button>
+          <button class="settings-btn" id="btn-cambiar-info"><i class="fa-solid fa-pen"></i> <span>Cambiar Información</span></button>
           <button class="settings-btn" onclick="window.location.href='legal.html'"><i class="fa-solid fa-scale-balanced"></i> <span>Información Legal</span></button>
           <button class="settings-btn settings-btn--peligro" id="btn-logout-app"><i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión</button>
         </div>
       </div>
 
     </main>
-
-    <nav class="bottom-nav">
-      <div class="nav-item activo" data-tab="home" aria-label="Inicio"><i class="fa-solid fa-house"></i></div>
-      <div class="nav-item" data-tab="search" aria-label="Buscar"><i class="fa-solid fa-magnifying-glass"></i></div>
-      <div class="nav-item" data-tab="arcade" aria-label="Arcade"><i class="fa-solid fa-khanda"></i></div>
-      <div class="nav-item" data-tab="quiz" aria-label="Quiz"><i class="fa-solid fa-brain"></i></div>
-      <div class="nav-item" data-tab="ajustes" aria-label="Ajustes"><i class="fa-solid fa-gear"></i></div>
-    </nav>
   </div>
 
   <script type="module" src="js/dashboard.js"></script>
