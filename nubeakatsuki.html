@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animación Nube Akatsuki con Brisa</title>
+    <style>
+        body {
+            background: #050505;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .animacion-box {
+            height: 140px; 
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        /* Contenedor que mantiene la nube y la brisa unidas */
+        .nube-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nube-akatsuki {
+            width: 150px; 
+            animation: flotar 3s ease-in-out infinite;
+            filter: drop-shadow(0px 5px 15px rgba(255, 0, 0, 0.2));
+            position: relative;
+            z-index: 2; /* Nube al frente */
+        }
+
+        /* Efecto de líneas de brisa detrás de la nube */
+        .brisa-linea {
+            position: absolute;
+            width: 80px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: 1; /* Detrás de la nube */
+            opacity: 0;
+            animation: efectoBrisa 2s linear infinite;
+        }
+
+        /* Posiciones aleatorias para varias líneas de brisa */
+        .brisa-linea:nth-child(1) { top: 20px; animation-delay: 0s; }
+        .brisa-linea:nth-child(2) { top: 70px; animation-delay: 0.5s; }
+        .brisa-linea:nth-child(3) { top: 110px; animation-delay: 1s; }
+
+        @keyframes flotar {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes efectoBrisa {
+            0% { transform: translateX(100px); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateX(-100px); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="animacion-box">
+        <div class="nube-container">
+            <!-- Líneas de brisa -->
+            <div class="brisa-linea"></div>
+            <div class="brisa-linea"></div>
+            <div class="brisa-linea"></div>
+            
+            <!-- Nube -->
+            <img src="https://zccbphmebkpuzwbkgtse.supabase.co/storage/v1/object/public/mis-imagenes/imagenes%20de%20login/nube%20Akatsuki.webp" alt="Nube Akatsuki" class="nube-akatsuki">
+        </div>
+    </div>
+
+</body>
+</html>
