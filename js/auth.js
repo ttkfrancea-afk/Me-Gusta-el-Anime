@@ -1,33 +1,20 @@
 // =====================================================================
-// OTAKU NEXUS · js/auth.js
+// ME GUSTA EL ANIME · js/auth.js
 // ---------------------------------------------------------------------
 // FASE ACTUAL: solo interfaz (visual/interacción). Este archivo NO se
 // conecta todavía a Supabase Auth a propósito — eso se hace en la
 // siguiente fase ("lo mecánico"). Aquí solo dejamos listo:
-//   1. La rotación de slides del panel visual.
-//   2. El alternado Login <-> Registro.
-//   3. El disparo de la animación "portal" hacia el dashboard.
+//   1. El alternado Login <-> Registro (y avisarle a la tómbola de fondo).
+//   2. El disparo de la animación "portal" hacia el dashboard.
 // =====================================================================
 
 const veil = document.getElementById('portal-veil');
 const splitPanel = document.getElementById('split-panel');
 
 // ---------------------------------------------------------------------
-// 1) ROTACIÓN DE SLIDES (panel visual izquierdo)
-// ---------------------------------------------------------------------
-const slides = document.querySelectorAll('.panel-visual__slide');
-let slideActual = 0;
-
-if (slides.length > 1) {
-  setInterval(() => {
-    slides[slideActual].classList.remove('activa');
-    slideActual = (slideActual + 1) % slides.length;
-    slides[slideActual].classList.add('activa');
-  }, 5500);
-}
-
-// ---------------------------------------------------------------------
-// 2) ALTERNAR LOGIN / REGISTRO
+// 1) ALTERNAR LOGIN / REGISTRO
+//    (la tómbola de fondo —js/fondo-tombola.js— decide sola qué
+//    animación mostrar; aquí solo le avisamos que hubo un cambio)
 // ---------------------------------------------------------------------
 const formLogin = document.getElementById('form-login');
 const formRegistro = document.getElementById('form-registro');
@@ -35,15 +22,23 @@ const formRegistro = document.getElementById('form-registro');
 document.getElementById('ir-a-registro').addEventListener('click', () => {
   formLogin.classList.remove('activo');
   formRegistro.classList.add('activo');
+
+  if (window.FondoTombola) {
+    window.FondoTombola.notificarCambioDePestana('register');
+  }
 });
 
 document.getElementById('ir-a-login').addEventListener('click', () => {
   formRegistro.classList.remove('activo');
   formLogin.classList.add('activo');
+
+  if (window.FondoTombola) {
+    window.FondoTombola.notificarCambioDePestana('login');
+  }
 });
 
 // ---------------------------------------------------------------------
-// 3) EL PORTAL: velo + tarjeta 3D + navegación al dashboard
+// 2) EL PORTAL: velo + tarjeta 3D + navegación al dashboard
 // ---------------------------------------------------------------------
 function dispararPortal(eventoOrigen) {
   // El portal "nace" desde donde el usuario tocó el botón, para que
@@ -62,7 +57,7 @@ function dispararPortal(eventoOrigen) {
 }
 
 // ---------------------------------------------------------------------
-// 4) ENVÍO DE FORMULARIOS (validación básica de interfaz)
+// 3) ENVÍO DE FORMULARIOS (validación básica de interfaz)
 // ---------------------------------------------------------------------
 formLogin.addEventListener('submit', (evento) => {
   evento.preventDefault();
@@ -101,7 +96,7 @@ formRegistro.addEventListener('submit', (evento) => {
 });
 
 // ---------------------------------------------------------------------
-// 5) "OLVIDÉ MI CONTRASEÑA" (placeholder de interfaz)
+// 4) "OLVIDÉ MI CONTRASEÑA" (placeholder de interfaz)
 // ---------------------------------------------------------------------
 document.getElementById('btn-olvido-password').addEventListener('click', () => {
   const mensajes = document.getElementById('mensajes-login');
