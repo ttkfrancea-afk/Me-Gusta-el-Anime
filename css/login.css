@@ -1,219 +1,356 @@
 /* =====================================================================
-   ME GUSTA EL ANIME · login.css
+   ME GUSTA EL ANIME · css/login.css
    ---------------------------------------------------------------------
-   Pantalla de Login / Registro. Panel dividido en 2: lado visual
-   (tómbola de animaciones en iframe) y lado de formularios en vidrio
-   con tinte rojo (no vidrio blanco genérico).
+   Mismo diseño exacto de tu loginanime.html original (tarjetas
+   deslizantes + overlay). Cambios respecto al original:
+     1) Se quitó #canvas1 y su motor de partículas (pesado en móvil).
+     2) El body ahora usa un degradado líquido negro/escarlata animado
+        en vez del canvas.
+     3) .barco-luffy / .nube-akatsuki fijas -> .tombola-frame (iframe).
+   Todo lo demás (layout, textos, breakpoints) es idéntico.
    ===================================================================== */
 
-.pantalla-login {
-  min-height: 100vh;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-md);
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700,800');
+
+:root {
+    --bg-body: #050505;
+    --bg-container: rgba(20, 20, 20, 0.85);
+    --bg-input: #2a2a2a;
+    --text-main: #ffffff;
+    --text-secondary: #b3b3b3;
+    --accent-primary: #ff0844;
+    --accent-secondary: #ffb199;
+    --rojo-profundo: #8a0021;
+    --gradient-overlay: linear-gradient(135deg, var(--accent-primary), var(--rojo-profundo));
+    --shadow-glass: 0 15px 35px rgba(0,0,0,0.5);
+    --border-glass: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* ---------------------------------------------------------------------
-   Tarjeta "split panel"
+   FONDO LÍQUIDO (reemplaza el canvas de partículas)
    --------------------------------------------------------------------- */
-.split-panel {
-  position: relative;
-  width: 100%;
-  max-width: 920px;
-  min-height: 560px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  overflow: hidden;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card-lifted);
+body {
+    background: linear-gradient(140deg, #000000 0%, var(--rojo-profundo) 45%, var(--accent-primary) 70%, #000000 100%);
+    background-size: 300% 300%;
+    animation: fondoLiquido 16s ease-in-out infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    color: var(--text-main);
+    overscroll-behavior: none;
 }
 
-/* ---------- LADO VISUAL ---------- */
-.panel-visual {
-  position: relative;
-  overflow: hidden;
-  order: 1;
-  background: #030303; /* fondo de respaldo mientras carga el primer iframe */
+@keyframes fondoLiquido {
+    0%   { background-position: 0% 30%; }
+    50%  { background-position: 100% 70%; }
+    100% { background-position: 0% 30%; }
 }
 
-/* Tómbola de animaciones: dos iframes en cross-fade (doble buffer).
-   Uno siempre visible, el otro precarga la siguiente animación antes
-   de mostrarla (evita parpadeos / pantallazo negro en redes lentas). */
-.panel-visual__frame {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0;
-  will-change: opacity;
-  transition: opacity .6s ease;
+h1 {
+    font-weight: 800;
+    margin: 0;
+    color: var(--text-main);
+    letter-spacing: 1px;
 }
 
-.panel-visual__frame.activa {
-  opacity: 1;
+p {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0.5px;
+    margin: 20px 0 30px;
+    color: var(--text-secondary);
 }
 
-/* Grano sutil sobre la tómbola, para que no se vea "plana" */
-.panel-visual::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  opacity: 0.35;
-  mix-blend-mode: overlay;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+span {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
 }
 
-.panel-visual::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-  background: linear-gradient(180deg, rgba(3, 3, 3, 0.1) 0%, rgba(3, 3, 3, 0.55) 70%, rgba(3, 3, 3, 0.92) 100%);
+a {
+    color: var(--text-secondary);
+    font-size: 13px;
+    text-decoration: none;
+    margin: 15px 0;
+    transition: color 0.3s ease;
 }
 
-.panel-visual__branding {
-  position: absolute;
-  bottom: var(--space-lg);
-  left: var(--space-lg);
-  right: var(--space-lg);
-  z-index: 4;
+a:hover {
+    color: var(--accent-primary);
 }
 
-.panel-visual__branding h1 {
-  font-family: var(--font-display);
-  font-size: var(--fs-3xl);
-  line-height: 1;
-  letter-spacing: var(--tracking-display-tight);
-  color: #fff;
-  text-shadow: 0 0 24px var(--color-red-glow);
+button {
+    border-radius: 30px;
+    border: none;
+    background: var(--accent-primary);
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 14px 50px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: transform 0.1s ease-in, box-shadow 0.3s ease;
+    cursor: pointer;
+    margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(255, 8, 68, 0.4);
 }
 
-.logo-graffiti {
-  font-family: var(--font-logo);
-  font-size: var(--fs-3xl);
-  line-height: 1.1;
-  color: var(--color-accent-yellow) !important;
-  text-shadow: 3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 10px 20px rgba(0,0,0,0.8) !important;
-  transform: rotate(-3deg);
-  margin-bottom: var(--space-sm);
+button:active {
+    transform: scale(0.95);
 }
 
-.panel-visual__branding p {
-  margin-top: var(--space-xs);
-  color: var(--color-text-muted);
-  font-size: var(--fs-sm);
-  max-width: 320px;
+button:focus {
+    outline: none;
 }
 
-/* ---------- LADO DE FORMULARIOS (vidrio con tinte de marca) ---------- */
-.panel-formularios {
-  position: relative;
-  background: linear-gradient(160deg, var(--glass-bg-strong), var(--glass-tint-red));
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border-left: 1px solid var(--glass-border);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: var(--space-xl) var(--space-lg);
-  order: 2;
+button.ghost {
+    background-color: transparent;
+    border: 2px solid #FFFFFF;
+    box-shadow: none;
 }
 
-.formularios-wrapper {
-  position: relative;
-  width: 100%;
+button.ghost:hover {
+    background-color: #FFFFFF;
+    color: var(--accent-primary);
 }
 
-.formulario {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(40px);
-  transition: opacity var(--transition-mid), transform var(--transition-mid);
+form {
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
+    text-align: center;
 }
 
-.formulario.activo {
-  position: relative;
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateX(0);
+input {
+    background-color: var(--bg-input);
+    border: 1px solid transparent;
+    color: var(--text-main);
+    padding: 14px 15px;
+    margin: 8px 0;
+    width: 100%;
+    border-radius: 8px;
+    transition: border 0.3s ease, background 0.3s ease;
 }
 
-.formulario__titulo {
-  font-family: var(--font-display);
-  font-size: var(--fs-2xl);
-  letter-spacing: var(--tracking-display-tight);
-  text-transform: uppercase;
-  margin-bottom: var(--space-sm);
+input:focus {
+    outline: none;
+    border: 1px solid var(--accent-primary);
+    background-color: #333;
 }
-
-.formulario__subtitulo {
-  color: var(--color-text-muted);
-  font-size: var(--fs-sm);
-  margin-bottom: var(--space-lg);
-}
-
-.formulario__pie {
-  margin-top: var(--space-md);
-  font-size: var(--fs-sm);
-  color: var(--color-text-muted);
-  text-align: center;
-}
-
-.formulario__pie button {
-  background: none;
-  border: none;
-  color: var(--color-accent-red);
-  font-weight: 700;
-  cursor: pointer;
-  font-family: var(--font-body);
-  font-size: var(--fs-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  min-height: 48px;
-  padding: 0 0.3rem;
-}
-.formulario__pie button:hover { text-decoration: underline; }
-
-.olvido-password {
-  display: block;
-  text-align: right;
-  font-size: var(--fs-xs);
-  color: var(--color-text-muted);
-  margin-top: -0.6rem;
-  margin-bottom: var(--space-md);
-  cursor: pointer;
-  min-height: 24px;
-}
-.olvido-password:hover { color: var(--color-accent-yellow); }
-
-.zona-mensajes { margin-top: var(--space-md); }
-.zona-mensajes:empty { display: none; }
 
 /* ---------------------------------------------------------------------
-   RESPONSIVE — mobile first real: en pantallas angostas el visual
-   se convierte en franja superior compacta y los formularios ganan
-   todo el protagonismo (que es lo que se usa el 90% del tiempo desde
-   un teléfono).
+   Contenedor principal (tarjetas deslizantes)
    --------------------------------------------------------------------- */
-@media (max-width: 760px) {
-  .split-panel { grid-template-columns: 1fr; min-height: auto; border-radius: var(--radius-md); }
-  .panel-visual { order: 1; min-height: 200px; }
-  .panel-formularios { order: 2; border-left: none; border-top: 1px solid var(--glass-border); padding: var(--space-lg) var(--space-md); }
-  .panel-visual__branding h1 { font-size: var(--fs-2xl); }
-  .pantalla-login { padding: 0; }
-  .split-panel { border-radius: 0; min-height: 100vh; }
+.container {
+    background-color: var(--bg-container);
+    border-radius: 20px;
+    box-shadow: var(--shadow-glass);
+    border: var(--border-glass);
+    position: relative;
+    overflow: hidden;
+    width: 900px;
+    max-width: 100%;
+    min-height: 550px;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
-.oculto { display: none !important; }
+.form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.sign-in-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.container.right-panel-active .sign-in-container {
+    transform: translateX(100%);
+}
+
+.sign-up-container {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+}
+
+.container.right-panel-active .sign-up-container {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: show 0.6s;
+}
+
+@keyframes show {
+    0%, 49.99% { opacity: 0; z-index: 1; }
+    50%, 100% { opacity: 1; z-index: 5; }
+}
+
+.overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+.container.right-panel-active .overlay-container {
+    transform: translateX(-100%);
+}
+
+.overlay {
+    background: var(--gradient-overlay);
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.container.right-panel-active .overlay {
+    transform: translateX(50%);
+}
+
+.overlay-panel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-left {
+    transform: translateX(-20%);
+}
+
+.container.right-panel-active .overlay-left {
+    transform: translateX(0);
+}
+
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+.container.right-panel-active .overlay-right {
+    transform: translateX(20%);
+}
+
+/* Controladores móvil */
+.mobile-toggle {
+    display: none;
+    margin-top: 20px;
+}
+
+.mobile-toggle a {
+    color: var(--accent-primary);
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* ---------------------------------------------------------------------
+   TÓMBOLA DE ANIMACIÓN (antes: .barco-luffy / .nube-akatsuki fijas)
+   --------------------------------------------------------------------- */
+.animacion-box {
+    height: 140px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.tombola-frame {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    pointer-events: none;
+    opacity: 0;
+    will-change: opacity;
+    transition: opacity 0.5s ease;
+}
+
+.tombola-frame.cargado {
+    opacity: 1;
+}
+
+/* ---------------------------------------------------------------------
+   MEDIA QUERIES (MÓVIL)
+   --------------------------------------------------------------------- */
+@media screen and (max-width: 768px) {
+    .container {
+        width: 100vw;
+        height: 100vh;
+        min-height: 100vh;
+        border-radius: 0;
+        border: none;
+        display: flex;
+        overflow: hidden;
+    }
+
+    .overlay-container { display: none; }
+
+    .sign-in-container, .sign-up-container {
+        width: 100vw;
+        padding: 20px;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sign-in-container { left: 0; transform: translateX(0); }
+    .sign-up-container {
+        left: 100vw;
+        opacity: 1;
+        z-index: 5;
+        animation: none;
+    }
+
+    .container.right-panel-active .sign-in-container { transform: translateX(-100vw); }
+    .container.right-panel-active .sign-up-container { transform: translateX(-100vw); }
+
+    .mobile-toggle { display: block; }
+
+    form { padding: 0 20px; }
+    h1 { font-size: 1.8rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body { animation: none; }
+    .tombola-frame { transition: none; }
+}
