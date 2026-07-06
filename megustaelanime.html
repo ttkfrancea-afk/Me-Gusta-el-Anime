@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animación Resorte Natural Optimizada</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            background: transparent;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .zona-limite {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .contenedor-animacion {
+            position: absolute;
+            width: 230px; /* antes 150px — más grande, como pediste */
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Se mantiene en 10s pero optimizamos el flujo con el cambio a 3D en las propiedades */
+            animation: efectoAcordeonResorte 10s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+            /* Fuerza el renderizado por tarjeta gráfica para evitar tirones */
+            will-change: transform, opacity;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+        }
+
+        .contenedor-animacion img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* =========================================================
+           ANIMACIÓN OPTIMIZADA CON REBOTE NATURAL EN 3D
+           ========================================================= */
+        @keyframes efectoAcordeonResorte {
+            /* 0s a 2.5s: Entrada ultra veloz desde la derecha */
+            0% {
+                transform: translate3d(250px, 0, 0) scale3d(1, 1, 1);
+                opacity: 0;
+            }
+            4% {
+                opacity: 1;
+            }
+            25% {
+                /* Impacto inmediato: Se deforma con precisión al chocar */
+                transform: translate3d(-125px, 0, 0) scale3d(0.2, 1.4, 1);
+            }
+
+            /* 2.5s a 5.5s: Liberación del resorte con transiciones fluidas */
+            32% {
+                /* Escape elástico horizontal */
+                transform: translate3d(-40px, 0, 0) scale3d(1.3, 0.8, 1);
+            }
+            42% {
+                /* Inercia pasando el centro */
+                transform: translate3d(15px, 0, 0) scale3d(0.9, 1.1, 1);
+            }
+            50% {
+                /* Pre-estabilización */
+                transform: translate3d(-5px, 0, 0) scale3d(1.05, 0.95, 1);
+            }
+            58% {
+                /* Clavado perfecto en el centro */
+                transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+            }
+
+            /* 5.8s a 10s: Reposo absoluto sin consumir recursos */
+            100% {
+                transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="zona-limite">
+        <div class="contenedor-animacion">
+            <img src="https://zccbphmebkpuzwbkgtse.supabase.co/storage/v1/object/public/mis-imagenes/imagenes%20de%20login/me%20gusta%20el%20anime%20.webp" 
+                 alt="Imagen Animada" 
+                 fetchpriority="high">
+        </div>
+    </div>
+
+</body>
+</html>

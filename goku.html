@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <!-- Evita estrictamente cualquier tipo de zoom en pantallas móviles -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimum-scale=1.0">
+    <title>Goku SSJ3 - Optimizado 60FPS</title>
+    <style>
+        /* Reset básico y bloqueo de scroll accidental */
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        html, body {
+            background: transparent;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            perspective: 1000px;
+            /* Desactiva gestos innecesarios del navegador en móviles */
+            touch-action: none; 
+        }
+
+        /* Contenedor optimizado — reducido de tamaño (a propósito): toda la
+           escena se achica de forma uniforme con un solo transform, así no
+           hay que recalcular a mano cada keyframe interno. */
+        .escenario {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 350px;
+            height: 500px;
+            transform: scale(0.6);
+            transform-origin: center center;
+        }
+
+        /* Personaje con aceleración por hardware nativa */
+        .goku-personaje {
+            max-width: 100%;
+            height: auto;
+            z-index: 3;
+            transform-origin: bottom center;
+            backface-visibility: hidden;
+            will-change: transform, opacity;
+            animation: secuenciaGoku8s 8s ease-in-out infinite;
+        }
+
+        /* Destello Neón optimizado mediante opacidad pura */
+        .destello-explosion {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #ffffff;
+            box-shadow: inset 0 0 100px #ffea00, 0 0 200px #ff3c00;
+            z-index: 5;
+            opacity: 0;
+            pointer-events: none;
+            will-change: opacity;
+            animation: flashExplosion8s 8s ease-out infinite;
+        }
+
+        /* Aura de Ki fluida */
+        .aura-ki {
+            position: absolute;
+            width: 320px;
+            height: 440px;
+            background: radial-gradient(circle, rgba(255,255,220,1) 0%, rgba(255,215,0,0.8) 45%, rgba(255,60,0,0.3) 70%, rgba(0,0,0,0) 85%);
+            border-radius: 50%;
+            filter: blur(15px);
+            z-index: 1;
+            opacity: 0;
+            pointer-events: none;
+            will-change: transform, opacity;
+            animation: secuenciaKi8s 8s ease-out infinite;
+        }
+
+        /* Suelo de energía */
+        .suelo-impacto {
+            position: absolute;
+            bottom: 5%;
+            width: 200px;
+            height: 20px;
+            border-radius: 50%;
+            z-index: 2;
+            opacity: 0;
+            pointer-events: none;
+            will-change: transform, opacity;
+            animation: grietaSuelo8s 8s ease-out infinite;
+        }
+
+        /* Polvo expansivo */
+        .efecto-polvo {
+            position: absolute;
+            bottom: 5%;
+            width: 260px;
+            height: 35px;
+            background: radial-gradient(circle, rgba(140,140,140,0.6) 0%, rgba(60,60,60,0.2) 60%, rgba(0,0,0,0) 80%);
+            border-radius: 50%;
+            filter: blur(10px);
+            z-index: 2;
+            opacity: 0;
+            pointer-events: none;
+            will-change: transform, opacity;
+            animation: secuenciaPolvo8s 8s ease-out infinite;
+        }
+
+        .contenedor-rayos {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        /* Rayos optimizados con GPU */
+        .rayo-dinamico {
+            position: absolute;
+            background-color: #ffffff;
+            box-shadow: 0 0 8px #00f0ff, 0 0 15px #ffea00;
+            border-radius: 2px;
+            opacity: 1;
+            will-change: transform, opacity;
+            animation: desvanecerRayo 0.08s linear forwards;
+        }
+
+        /* Cache oculto para evitar retrasos de carga */
+        .cache-imagenes {
+            display: none;
+        }
+
+        /* ==================================================================
+         * CRONOLOGÍA DE ANIMACIÓN OPTIMIZADA A 8 SEGUNDOS (60 FPS)
+         * ================================================================== */
+        @keyframes secuenciaGoku8s {
+            0% { transform: translateY(-100vh) scaleY(1.1); opacity: 0; }
+            10% { opacity: 1; }
+            33.33% { transform: translateY(0) scaleY(0.95) scaleX(1.05); } /* Impacto a los 2.66s */
+            35% { transform: scale(1.15); } 
+            /* Pulsaciones de Ki dinámicas */
+            45% { transform: scale(0.98); }
+            55% { transform: scale(1.05); }
+            65% { transform: scale(0.98); }
+            75% { transform: scale(1.05); }
+            85% { transform: scale(0.98); }
+            95% { transform: scale(1.02); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes flashExplosion8s {
+            0%, 32% { opacity: 0; }
+            33.33% { opacity: 1; }
+            36% { opacity: 0.3; }
+            42%, 100% { opacity: 0; }
+        }
+
+        @keyframes secuenciaKi8s {
+            0%, 32% { opacity: 0; transform: scale(0.5); }
+            33.33% { opacity: 1; transform: scale(1.2); }
+            40%, 96% { opacity: 0.85; transform: scale(1.05) translateY(-2px); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        @keyframes grietaSuelo8s {
+            0%, 32% { opacity: 0; transform: scale(0.2); }
+            33.33% { opacity: 1; background: #ffcc00; box-shadow: 0 0 30px #ffea00; }
+            45% { opacity: 0.3; transform: scale(1.3); }
+            50%, 100% { opacity: 0; }
+        }
+
+        @keyframes secuenciaPolvo8s {
+            0%, 32% { opacity: 0; transform: scale(0.2); }
+            33.33% { opacity: 0.9; transform: scale(1.1); }
+            45% { opacity: 0.2; transform: scale(1.8); }
+            55%, 100% { opacity: 0; }
+        }
+
+        @keyframes desvanecerRayo {
+            0% { opacity: 1; transform: translate(0, 0) scale(1); }
+            100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.5); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Destello de la explosión -->
+    <div class="destello-explosion" id="destello"></div>
+
+    <div class="escenario">
+        <div class="aura-ki" id="aura"></div>
+        <div class="suelo-impacto" id="suelo"></div>
+
+        <!-- Personaje Principal -->
+        <img src="https://zccbphmebkpuzwbkgtse.supabase.co/storage/v1/object/public/mis-imagenes/imagenes%20de%20login/trancion%202..webp" 
+             alt="Animación Goku" 
+             class="goku-personaje" 
+             id="goku">
+
+        <div class="contenedor-rayos" id="rayosContenedor"></div>
+        <div class="efecto-polvo" id="polvo"></div>
+    </div>
+
+    <!-- Div de Pre-carga estratégica: Descarga los archivos en paralelo antes de la ejecución -->
+    <div class="cache-imagenes">
+        <img src="https://zccbphmebkpuzwbkgtse.supabase.co/storage/v1/object/public/mis-imagenes/imagenes%20de%20login/trancion%202..webp">
+        <img src="https://zccbphmebkpuzwbkgtse.supabase.co/storage/v1/object/public/mis-imagenes/imagenes%20de%20login/trancion%203..webp">
+    </div>
+
+    <script>
+        const goku = document.getElementById('goku');
+        const rayosContenedor = document.getElementById('rayosContenedor');
+
+        const urlFase2 = "https://zccbphmebkpuzwbkgtse.supabase.co/storage/v1/object/public/mis-imagenes/imagenes%20de%20login/trancion%202..webp";
+        const urlFase3 = "https://zccbphmebkpuzwbkgtse.supabase.co/storage/v1/object/public/mis-imagenes/imagenes%20de%20login/trancion%203..webp";
+
+        let enFase3 = false;
+        let intervaloRayos = null;
+
+        // Generador de rayos de alto rendimiento (Reutiliza memoria de forma limpia)
+        function generarRayoChispa() {
+            if (!enFase3) return;
+
+            const fragmento = document.createDocumentFragment();
+            
+            for (let i = 0; i < 2; i++) {
+                const rayo = document.createElement('div');
+                rayo.className = 'rayo-dinamico';
+
+                const esVertical = Math.random() > 0.5;
+                const ancho = esVertical ? Math.floor(Math.random() * 2) + 2 : Math.floor(Math.random() * 20) + 15;
+                const alto = esVertical ? Math.floor(Math.random() * 40) + 20 : Math.floor(Math.random() * 2) + 2;
+
+                rayo.style.width = ancho + 'px';
+                rayo.style.height = alto + 'px';
+                rayo.style.top = (Math.floor(Math.random() * 70) + 10) + '%';
+                rayo.style.left = (Math.floor(Math.random() * 50) + 25) + '%';
+                
+                const rot = Math.floor(Math.random() * 360);
+                const dx = (Math.random() > 0.5 ? 20 : -20) + 'px';
+                const dy = (Math.random() > 0.5 ? -25 : 15) + 'px';
+                
+                rayo.style.transform = 'rotate(' + rot + 'deg)';
+                rayo.style.setProperty('--dx', dx);
+                rayo.style.setProperty('--dy', dy);
+
+                fragmento.appendChild(rayo);
+
+                // Eliminación estricta para evitar fugas de memoria
+                setTimeout(() => rayo.remove(), 75);
+            }
+            rayosContenedor.appendChild(fragmento);
+        }
+
+        function iniciarCicloTransformacion() {
+            // Regreso inmediato a Fase 2 (Ya almacenada en caché)
+            goku.src = urlFase2;
+            enFase3 = false;
+            rayosContenedor.textContent = ''; 
+            if (intervaloRayos) clearInterval(intervaloRayos);
+
+            // Transición veloz a los 2.66 segundos exactos (33.33% de la animación de 8s)
+            setTimeout(() => {
+                goku.src = urlFase3;
+                enFase3 = true;
+                intervaloRayos = setInterval(generarRayoChispa, 40);
+            }, 2666);
+        }
+
+        // Ejecución inmediata del bucle de 8 segundos
+        iniciarCicloTransformacion();
+        setInterval(iniciarCicloTransformacion, 8000);
+    </script>
+
+</body>
+</html>
