@@ -1,108 +1,75 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Me Gusta el Anime · Entrar</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="css/variables.css" />
-  <link rel="stylesheet" href="css/login.css" />
-  <link rel="stylesheet" href="css/transitions.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimum-scale=1.0">
+    <title>Me Gusta el Anime | Entrar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
+    <div class="container" id="container">
 
-  <!-- Velo del portal: arranca invisible, JS lo activa al confirmar entrada -->
-  <div id="portal-veil" class="portal-veil"></div>
+        <!-- PANEL DE REGISTRO (SIGN UP) -->
+        <div class="form-container sign-up-container">
+            <form action="#">
+                <h1>Crear Cuenta</h1>
 
-  <div class="pantalla-login">
-    <div class="split-panel entrada-login" id="split-panel">
+                <!-- Tómbola de animación (antes: barco-luffy fijo) -->
+                <div class="animacion-box">
+                    <iframe class="tombola-frame" id="tombolaRegistro" src="megustaelanime.html" title="" tabindex="-1" aria-hidden="true"></iframe>
+                </div>
 
-      <!-- LADO VISUAL: tómbola de animaciones (doble iframe en cross-fade) -->
-      <div class="panel-visual">
-        <iframe id="fondoA" class="panel-visual__frame activa" data-actual="megustaelanime.html"
-                src="megustaelanime.html" title="" tabindex="-1" aria-hidden="true"></iframe>
-        <iframe id="fondoB" class="panel-visual__frame" data-actual=""
-                src="" title="" tabindex="-1" aria-hidden="true"></iframe>
-        <div class="panel-visual__branding">
-          <div class="logo-graffiti">Me Gusta<br>el Anime</div>
-          <p>Quizzes, torneos con premios reales y el feed de la comunidad. Todo en un solo lugar.</p>
+                <span>Ingresa tus datos para registrarte</span>
+                <input type="text" placeholder="Nombre completo" />
+                <input type="email" placeholder="Correo electrónico" />
+                <input type="password" placeholder="Contraseña" />
+                <button type="button">Registrarse</button>
+
+                <p class="mobile-toggle">¿Ya tienes cuenta? <a href="#" id="signInMobile">Inicia Sesión</a></p>
+            </form>
         </div>
-      </div>
 
-      <!-- LADO DE FORMULARIOS -->
-      <div class="panel-formularios">
-        <div class="formularios-wrapper">
+        <!-- PANEL DE INICIO DE SESIÓN (SIGN IN) -->
+        <div class="form-container sign-in-container">
+            <form action="#">
+                <h1>Iniciar Sesión</h1>
 
-          <!-- LOGIN -->
-          <form id="form-login" class="formulario activo" novalidate>
-            <h2 class="formulario__titulo">Entrar</h2>
-            <p class="formulario__subtitulo">Bienvenido de vuelta, otaku.</p>
+                <!-- Tómbola de animación (antes: nube-akatsuki fija) -->
+                <div class="animacion-box">
+                    <iframe class="tombola-frame" id="tombolaLogin" src="megustaelanime.html" title="" tabindex="-1" aria-hidden="true"></iframe>
+                </div>
 
-            <div class="input-grupo">
-              <label for="login-email">Correo</label>
-              <input type="email" id="login-email" placeholder="tucorreo@ejemplo.com" required autocomplete="email" />
-            </div>
+                <span>Ingresa tus credenciales</span>
+                <input type="email" placeholder="Correo electrónico" />
+                <input type="password" placeholder="Contraseña" />
+                <a href="#">¿Olvidaste tu contraseña?</a>
+                <button type="button">Ingresar</button>
 
-            <div class="input-grupo">
-              <label for="login-password">Contraseña</label>
-              <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password" />
-            </div>
-
-            <span class="olvido-password" id="btn-olvido-password">¿Olvidaste tu contraseña?</span>
-
-            <button type="submit" class="btn btn-primario" style="width:100%;" id="btn-login">
-              <i class="fa-solid fa-right-to-bracket"></i> Entrar
-            </button>
-
-            <div class="zona-mensajes" id="mensajes-login"></div>
-
-            <p class="formulario__pie">
-              ¿Todavía no tienes cuenta?
-              <button type="button" id="ir-a-registro">Regístrate</button>
-            </p>
-          </form>
-
-          <!-- REGISTRO -->
-          <form id="form-registro" class="formulario" novalidate>
-            <h2 class="formulario__titulo">Crear cuenta</h2>
-            <p class="formulario__subtitulo">Únete a la comunidad en menos de un minuto.</p>
-
-            <div class="input-grupo">
-              <label for="registro-usuario">Usuario</label>
-              <input type="text" id="registro-usuario" placeholder="Tu nombre de otaku" required autocomplete="username" />
-            </div>
-
-            <div class="input-grupo">
-              <label for="registro-email">Correo</label>
-              <input type="email" id="registro-email" placeholder="tucorreo@ejemplo.com" required autocomplete="email" />
-            </div>
-
-            <div class="input-grupo">
-              <label for="registro-password">Contraseña</label>
-              <input type="password" id="registro-password" placeholder="Mínimo 6 caracteres" required autocomplete="new-password" />
-            </div>
-
-            <button type="submit" class="btn btn-primario" style="width:100%;" id="btn-registro">
-              <i class="fa-solid fa-user-plus"></i> Crear cuenta
-            </button>
-
-            <div class="zona-mensajes" id="mensajes-registro"></div>
-
-            <p class="formulario__pie">
-              ¿Ya tienes cuenta?
-              <button type="button" id="ir-a-login">Inicia sesión</button>
-            </p>
-          </form>
-
+                <p class="mobile-toggle">¿No tienes cuenta? <a href="#" id="signUpMobile">Regístrate</a></p>
+            </form>
         </div>
-      </div>
+
+        <!-- PANEL SUPERPUESTO (SOLO PC) -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>¡Bienvenido de nuevo!</h1>
+                    <p>Para mantenerte conectado, inicia sesión con tu información personal</p>
+                    <button class="ghost" id="signIn">Iniciar Sesión</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>¡Hola, Nakama!</h1>
+                    <p>Comienza tu aventura registrando tus datos hoy mismo</p>
+                    <button class="ghost" id="signUp">Registrarse</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- Módulo de fondo: SOLO decide qué animación se ve. No sabe nada de auth. -->
-  <script src="js/fondo-tombola.js"></script>
-  <script type="module" src="js/auth.js"></script>
+    <!-- Módulo 1: SOLO decide qué animación va en la tómbola -->
+    <script src="js/fondo-tombola.js"></script>
+    <!-- Módulo 2: SOLO alterna login/registro (desktop + mobile) -->
+    <script src="js/auth-ui.js"></script>
 </body>
 </html>
