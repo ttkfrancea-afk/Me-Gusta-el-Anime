@@ -19,11 +19,12 @@
   <div class="pantalla-login">
     <div class="split-panel entrada-login" id="split-panel">
 
-      <!-- LADO VISUAL -->
+      <!-- LADO VISUAL: tómbola de animaciones (doble iframe en cross-fade) -->
       <div class="panel-visual">
-        <div class="panel-visual__slide panel-visual__slide--v1 activa"></div>
-        <div class="panel-visual__slide panel-visual__slide--v2"></div>
-        <div class="panel-visual__slide panel-visual__slide--v3"></div>
+        <iframe id="fondoA" class="panel-visual__frame activa" data-actual="megustaelanime.html"
+                src="megustaelanime.html" title="" tabindex="-1" aria-hidden="true"></iframe>
+        <iframe id="fondoB" class="panel-visual__frame" data-actual=""
+                src="" title="" tabindex="-1" aria-hidden="true"></iframe>
         <div class="panel-visual__branding">
           <div class="logo-graffiti">Me Gusta<br>el Anime</div>
           <p>Quizzes, torneos con premios reales y el feed de la comunidad. Todo en un solo lugar.</p>
@@ -100,6 +101,8 @@
     </div>
   </div>
 
+  <!-- Módulo de fondo: SOLO decide qué animación se ve. No sabe nada de auth. -->
+  <script src="js/fondo-tombola.js"></script>
   <script type="module" src="js/auth.js"></script>
 </body>
 </html>
