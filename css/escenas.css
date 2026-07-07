@@ -1,0 +1,575 @@
+/* =====================================================================
+   ME GUSTA EL ANIME · css/escenas.css
+   ---------------------------------------------------------------------
+   Las 6 animaciones del login, YA NO como iframes — inyectadas directo
+   en el DOM de la página. Cada una vive bajo su propia clase raíz
+   (.escena-xxx) para que ningún nombre de clase choque entre ellas ni
+   con el resto del sitio. overflow:visible en todos lados: nada se
+   corta, la animación tiene libertad real de moverse fuera de su
+   contenedor nominal si así fue diseñada.
+   ===================================================================== */
+
+.escena-animacion {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+    position: relative;
+    overflow: visible;
+}
+
+/* =====================================================================
+   MARCA — "Me Gusta el Anime" (más grande, como pediste)
+   ===================================================================== */
+.escena-brand {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: visible;
+}
+
+.escena-brand__caja {
+    position: relative;
+    width: 230px;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: escena-brand-resorte 10s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+    will-change: transform, opacity;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+
+.escena-brand__caja img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+@keyframes escena-brand-resorte {
+    0%   { transform: translate3d(250px, 0, 0) scale3d(1, 1, 1); opacity: 0; }
+    4%   { opacity: 1; }
+    25%  { transform: translate3d(-125px, 0, 0) scale3d(0.2, 1.4, 1); }
+    32%  { transform: translate3d(-40px, 0, 0) scale3d(1.3, 0.8, 1); }
+    42%  { transform: translate3d(15px, 0, 0) scale3d(0.9, 1.1, 1); }
+    50%  { transform: translate3d(-5px, 0, 0) scale3d(1.05, 0.95, 1); }
+    58%  { transform: translate3d(0, 0, 0) scale3d(1, 1, 1); }
+    100% { transform: translate3d(0, 0, 0) scale3d(1, 1, 1); }
+}
+
+/* =====================================================================
+   GOKU SSJ3 (reducido, como pediste)
+   ===================================================================== */
+.escena-goku {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+    overflow: visible;
+}
+
+.escena-goku__destello {
+    position: absolute;
+    inset: 0;
+    background: #ffffff;
+    box-shadow: inset 0 0 100px #ffea00, 0 0 200px #ff3c00;
+    z-index: 5;
+    opacity: 0;
+    pointer-events: none;
+    will-change: opacity;
+    animation: escena-goku-flash 8s ease-out infinite;
+}
+
+.escena-goku__escenario {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 350px;
+    height: 500px;
+    transform: scale(0.6);
+    transform-origin: center center;
+}
+
+.escena-goku__personaje {
+    max-width: 100%;
+    height: auto;
+    z-index: 3;
+    transform-origin: bottom center;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+    animation: escena-goku-secuencia 8s ease-in-out infinite;
+}
+
+.escena-goku__aura {
+    position: absolute;
+    width: 320px;
+    height: 440px;
+    background: radial-gradient(circle, rgba(255,255,220,1) 0%, rgba(255,215,0,0.8) 45%, rgba(255,60,0,0.3) 70%, rgba(0,0,0,0) 85%);
+    border-radius: 50%;
+    filter: blur(15px);
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform, opacity;
+    animation: escena-goku-ki 8s ease-out infinite;
+}
+
+.escena-goku__suelo {
+    position: absolute;
+    bottom: 5%;
+    width: 200px;
+    height: 20px;
+    border-radius: 50%;
+    z-index: 2;
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform, opacity;
+    animation: escena-goku-grieta 8s ease-out infinite;
+}
+
+.escena-goku__polvo {
+    position: absolute;
+    bottom: 5%;
+    width: 260px;
+    height: 35px;
+    background: radial-gradient(circle, rgba(140,140,140,0.6) 0%, rgba(60,60,60,0.2) 60%, rgba(0,0,0,0) 80%);
+    border-radius: 50%;
+    filter: blur(10px);
+    z-index: 2;
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform, opacity;
+    animation: escena-goku-polvo 8s ease-out infinite;
+}
+
+.escena-goku__rayos {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    pointer-events: none;
+}
+
+.escena-goku__rayo {
+    position: absolute;
+    background-color: #ffffff;
+    box-shadow: 0 0 8px #00f0ff, 0 0 15px #ffea00;
+    border-radius: 2px;
+    opacity: 1;
+    will-change: transform, opacity;
+    animation: escena-goku-desvanecer-rayo 0.08s linear forwards;
+}
+
+@keyframes escena-goku-secuencia {
+    0% { transform: translateY(-100%) scaleY(1.1); opacity: 0; }
+    10% { opacity: 1; }
+    33.33% { transform: translateY(0) scaleY(0.95) scaleX(1.05); }
+    35% { transform: scale(1.15); }
+    45% { transform: scale(0.98); }
+    55% { transform: scale(1.05); }
+    65% { transform: scale(0.98); }
+    75% { transform: scale(1.05); }
+    85% { transform: scale(0.98); }
+    95% { transform: scale(1.02); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes escena-goku-flash {
+    0%, 32% { opacity: 0; }
+    33.33% { opacity: 1; }
+    36% { opacity: 0.3; }
+    42%, 100% { opacity: 0; }
+}
+
+@keyframes escena-goku-ki {
+    0%, 32% { opacity: 0; transform: scale(0.5); }
+    33.33% { opacity: 1; transform: scale(1.2); }
+    40%, 96% { opacity: 0.85; transform: scale(1.05) translateY(-2px); }
+    100% { opacity: 0; transform: scale(0.5); }
+}
+
+@keyframes escena-goku-grieta {
+    0%, 32% { opacity: 0; transform: scale(0.2); }
+    33.33% { opacity: 1; background: #ffcc00; box-shadow: 0 0 30px #ffea00; }
+    45% { opacity: 0.3; transform: scale(1.3); }
+    50%, 100% { opacity: 0; }
+}
+
+@keyframes escena-goku-polvo {
+    0%, 32% { opacity: 0; transform: scale(0.2); }
+    33.33% { opacity: 0.9; transform: scale(1.1); }
+    45% { opacity: 0.2; transform: scale(1.8); }
+    55%, 100% { opacity: 0; }
+}
+
+@keyframes escena-goku-desvanecer-rayo {
+    0% { opacity: 1; transform: translate(0, 0) scale(1); }
+    100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.5); }
+}
+
+/* =====================================================================
+   NARUTO — Kage Bunshin no Jutsu (los clones "pum pum pum")
+   Nota técnica: el archivo original usaba vw/vh (relativos a pantalla
+   completa). Como ahora vive DENTRO del login, se convirtieron todos
+   a % relativos a .escena-naruto (que tiene alto fijo de 360px), para
+   que el tamaño/posición de cada clon sea igual de preciso pero
+   relativo a su propio espacio, no a la pantalla del teléfono entera.
+   ===================================================================== */
+.escena-naruto {
+    position: relative;
+    width: 100%;
+    height: 360px;
+    overflow: visible;
+    font-family: 'Arial Black', sans-serif;
+}
+
+.escena-naruto__wrapper {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.escena-naruto.ready .escena-naruto__wrapper { display: block; }
+
+.escena-naruto__paso {
+    position: absolute;
+    opacity: 0;
+    will-change: opacity, transform, filter;
+    object-fit: contain;
+    transform: translateZ(0);
+}
+
+@keyframes escena-naruto-zigzag {
+    0% { opacity: 0; transform: scale3d(0.4, 0.4, 1); filter: blur(8px); }
+    10% { opacity: 1; transform: scale3d(1, 1, 1); filter: blur(0px); }
+    90% { opacity: 1; transform: scale3d(1, 1, 1); filter: blur(0px); }
+    100% { opacity: 0; transform: scale3d(1.2, 1.2, 1); filter: blur(6px); }
+}
+
+@keyframes escena-naruto-intro4 {
+    0% { opacity: 0; filter: blur(10px) brightness(1.5); }
+    100% { opacity: 1; filter: blur(0px) brightness(1); }
+}
+
+@keyframes escena-naruto-aura-kyubi {
+    0% { filter: drop-shadow(0 0 6px #ff1a00) drop-shadow(0 0 15px #ff6a00); }
+    50% { filter: drop-shadow(0 0 14px #e60000) drop-shadow(0 0 28px #ff8800); }
+    100% { filter: drop-shadow(0 0 6px #ff1a00) drop-shadow(0 0 15px #ff6a00); }
+}
+
+.escena-naruto__kurama {
+    position: absolute;
+    width: 60%;
+    height: 50%;
+    bottom: 0;
+    left: 20%;
+    z-index: 22;
+    pointer-events: none;
+    overflow: visible;
+    opacity: 0;
+}
+.escena-naruto.ready .escena-naruto__kurama {
+    opacity: 1;
+    transition: opacity 0.3s ease 4.7s;
+}
+
+.escena-naruto__burbuja {
+    position: absolute;
+    bottom: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,106,0,0.9) 0%, rgba(230,0,0,0.7) 60%, rgba(150,0,0,0) 100%);
+    will-change: transform, opacity;
+    animation: escena-naruto-subir-burbuja 1.8s infinite linear;
+    opacity: 0;
+}
+
+.escena-naruto.ready .escena-naruto__cb1 { width: 45px; height: 45px; left: 15%; --x-move: -20px; animation-delay: 4.7s; }
+.escena-naruto.ready .escena-naruto__cb2 { width: 60px; height: 60px; left: 45%; --x-move: 30px; animation-delay: 5.0s; }
+.escena-naruto.ready .escena-naruto__cb3 { width: 35px; height: 35px; left: 70%; --x-move: -15px; animation-delay: 4.8s; }
+.escena-naruto.ready .escena-naruto__cb4 { width: 50px; height: 50px; left: 30%; --x-move: 10px; animation-delay: 5.2s; }
+.escena-naruto.ready .escena-naruto__cb5 { width: 40px; height: 40px; left: 60%; --x-move: -35px; animation-delay: 5.4s; }
+
+@keyframes escena-naruto-subir-burbuja {
+    0% { transform: translate3d(0, 0, 0) scale(0.4); opacity: 0; }
+    15% { opacity: 0.85; }
+    50% { background: radial-gradient(circle, rgba(255,165,0,0.8) 0%, rgba(200,0,0,0.5) 70%, rgba(0,0,0,0) 100%); }
+    90% { opacity: 0.4; }
+    100% { transform: translate3d(var(--x-move), -162px, 0) scale(1.3); opacity: 0; filter: blur(1px); }
+}
+
+.escena-naruto__humo {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(240,240,240,1) 0%, rgba(210,210,210,0.8) 40%, rgba(150,150,150,0) 70%);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform, opacity, filter;
+    z-index: 15;
+}
+
+@keyframes escena-naruto-puff {
+    0% { transform: scale3d(0.1, 0.1, 1); opacity: 0; filter: blur(2px); }
+    10% { opacity: 1; filter: blur(0px); }
+    50% { opacity: 0.8; transform: scale3d(1.4, 1.4, 1); filter: blur(5px); }
+    100% { transform: scale3d(2.2, 2.2, 1); opacity: 0; filter: blur(15px); }
+}
+
+@keyframes escena-naruto-revelacion {
+    0% { opacity: 0; transform: scale3d(0.6, 0.6, 1); filter: blur(8px); }
+    20% { opacity: 1; filter: blur(0px); }
+    100% { opacity: 1; transform: scale3d(1, 1, 1); }
+}
+
+.escena-naruto__texto-sombra {
+    animation: escena-naruto-text-shadow 0.6s 4.7s both;
+}
+@keyframes escena-naruto-text-shadow {
+    0% { text-shadow: 0 0 0 rgba(0, 0, 0, 0); }
+    100% { text-shadow: 6px 6px 15px rgba(230, 0, 0, 0.85); }
+}
+
+@keyframes escena-naruto-aparecer-burbuja {
+    0% { opacity: 0; transform: translate3d(-50%, 15px, 0) scale(0.8); }
+    100% { opacity: 1; transform: translate3d(-50%, 0, 0) scale(1); }
+}
+
+.escena-naruto.ready .escena-naruto__n1 { width: 25%; top: 5%; left: 5%; animation: escena-naruto-zigzag 1s ease-out forwards; }
+.escena-naruto.ready .escena-naruto__n2 { width: 40%; top: 20%; right: 5%; animation: escena-naruto-zigzag 1s ease-out 1s forwards; }
+.escena-naruto.ready .escena-naruto__n3 { width: 55%; bottom: 15%; left: 5%; animation: escena-naruto-zigzag 1.2s ease-out 2s forwards; }
+
+.escena-naruto.ready .escena-naruto__n4 {
+    height: 55%; width: 100%; bottom: 0; left: 50%;
+    transform: translate3d(-50%, 0, 0);
+    animation: escena-naruto-intro4 0.4s ease-out 3.2s forwards, escena-naruto-aura-kyubi 1.4s ease-in-out 3.6s infinite;
+    z-index: 25;
+}
+
+.escena-naruto__bocadillo {
+    position: absolute; top: 36%; left: 50%; transform: translate3d(-50%, 0, 0);
+    background: rgba(255, 255, 255, 0.95); border: 4px solid #000; padding: 8px 16px;
+    border-radius: 20px; z-index: 30; opacity: 0; white-space: nowrap; box-shadow: 0 5px 0 #000;
+}
+.escena-naruto.ready .escena-naruto__bocadillo { animation: escena-naruto-aparecer-burbuja 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 4.7s forwards; }
+.escena-naruto__bocadillo::after { content: ''; position: absolute; bottom: -13px; left: 50%; transform: translateX(-50%); border-width: 13px 10px 0; border-style: solid; border-color: rgba(255, 255, 255, 0.95) transparent; }
+.escena-naruto__bocadillo::before { content: ''; position: absolute; bottom: -19px; left: 50%; transform: translateX(-50%); border-width: 15px 12px 0; border-style: solid; border-color: #000 transparent; z-index: -1; }
+
+.escena-naruto__texto-jutsu { color: #ff3c00; font-size: 18px; -webkit-text-stroke: 1.5px #000; }
+
+.escena-naruto__clon { z-index: 10; }
+.escena-naruto.ready .escena-naruto__sb1 { top: 12%; left: 12%; animation: escena-naruto-puff 0.5s ease-out 4.9s forwards; }
+.escena-naruto.ready .escena-naruto__c1 { width: 32%; top: 10%; left: 5%; animation: escena-naruto-revelacion 0.4s ease-out 5.0s forwards; }
+
+.escena-naruto.ready .escena-naruto__sb2 { top: 42%; right: 10%; animation: escena-naruto-puff 0.5s ease-out 5.3s forwards; }
+.escena-naruto.ready .escena-naruto__c2 { width: 35%; top: 40%; right: 4%; animation: escena-naruto-revelacion 0.4s ease-out 5.4s forwards; }
+
+.escena-naruto.ready .escena-naruto__sb3 { top: 6%; left: 42%; animation: escena-naruto-puff 0.5s ease-out 5.7s forwards; }
+.escena-naruto.ready .escena-naruto__c3 { width: 30%; top: 4%; left: 40%; animation: escena-naruto-revelacion 0.4s ease-out 5.8s forwards; }
+
+.escena-naruto.ready .escena-naruto__sb4 { bottom: 20%; left: 10%; animation: escena-naruto-puff 0.5s ease-out 6.1s forwards; }
+.escena-naruto.ready .escena-naruto__c4 { width: 36%; bottom: 12%; left: 2%; animation: escena-naruto-revelacion 0.4s ease-out 6.2s forwards; }
+
+.escena-naruto.ready .escena-naruto__sb6 { top: 10%; right: 14%; animation: escena-naruto-puff 0.5s ease-out 6.5s forwards; }
+.escena-naruto.ready .escena-naruto__c6 { width: 32%; top: 8%; right: 8%; animation: escena-naruto-revelacion 0.4s ease-out 6.6s forwards; }
+
+/* =====================================================================
+   BARCO DE LUFFY
+   ===================================================================== */
+.escena-barco {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: visible;
+}
+
+.escena-barco__img {
+    width: 210px;
+    animation: escena-barco-navegar 10s ease-in-out infinite;
+}
+
+@keyframes escena-barco-navegar {
+    0% { transform: translateX(120px) scale(1.4); opacity: 0; }
+    15% { opacity: 1; }
+    50% { transform: translateX(0px) scale(1); opacity: 1; }
+    85% { opacity: 1; }
+    100% { transform: translateX(-120px) scale(0.2); opacity: 0; }
+}
+
+/* =====================================================================
+   NUBE AKATSUKI
+   ===================================================================== */
+.escena-nube {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: visible;
+}
+
+.escena-nube__contenedor {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.escena-nube__img {
+    width: 185px;
+    animation: escena-nube-flotar 3s ease-in-out infinite;
+    filter: drop-shadow(0px 5px 15px rgba(255, 0, 0, 0.2));
+    position: relative;
+    z-index: 2;
+}
+
+.escena-nube__brisa {
+    position: absolute;
+    width: 80px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    z-index: 1;
+    opacity: 0;
+    animation: escena-nube-brisa 2s linear infinite;
+}
+.escena-nube__brisa:nth-child(1) { top: 20px; animation-delay: 0s; }
+.escena-nube__brisa:nth-child(2) { top: 70px; animation-delay: 0.5s; }
+.escena-nube__brisa:nth-child(3) { top: 110px; animation-delay: 1s; }
+
+@keyframes escena-nube-flotar {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes escena-nube-brisa {
+    0% { transform: translateX(100px); opacity: 0; }
+    50% { opacity: 0.5; }
+    100% { transform: translateX(-100px); opacity: 0; }
+}
+
+/* =====================================================================
+   SOLO LEVELING — Monarca de las Sombras
+   Nota técnica: el original usaba -100vh (pantalla completa) para que
+   el Monarca entrara desde arriba. Convertido a -100% (100% de su
+   propia altura, que es 100% del contenedor) — así entra siempre
+   "una altura de contenedor" por arriba, sin importar el tamaño real.
+   ===================================================================== */
+.escena-solo {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: visible;
+}
+
+.escena-solo__escenario {
+    width: 100%;
+    max-width: 220px;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.escena-solo__img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+.escena-solo__e {
+    z-index: 1;
+    opacity: 0;
+    transform-origin: bottom center;
+    animation: escena-solo-sung-e 8s ease-out infinite;
+}
+
+.escena-solo__s {
+    z-index: 2;
+    opacity: 1;
+    transform-origin: bottom center;
+    transform: translate3d(0, -100%, 0);
+    animation: escena-solo-monarca 8s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+.escena-solo__sombras {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    pointer-events: none;
+}
+
+.escena-solo__calavera {
+    position: absolute;
+    background: rgba(139, 92, 246, 0.35);
+    border-radius: 50% 50% 40% 40%;
+    box-shadow: 0 0 22px #a855f7, inset 0 0 12px #5b21b6;
+    opacity: 0;
+    will-change: transform, opacity;
+}
+
+.escena-solo__sk1 { width: 45px; height: 50px; bottom: 18%; left: 8%; --dx: -55px; --dy: -115px; animation: escena-solo-humo 1.5s ease-out 4.64s infinite; }
+.escena-solo__sk2 { width: 58px; height: 63px; bottom: 12%; right: 4%; --dx: 60px; --dy: -140px; animation: escena-solo-humo 1.5s ease-out 4.68s infinite; }
+
+@keyframes escena-solo-sung-e {
+    0% { transform: translate3d(0, 0, -300px) scale3d(0, 0, 0); opacity: 0; }
+    15% { transform: translate3d(0, 0, 0) scale3d(1, 1, 1); opacity: 1; }
+    18%, 26%, 34% { transform: translate3d(-3px, 0, 0); opacity: 1; }
+    22%, 30%, 38% { transform: translate3d(3px, 0, 0); opacity: 1; }
+    42% { transform: translate3d(0, 0, 0); opacity: 1; }
+    45% { transform: scale3d(1.1, 0.60, 1); opacity: 1; }
+    49% { transform: scale3d(1.03, 0.70, 1); opacity: 1; }
+    52% { transform: scale3d(1.2, 0.30, 1); opacity: 0.8; }
+    55% { transform: scale3d(1.1, 0.35, 1); opacity: 0.7; }
+    58% { transform: scale3d(1.6, 0.01, 1); opacity: 0.3; }
+    60%, 90% { transform: scale3d(2, 0, 1); opacity: 0; }
+    96%, 100% { transform: scale3d(0, 0, 0); opacity: 0; }
+}
+
+@keyframes escena-solo-monarca {
+    0%, 40% { transform: translate3d(0, -100%, 0); }
+    45% { transform: translate3d(0, 0, 0) scale3d(1.08, 0.8, 1); }
+    49% { transform: translate3d(0, -12%, 0) scale3d(0.95, 1.1, 1); }
+    52% { transform: translate3d(0, 0, 0) scale3d(1.12, 0.85, 1); }
+    55% { transform: translate3d(0, -4%, 0) scale3d(0.98, 1.03, 1); }
+    58% { transform: translate3d(0, 0, 0) scale3d(1.05, 0.95, 1); }
+    62%, 90% { transform: translate3d(0, 0, 0) scale3d(1, 1, 1); }
+    96%, 100% { transform: translate3d(0, -100%, 0); }
+}
+
+@keyframes escena-solo-humo {
+    0% { transform: translate3d(0, 0, 0) scale(0.2); opacity: 0; }
+    15% { opacity: 0.9; filter: blur(1px); }
+    100% { transform: translate3d(var(--dx), var(--dy), 0) scale(1.7); opacity: 0; filter: blur(15px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .escena-brand__caja, .escena-goku__personaje, .escena-goku__destello,
+    .escena-goku__aura, .escena-goku__suelo, .escena-goku__polvo,
+    .escena-barco__img, .escena-nube__img, .escena-nube__brisa,
+    .escena-solo__e, .escena-solo__s, .escena-solo__calavera {
+        animation: none !important;
+    }
+}
