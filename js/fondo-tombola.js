@@ -1,9 +1,9 @@
 /* =========================================================
    ME GUSTA EL ANIME — js/fondo-tombola.js
-   Responsabilidad única: decidir qué animación se ve dentro
-   de .animacion-box (tanto en el panel de registro como en el
-   de login — solo uno es visible a la vez, pero se mantienen
-   los dos iframes sincronizados al mismo valor).
+   Responsabilidad única: decidir qué animación se ve (misma
+   regla de siempre) y pedirle a Escenas (js/escenas.js) que
+   la construya dentro del login — ya no hay iframes que
+   cambiar de src, hay escenas que se inyectan/limpian.
 
    Reglas:
    1) Carga fija: "megustaelanime.html" siempre al entrar/recargar.
@@ -12,9 +12,7 @@
    3) De ahí en adelante (cualquier cambio de pestaña): aleatorio
       libre entre las 6.
 
-   No sabe nada de formularios. Expone únicamente:
-     window.FondoTombola.notificarCambioDePestana(tab)
-   auth-ui.js lo llama cuando el usuario cambia de pestaña.
+   Expone: window.FondoTombola.notificarCambioDePestana(tab)
    ========================================================= */
 
 (function () {
@@ -30,22 +28,9 @@
 
     const TODAS = [...SIN_BIENVENIDA, BIENVENIDA];
 
-    // Cada animación tiene su propio tamaño calculado (ver css/login.css).
-    // Sin esto, todas comparten la misma caja y se ven o apretadas o
-    // demasiado sueltas según el archivo.
-    const TALLAS = {
-        'megustaelanime.html': 'talla-brand',
-        'barcoluffy.html': 'talla-barco',
-        'clones-naruto.html': 'talla-naruto',
-        'goku.html': 'talla-goku',
-        'nubeakatsuki.html': 'talla-nube',
-        'sololeveling.html': 'talla-solo'
-    };
-    const TODAS_LAS_TALLAS = Object.values(TALLAS);
-
-    const frames = [
-        document.getElementById('tombolaRegistro'),
-        document.getElementById('tombolaLogin')
+    const contenedores = [
+        document.getElementById('escenaRegistro'),
+        document.getElementById('escenaLogin')
     ].filter(Boolean);
 
     let actual = BIENVENIDA;
@@ -57,21 +42,10 @@
         return fuente[Math.floor(Math.random() * fuente.length)];
     }
 
-    function mostrarEnFrames(nuevoSrc) {
-        actual = nuevoSrc;
-        const claseTalla = TALLAS[nuevoSrc];
-
-        frames.forEach((frame) => {
-            frame.classList.remove('cargado');
-            TODAS_LAS_TALLAS.forEach((clase) => frame.classList.remove(clase));
-            if (claseTalla) frame.classList.add(claseTalla);
-
-            const alTerminarDeCargar = () => {
-                frame.classList.add('cargado');
-                frame.removeEventListener('load', alTerminarDeCargar);
-            };
-            frame.addEventListener('load', alTerminarDeCargar, { once: true });
-            frame.src = nuevoSrc;
+    function mostrarEnContenedores(nombre) {
+        actual = nombre;
+        contenedores.forEach((contenedor) => {
+            if (window.Escenas) window.Escenas.mostrar(nombre, contenedor);
         });
     }
 
@@ -86,13 +60,11 @@
             siguiente = elegirDistintoAlActual(TODAS);
         }
 
-        mostrarEnFrames(siguiente);
+        mostrarEnContenedores(siguiente);
     }
 
-    // Revela con fade-in la animación de bienvenida apenas cargue la primera vez
-    frames.forEach((frame) => {
-        frame.addEventListener('load', () => frame.classList.add('cargado'), { once: true });
-    });
+    // Carga fija inicial en ambos contenedores
+    mostrarEnContenedores(BIENVENIDA);
 
     window.FondoTombola = { notificarCambioDePestana };
 })();
