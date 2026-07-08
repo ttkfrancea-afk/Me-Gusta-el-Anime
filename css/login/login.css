@@ -53,6 +53,7 @@ body {
     flex-direction: column;
     font-family: 'Montserrat', sans-serif;
     height: 100vh;
+    height: 100dvh; /* consistente con .container en móvil, evita un desfase de 1 barra de navegador entre ambos */
     overflow: hidden;
     color: var(--text-main);
     overscroll-behavior: none;
@@ -374,6 +375,9 @@ input:focus {
         border: none;
         display: flex;
         overflow: hidden;
+        background-color: var(--bg-body); /* sólido en móvil: aquí la tarjeta ocupa toda la pantalla, así que ya no debe ser semitransparente. Sin esto, se ve el degradado animado del body a través del blur → esas líneas diagonales y la franja roja */
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
     }
 
     .overlay-container { display: none; }
@@ -383,8 +387,6 @@ input:focus {
         padding: 20px;
         padding-bottom: max(20px, env(safe-area-inset-bottom)); /* nunca queda contenido pegado detrás de la barra de gestos */
         transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        overflow-y: auto; /* red de seguridad: si un teléfono es muy pequeño, hace scroll en vez de recortar contenido */
-        -webkit-overflow-scrolling: touch;
     }
 
     .sign-in-container { left: 0; transform: translateX(0); }
