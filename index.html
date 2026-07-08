@@ -16,8 +16,12 @@
             <form action="#">
                 <h1>Crear Cuenta</h1>
 
-                <!-- Tómbola de animación — inyectada por js/login/escenas.js, sin iframe -->
-                <div class="escena-animacion" id="escenaRegistro"></div>
+                <!-- Animación fija: Barco de Luffy. Sin JS, sin tómbola. -->
+                <div class="escena-animacion">
+                    <div class="escena-barco">
+                        <img src="https://zccbphmebkpuzwbkgtse.supabase.co/storage/v1/object/public/mis-imagenes/imagenes%20de%20login/barco%20luffy.webp" alt="Barco de Luffy" class="escena-barco__img">
+                    </div>
+                </div>
 
                 <span>Ingresa tus datos para registrarte</span>
                 <input type="text" placeholder="Nombre completo" />
@@ -44,8 +48,14 @@
             <form action="#">
                 <h1>Iniciar Sesión</h1>
 
-                <!-- Tómbola de animación — inyectada por js/login/escenas.js, sin iframe -->
-                <div class="escena-animacion" id="escenaLogin"></div>
+                <!-- Animación fija: Me Gusta el Anime. Sin JS, sin tómbola. -->
+                <div class="escena-animacion">
+                    <div class="escena-brand">
+                        <div class="escena-brand__caja">
+                            <img src="https://zccbphmebkpuzwbkgtse.supabase.co/storage/v1/object/public/mis-imagenes/imagenes%20de%20login/me%20gusta%20el%20anime%20.webp" alt="Me Gusta el Anime">
+                        </div>
+                    </div>
+                </div>
 
                 <span>Ingresa tus credenciales</span>
                 <input type="email" placeholder="Correo electrónico" />
@@ -84,13 +94,9 @@
         </div>
     </div>
 
-    <!-- Módulo 0: construye/limpia cada animación dentro del propio DOM (sin iframe) -->
-    <script src="js/login/escenas.js"></script>
-    <!-- Módulo 1: SOLO decide qué animación va en la tómbola -->
-    <script src="js/login/fondo-tombola.js"></script>
-    <!-- Módulo 2: SOLO alterna login/registro (desktop + mobile) -->
+    <!-- Alterna login/registro (desktop + mobile) -->
     <script src="js/login/auth-ui.js"></script>
-    <!-- Módulo 3: conecta los botones de Google con Supabase Auth (type="module" porque importa supabase.js) -->
+    <!-- Conecta los botones de Google/Facebook con Supabase Auth -->
     <script type="module" src="js/login/social-auth.js"></script>
 </body>
 </html>
