@@ -1,418 +1,101 @@
 /* =====================================================================
-   ME GUSTA EL ANIME · css/login/login.css
+   ME GUSTA EL ANIME · css/login/escenas.css
    ---------------------------------------------------------------------
-   Mismo diseño exacto de tu loginanime.html original (tarjetas
-   deslizantes + overlay). Cambios respecto al original:
-     1) Se quitó #canvas1 y su motor de partículas (pesado en móvil).
-     2) El body ahora usa un degradado líquido negro/escarlata animado
-        en vez del canvas.
-     3) .barco-luffy / .nube-akatsuki fijas -> .tombola-frame (iframe).
-   Todo lo demás (layout, textos, breakpoints) es idéntico.
+   SOLO 2 animaciones, cada una fija a su panel — nunca rotan, nunca
+   cambian, no dependen de JavaScript. Por eso ya no existe
+   js/login/escenas.js ni js/login/fondo-tombola.js: ambas escenas son
+   puro CSS sobre una etiqueta <img> estática que ya vive directo en
+   index.html.
 
-   Cambios de esta pasada de limpieza (arquitectura, no diseño):
-     - Se eliminó `.tombola-frame.cargado`: CSS muerto de la época del
-       iframe, ya no existe ese elemento en el DOM.
-     - Se añadió estabilidad de layout en móvil (100dvh + safe-area)
-       para que el contenido nunca quede tapado por los botones de
-       navegación del sistema. No se tocó ningún valor existente.
+     Panel de Login   -> .escena-brand  ("Me Gusta el Anime")
+     Panel de Registro -> .escena-barco  (Barco de Luffy)
+
+   overflow:visible se mantiene a propósito: es lo que permite que el
+   barco "invada" visualmente el espacio del título de arriba durante
+   su animación de llegada (efecto 3D de acercamiento).
    ===================================================================== */
 
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700,800');
-
-:root {
-    --bg-body: #050505;
-    --bg-container: rgba(20, 20, 20, 0.85);
-    --bg-input: #2a2a2a;
-    --text-main: #ffffff;
-    --text-secondary: #b3b3b3;
-    --accent-primary: #ff0844;
-    --accent-secondary: #ffb199;
-    --rojo-profundo: #8a0021;
-    --gradient-overlay: linear-gradient(135deg, var(--accent-primary), var(--rojo-profundo));
-    --shadow-glass: 0 15px 35px rgba(0,0,0,0.5);
-    --border-glass: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
-}
-
-/* ---------------------------------------------------------------------
-   FONDO LÍQUIDO (reemplaza el canvas de partículas)
-   --------------------------------------------------------------------- */
-body {
-    background: linear-gradient(140deg, #000000 0%, var(--rojo-profundo) 45%, var(--accent-primary) 70%, #000000 100%);
-    background-size: 300% 300%;
-    animation: fondoLiquido 16s ease-in-out infinite;
+.escena-animacion {
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    font-family: 'Montserrat', sans-serif;
-    height: 100vh;
-    height: 100dvh; /* consistente con .container en móvil, evita un desfase de 1 barra de navegador entre ambos */
-    overflow: hidden;
-    color: var(--text-main);
-    overscroll-behavior: none;
-}
-
-@keyframes fondoLiquido {
-    0%   { background-position: 0% 30%; }
-    50%  { background-position: 100% 70%; }
-    100% { background-position: 0% 30%; }
-}
-
-h1 {
-    font-weight: 800;
-    margin: 0;
-    color: var(--text-main);
-    letter-spacing: 1px;
-}
-
-p {
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 22px;
-    letter-spacing: 0.5px;
-    margin: 20px 0 30px;
-    color: var(--text-secondary);
-}
-
-span {
-    font-size: 12px;
-    color: var(--text-secondary);
-    margin-bottom: 15px;
-}
-
-a {
-    color: var(--text-secondary);
-    font-size: 13px;
-    text-decoration: none;
     margin: 15px 0;
-    transition: color 0.3s ease;
-}
-
-a:hover {
-    color: var(--accent-primary);
-}
-
-button {
-    border-radius: 30px;
-    border: none;
-    background: var(--accent-primary);
-    color: #FFFFFF;
-    font-size: 13px;
-    font-weight: bold;
-    padding: 14px 50px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    transition: transform 0.1s ease-in, box-shadow 0.3s ease;
-    cursor: pointer;
-    margin-top: 15px;
-    box-shadow: 0 4px 15px rgba(255, 8, 68, 0.4);
-}
-
-button:active {
-    transform: scale(0.95);
-}
-
-button:focus {
-    outline: none;
-}
-
-button.ghost {
-    background-color: transparent;
-    border: 2px solid #FFFFFF;
-    box-shadow: none;
-}
-
-button.ghost:hover {
-    background-color: #FFFFFF;
-    color: var(--accent-primary);
-}
-
-form {
-    background-color: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 0 50px;
-    height: 100%;
-    text-align: center;
-}
-
-input {
-    background-color: var(--bg-input);
-    border: 1px solid transparent;
-    color: var(--text-main);
-    padding: 14px 15px;
-    margin: 8px 0;
-    width: 100%;
-    border-radius: 8px;
-    transition: border 0.3s ease, background 0.3s ease;
-}
-
-input:focus {
-    outline: none;
-    border: 1px solid var(--accent-primary);
-    background-color: #333;
-}
-
-/* ---------------------------------------------------------------------
-   Contenedor principal (tarjetas deslizantes)
-   --------------------------------------------------------------------- */
-.container {
-    background-color: var(--bg-container);
-    border-radius: 20px;
-    box-shadow: var(--shadow-glass);
-    border: var(--border-glass);
     position: relative;
-    overflow: hidden;
-    width: 900px;
-    max-width: 100%;
-    min-height: 550px;
-    z-index: 10;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    overflow: visible;
 }
 
-.form-container {
-    position: absolute;
-    top: 0;
-    height: 100%;
-    transition: all 0.6s ease-in-out;
-}
-
-.sign-in-container {
-    left: 0;
-    width: 50%;
-    z-index: 2;
-}
-
-.container.right-panel-active .sign-in-container {
-    transform: translateX(100%);
-}
-
-.sign-up-container {
-    left: 0;
-    width: 50%;
-    opacity: 0;
-    z-index: 1;
-}
-
-.container.right-panel-active .sign-up-container {
-    transform: translateX(100%);
-    opacity: 1;
-    z-index: 5;
-    animation: show 0.6s;
-}
-
-@keyframes show {
-    0%, 49.99% { opacity: 0; z-index: 1; }
-    50%, 100% { opacity: 1; z-index: 5; }
-}
-
-.overlay-container {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 50%;
-    height: 100%;
-    overflow: hidden;
-    transition: transform 0.6s ease-in-out;
-    z-index: 100;
-}
-
-.container.right-panel-active .overlay-container {
-    transform: translateX(-100%);
-}
-
-.overlay {
-    background: var(--gradient-overlay);
-    background-repeat: no-repeat;
-    background-size: cover;
+/* =====================================================================
+   MARCA — Me Gusta el Anime (panel de Login)
+   ===================================================================== */
+.escena-brand {
     position: relative;
-    left: -100%;
-    height: 100%;
-    width: 200%;
-    transform: translateX(0);
-    transition: transform 0.6s ease-in-out;
-}
-
-.container.right-panel-active .overlay {
-    transform: translateX(50%);
-}
-
-.overlay-panel {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 0 40px;
-    text-align: center;
-    top: 0;
-    height: 100%;
-    width: 50%;
-    transform: translateX(0);
-    transition: transform 0.6s ease-in-out;
-}
-
-.overlay-left {
-    transform: translateX(-20%);
-}
-
-.container.right-panel-active .overlay-left {
-    transform: translateX(0);
-}
-
-.overlay-right {
-    right: 0;
-    transform: translateX(0);
-}
-
-.container.right-panel-active .overlay-right {
-    transform: translateX(20%);
-}
-
-/* Controladores móvil */
-.mobile-toggle {
-    display: none;
-    margin-top: 20px;
-}
-
-.mobile-toggle a {
-    color: var(--accent-primary);
-    font-weight: bold;
-    font-size: 14px;
-}
-
-/* ---------------------------------------------------------------------
-   INICIO DE SESIÓN SOCIAL (Google / Facebook)
-   --------------------------------------------------------------------- */
-.social-login {
-    display: flex;
-    gap: 10px;
     width: 100%;
-    margin: 6px 0 4px;
-}
-
-.btn-social {
-    flex: 1;
+    height: 300px;
     display: flex;
-    align-items: center;
     justify-content: center;
-    gap: 8px;
-    border-radius: 30px;
-    padding: 12px 10px;
-    font-size: 12.5px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: none;
-    cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
-    box-shadow: none;
-    margin-top: 0;
+    align-items: center;
+    overflow: visible;
 }
 
-.btn-social:active {
-    transform: scale(0.96);
+.escena-brand__caja {
+    position: relative;
+    width: 230px;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: escena-brand-resorte 10s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+    will-change: transform, opacity;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
 }
 
-.btn-google {
-    background: #1c1c1c;
-    color: var(--text-main);
-}
-.btn-google i { color: #ea4335; font-size: 14px; }
-.btn-google:hover { background: #262626; border-color: rgba(255,255,255,0.22); }
-
-.btn-facebook {
-    background: #1877f2;
-    color: #ffffff;
-    border-color: transparent;
-}
-.btn-facebook i { color: #ffffff; font-size: 14px; }
-.btn-facebook:hover { box-shadow: 0 4px 14px rgba(24, 119, 242, 0.45); }
-
-/* ---------------------------------------------------------------------
-   "¿Olvidaste tu contraseña?" reubicado debajo de "Regístrate",
-   con el mismo peso visual pero en rojo intenso + resplandor
-   --------------------------------------------------------------------- */
-.olvido-destacado {
+.escena-brand__caja img {
+    width: 100%;
+    height: auto;
     display: block;
-    margin-top: 12px;
-    color: var(--accent-primary);
-    font-weight: 700;
-    font-size: 14px;
-    text-shadow: 0 0 10px rgba(255, 8, 68, 0.65), 0 0 22px rgba(255, 8, 68, 0.35);
-}
-.olvido-destacado:hover {
-    color: var(--accent-secondary);
-    text-shadow: 0 0 12px rgba(255, 8, 68, 0.85), 0 0 26px rgba(255, 8, 68, 0.5);
 }
 
-/* La tómbola de animación ahora vive en css/login/escenas.css
-   (.escena-animacion y cada .escena-xxx) — ya no hay iframe ni caja
-   fija aquí. La regla .tombola-frame.cargado de la versión anterior
-   se eliminó: ese elemento ya no existe en el DOM. */
-
-/* ---------------------------------------------------------------------
-   MEDIA QUERIES (MÓVIL)
-   --------------------------------------------------------------------- */
-@media screen and (max-width: 768px) {
-    .container {
-        width: 100vw;
-        height: 100vh;
-        height: 100dvh; /* alto dinámico real: descuenta las barras del navegador/gestos, evita que el contenido quede tapado por los botones del sistema */
-        min-height: 100vh;
-        min-height: 100dvh;
-        border-radius: 0;
-        border: none;
-        display: flex;
-        overflow: hidden;
-        background-color: var(--bg-body); /* sólido en móvil: aquí la tarjeta ocupa toda la pantalla, así que ya no debe ser semitransparente. Sin esto, se ve el degradado animado del body a través del blur → esas líneas diagonales y la franja roja */
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-    }
-
-    .overlay-container { display: none; }
-
-    .sign-in-container, .sign-up-container {
-        width: 100vw;
-        padding: 20px;
-        padding-bottom: max(20px, env(safe-area-inset-bottom)); /* nunca queda contenido pegado detrás de la barra de gestos */
-        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        overflow-y: auto; /* red de seguridad: si un teléfono es muy pequeño, hace scroll en vez de recortar contenido */
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .sign-in-container { left: 0; transform: translateX(0); }
-    .sign-up-container {
-        left: 100vw;
-        opacity: 1;
-        z-index: 5;
-        animation: none;
-    }
-
-    .container.right-panel-active .sign-in-container { transform: translateX(-100vw); }
-    .container.right-panel-active .sign-up-container { transform: translateX(-100vw); }
-
-    .mobile-toggle { display: block; }
-
-    form { padding: 0 20px; }
-    h1 { font-size: 1.8rem; }
+@keyframes escena-brand-resorte {
+    0%   { transform: translate3d(250px, 0, 0) scale3d(1, 1, 1); opacity: 0; }
+    4%   { opacity: 1; }
+    25%  { transform: translate3d(-125px, 0, 0) scale3d(0.2, 1.4, 1); }
+    32%  { transform: translate3d(-40px, 0, 0) scale3d(1.3, 0.8, 1); }
+    42%  { transform: translate3d(15px, 0, 0) scale3d(0.9, 1.1, 1); }
+    50%  { transform: translate3d(-5px, 0, 0) scale3d(1.05, 0.95, 1); }
+    58%  { transform: translate3d(0, 0, 0) scale3d(1, 1, 1); }
+    100% { transform: translate3d(0, 0, 0) scale3d(1, 1, 1); }
 }
 
-@media screen and (max-width: 340px) {
-    .social-login { flex-direction: column; }
+/* =====================================================================
+   BARCO DE LUFFY (panel de Registro)
+   ===================================================================== */
+.escena-barco {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: visible;
+}
+
+.escena-barco__img {
+    width: 210px;
+    animation: escena-barco-navegar 10s ease-in-out infinite;
+}
+
+@keyframes escena-barco-navegar {
+    0% { transform: translateX(120px) scale(1.4); opacity: 0; }
+    15% { opacity: 1; }
+    50% { transform: translateX(0px) scale(1); opacity: 1; }
+    85% { opacity: 1; }
+    100% { transform: translateX(-120px) scale(0.2); opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    body { animation: none; }
-    .tombola-frame { transition: none; }
+    .escena-brand__caja, .escena-barco__img {
+        animation: none !important;
+    }
 }
